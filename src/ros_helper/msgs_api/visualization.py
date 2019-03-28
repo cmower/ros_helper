@@ -13,11 +13,14 @@ class MarkerMsg(Marker):
         self.header.frame_id = frame_id
         self.id = 0
         self.type = marker_type
-        self.action = self.ADD
+        self.action = Marker.ADD
         self.pose.orientation.w = 1
 
     def add_id(self, i):
         self.id = i
+
+    def add_action(self, a):
+        self.action = a
 
     def add_position(self, pos):
         for d, p in zip(XYZ, pos): setattr(self.pose.position, d, p)
@@ -39,20 +42,23 @@ class MarkerMsg(Marker):
         self.color = c
 
     def add_rgb(self, col):
-        for d, c in zip(['r', 'g', 'b'], col): setattr(self, d, c)
+        for d, c in zip(['r', 'g', 'b'], col): setattr(self.color, d, c)
         self.add_alpha(1.0)
 
     def add_rgba(self, col):
-        for d, c in zip(['r', 'g', 'b', 'a'], col): setattr(self, d, c)
+        for d, c in zip(['r', 'g', 'b', 'a'], col): setattr(self.color, d, c)
 
     def add_alpha(self, a):
-        self.a = a
+        self.color.a = a
 
 class MarkerArrayMsg(MarkerArray):
 
-    def __init__(self, ms):
+    def __init__(self, ms=None):
         super(MarkerArrayMsg, self).__init__()
-        self.markers = ms
+        if type(ms) is list: self.markers = ms
+            
+    def append(self, m):
+        self.markers.append(m)
 
     def resolve_ids(self):
         for i, m in enumerate(self.markers): m.id = i
