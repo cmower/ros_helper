@@ -3,7 +3,7 @@ from std_msgs.msg import *
 class BoolMsg(Bool):
 
   def __init__(self, d):
-	super(BoolMSg, self).__init__()
+    super(BoolMSg, self).__init__()
     self.data = d
 
 class Float32Msg(Float32):
