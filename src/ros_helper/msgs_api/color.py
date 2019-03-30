@@ -1090,7 +1090,6 @@ LIST_ral_standard['papyrus_white'] = (0.843137254902, 0.843137254902, 0.84313725
 LIST_ral_standard['pearl_light_grey'] = (0.611764705882, 0.611764705882, 0.611764705882)
 LIST_ral_standard['pearl_dark_grey'] = (0.509803921569, 0.509803921569, 0.509803921569)
 
-
 ##
 ## Color msg class
 ## 
@@ -1099,5 +1098,4 @@ class ColorMsg(ColorRGBA):
 
     def __init__(self, rgb, a):
         super(ColorMsg, self).__init__()
-        for d, c in zip(['r', 'g', 'b'], col): setattr(self, d, c)
-        self.a = a
+        for d, c in zip(['r', 'g', 'b', 'a'], rgb + [a]): setattr(self, d, c)
