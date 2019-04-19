@@ -55,7 +55,9 @@ class MarkerArrayMsg(MarkerArray):
 
     def __init__(self, ms=None):
         super(MarkerArrayMsg, self).__init__()
-        if type(ms) is list: self.markers = ms
+        if type(ms) is list:
+            self.markers = ms
+            self.resolve_ids()
             
     def append(self, m):
         self.markers.append(m)
