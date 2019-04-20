@@ -64,7 +64,7 @@ if __name__=='__main__':
 	msg = vis.MarkerMsg(vis.Marker.MESH_RESOURCE, rospy.Time.now(), frame_id)
 	msg.add_scale(scale)
 	msg.add_mesh(filename, use_embedded_materials)
-	if use_embedded_materials: msg.add_rgba(color)
+	if not use_embedded_materials: msg.add_rgba(color)
 
 	# Init timer and spin
 	rospy.Timer(rospy.Duration(1.0/hz), MeshPublisher(topic_name, msg).update)
