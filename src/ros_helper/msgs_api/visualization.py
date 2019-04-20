@@ -1,9 +1,5 @@
 from visualization_msgs.msg import Marker, MarkerArray
-
-RGB = ['r', 'g', 'b']
-RGBA = ['r', 'g', 'b', 'a']
-XYZ = ['x', 'y', 'z']
-XYZW = ['x', 'y', 'z', 'w']
+from .utils import *
 
 class MarkerMsg(Marker):
 
@@ -23,16 +19,16 @@ class MarkerMsg(Marker):
         self.action = a
 
     def add_position(self, pos):
-        for d, p in zip(XYZ, pos): setattr(self.pose.position, d, p)
+    	_msetter(self.pose.position, XYZ, pos)
 
     def add_orientation(self, ori):
-        for d, o in zip(XYZW, ori): setattr(self.pose.orientation, d, o)
+    	_msetter(self.pose.orientation, XYZW, ori)
         
     def append_point(self, pt):
         self.points.append(pt)
 
     def add_scale(self, sc):
-        for d, s in zip(XYZ, sc): setattr(self.scale, d, s)
+    	_msetter(self.scale, XYZ, sc)
 
     def add_mesh(self, filename, use_embedded_materials=False):
         self.mesh_use_embedded_materials = use_embedded_materials
@@ -42,11 +38,11 @@ class MarkerMsg(Marker):
         self.color = c
 
     def add_rgb(self, col):
-        for d, c in zip(['r', 'g', 'b'], col): setattr(self.color, d, c)
+    	_msetter(self.color, RGB, col)
         self.add_alpha(1.0)
 
     def add_rgba(self, col):
-        for d, c in zip(['r', 'g', 'b', 'a'], col): setattr(self.color, d, c)
+    	_msetter(self.color, RGBA, col)
 
     def add_alpha(self, a):
         self.color.a = a

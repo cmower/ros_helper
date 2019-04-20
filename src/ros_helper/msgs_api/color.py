@@ -1,4 +1,5 @@
 from std_msgs.msg import ColorRGBA
+from .utils import *
 
 ##
 ## Color lists
@@ -1098,4 +1099,4 @@ class ColorMsg(ColorRGBA):
 
     def __init__(self, rgb, a):
         super(ColorMsg, self).__init__()
-        for d, c in zip(['r', 'g', 'b', 'a'], rgb + [a]): setattr(self, d, c)
+        _msetter(self, RGBA, rgb + [a])

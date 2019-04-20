@@ -1,13 +1,13 @@
+import tf
+import numpy as np
 from geometry_msgs.msg import Point, TransformStamped
-
-XYZ = ['x', 'y', 'z']
-XYZW = ['x', 'y', 'z', 'w']
+from .utils import *
 
 class PointMsg(Point):
 
     def __init__(self, pos):
         super(PointMsg, self).__init__()
-        for d, p in zip(XYZ, pos): setattr(self, d, p)
+        _msetter(self, XYZ, pos)
 
 class TransformStampedMsg(TransformStamped):
 
@@ -16,9 +16,27 @@ class TransformStampedMsg(TransformStamped):
         self.header.stamp = t
         self.header.frame_id = base_frame_id
         self.child_frame_id = child_frame_id
-        for d, p in zip(XYZ, trans): setattr(self.transform.translation, d, p)
-        for d, q in zip(XYZW, quat): setattr(self.transform.rotation, d, q)
+        _msetter(self.transform.translation, XYZ, trans)
+        _msetter(self.transform.rotation, XYZW, quat)
 
     @staticmethod
     def get_trans_quat(tr):
-        return [getattr(tr.transform.translation, d) for d in XYZ], [getattr(tr.transform.rotation, d) for d in XYZW]
+        return TransformStampedMsg.get_trans(tr), TransformStampedMsg.get_quat(tr)
+
+    @staticmethod
+    def get_trans(tr):
+    	return np.array(_mgetter(tr.transform.translation, XYZ))
+
+    @staticmethod
+    def get_quat(tr):
+    	return np.array(_mgetter(tr.transform.rotation, XYZW))
+
+    @staticmethod
+   	def get_matrix(tr):
+   		T = tf.transformations.quaternion_matrix(TransformStampedMsg.get_quat(tr))
+   		T[:3,3] = TransformStampedMsg.get_trans(tr)
+   		return T
+
+   	@staticmethod
+   	def get_euler(tr):
+   		return tf.transformations.euler_from_quaternion(TransformStampedMsg.get_quat(tr))
