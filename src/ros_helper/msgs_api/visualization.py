@@ -64,3 +64,10 @@ class MarkerArrayMsg(MarkerArray):
 
     def resolve_ids(self):
         for i, m in enumerate(self.markers): m.id = i
+
+    @property
+    def num_markers(self):
+        return len(self.markers)
+
+    def add_time(self, i, t):
+        self.markers[i].header.stamp = t
