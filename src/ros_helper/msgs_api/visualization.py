@@ -1,6 +1,8 @@
 from visualization_msgs.msg import Marker, MarkerArray
 from .utils import *
 
+__all__= ['MarkerMsg', 'StlMeshMsg', 'CubeMsg', 'SphereMsg', 'CylinderMsg', 'MarkerArrayMsg']
+
 class MarkerMsg(Marker):
 
     def __init__(self, marker_type, time, frame_id):
@@ -14,6 +16,9 @@ class MarkerMsg(Marker):
 
     def add_id(self, i):
         self.id = i
+
+    def add_time(self, t):
+        self.header.stamp = t
 
     def add_action(self, a):
         self.action = a
@@ -35,17 +40,52 @@ class MarkerMsg(Marker):
         self.mesh_resource = filename
 
     def add_color(self, c):
-        self.color = c
-
-    def add_rgb(self, col):
-    	_msetter(self.color, RGB, col)
-        self.add_alpha(1.0)
-
-    def add_rgba(self, col):
-    	_msetter(self.color, RGBA, col)
+        if type(c) is list or type(c) is tuple:
+            if len(c) == 3:
+                _msetter(self.color, RGB, c)
+                self.add_alpha(1.0)
+            elif len(c) == 4:
+                _msetter(self.color, RGBA, c)
+        else:
+            # Assume given color is std_msgs.msg.ColorRGBA
+            self.color = c
 
     def add_alpha(self, a):
         self.color.a = a
+
+class StlMeshMsg(MarkerMsg):
+
+    def __init__(self, filename, time, frame_id, scale, color):
+        super(StlMeshMsg, self).__init__(Marker.MESH_RESOURCE, time, frame_id)
+        self.add_mesh(filename, False)
+        self.add_scale(scale)
+        self.add_color(color)
+        
+class SphereMsg(MarkerMsg):
+    
+    def __init__(self, time, radius, frame_id, color, pos=None):
+        super(SphereMsg, self).__init__(Marker.SPHERE, time, frame_id)
+        self.add_scale([2.0 * radius]*3) 
+        self.add_color(color)
+        if pos is not None: self.add_position(pos)
+
+class CubeMsg(MarkerMsg):
+
+    def __init__(self, time, length, width, height, frame_id, color, pos=None, ori=None):
+        super(CubeMsg, self).__init__(Marker.CUBE, time, frame_id)
+        self.add_scale([length, width, height])
+        self.add_color(color)
+        if pos is not None: self.add_position(pos)
+        if ori is not None: self.add_orientation(ori)
+
+class CylinderMsg(MarkerMsg):
+
+    def __init__(self, time, radius, height, frame_id, color, pos=None, ori=None):
+        super(CylinderMsg, self).__init__(Marker.CYLINDER, time, frame_id)
+        self.add_scale([2.0*radius, 2.0*radius, height])
+        self.add_color(color)
+        if pos is not None: self.add_position(pos)
+        if ori is not None: self.add_orientation(ori)
 
 class MarkerArrayMsg(MarkerArray):
 
@@ -66,4 +106,4 @@ class MarkerArrayMsg(MarkerArray):
         return len(self.markers)
 
     def add_time(self, i, t):
-        self.markers[i].header.stamp = t
+        self.markers[i].header.stamp = t        

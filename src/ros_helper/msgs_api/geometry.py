@@ -32,11 +32,11 @@ class TransformStampedMsg(TransformStamped):
     	return np.array(_mgetter(tr.transform.rotation, XYZW))
 
     @staticmethod
-   	def get_matrix(tr):
-   		T = tf.transformations.quaternion_matrix(TransformStampedMsg.get_quat(tr))
-   		T[:3,3] = TransformStampedMsg.get_trans(tr)
-   		return T
+    def get_matrix(tr):
+   	T = tf.transformations.quaternion_matrix(TransformStampedMsg.get_quat(tr))
+   	T[:3,3] = TransformStampedMsg.get_trans(tr)
+   	return T
 
-   	@staticmethod
-   	def get_euler(tr):
-   		return tf.transformations.euler_from_quaternion(TransformStampedMsg.get_quat(tr))
+    @staticmethod
+    def get_euler(tr):
+   	return tf.transformations.euler_from_quaternion(TransformStampedMsg.get_quat(tr))
