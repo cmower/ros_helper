@@ -1,5 +1,5 @@
 
-__all__ = ['RGB', 'RGBA', 'XYZ', 'XYZ', '_mgetter', '_msetter']
+__all__ = ['RGB', 'RGBA', 'XYZ', 'XYZW', '_mgetter', '_msetter']
 
 RGB = ['r', 'g', 'b']
 RGBA = ['r', 'g', 'b', 'a']
