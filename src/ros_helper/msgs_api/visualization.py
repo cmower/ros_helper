@@ -1,7 +1,9 @@
 from visualization_msgs.msg import Marker, MarkerArray
+from .geometry import PointMsg
+import numpy as np
 from .utils import *
 
-__all__= ['MarkerMsg', 'StlMeshMsg', 'CubeMsg', 'SphereMsg', 'CylinderMsg', 'MarkerArrayMsg']
+__all__= ['MarkerMsg', 'StlMeshMsg', 'CubeMsg', 'SphereMsg', 'CylinderMsg', 'MarkerArrayMsg', 'LineStripMsg', 'SphereListMsg']
 
 class MarkerMsg(Marker):
 
@@ -31,6 +33,9 @@ class MarkerMsg(Marker):
         
     def append_point(self, pt):
         self.points.append(pt)
+
+    def add_points(self, pts):
+        self.points = pts
 
     def add_scale(self, sc):
     	_msetter(self.scale, XYZ, sc)
@@ -87,6 +92,32 @@ class CylinderMsg(MarkerMsg):
         if pos is not None: self.add_position(pos)
         if ori is not None: self.add_orientation(ori)
 
+class LineStripMsg(MarkerMsg):
+
+    def __init__(self, time, frame_id, line_width, color, points=None):
+        super(LineStripMsg, self).__init__(Marker.LINE_STRIP, time, frame_id)
+        self.add_color(color)
+        self.add_scale([line_width, 0, 0])
+        if type(points) is list:
+            # assume list of Point msgs
+            self.add_points(points)
+        elif type(points) is np.ndarray:
+            # assume n-by-3
+            for p in points: self.append_point(PointMsg(p))
+
+class SphereListMsg(MarkerMsg):
+
+    def __init__(self, time, frame_id, radius, color, points=None):
+        super(SphereListMsg, self).__init__(Marker.SPHERE_LIST, time, frame_id)
+        self.add_color(color)
+        self.add_scale([2.0 * radius]*3)
+        if type(points) is list:
+            # assume list of Point msgs
+            self.add_points(points)
+        elif type(points) is np.ndarray:
+            # assume n-by-3
+            for p in points: self.append_point(PointMsg(p))
+            
 class MarkerArrayMsg(MarkerArray):
 
     def __init__(self, ms=None):
