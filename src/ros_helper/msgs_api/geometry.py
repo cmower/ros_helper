@@ -9,6 +9,14 @@ class PointMsg(Point):
         super(PointMsg, self).__init__()
         _msetter(self, XYZ, pos)
 
+    @staticmethod
+    def to_list(pt):
+        return _mgetter(pt, XYZ)
+
+    @staticmethod
+    def to_np(pt):
+        return np.array(PointMsg.to_list(pt))
+
 class TransformStampedMsg(TransformStamped):
 
     def __init__(self, t, trans, quat, child_frame_id, base_frame_id):
