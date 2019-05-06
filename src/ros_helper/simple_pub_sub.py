@@ -6,6 +6,8 @@ https://www.youtube.com/watch?v=cKPlPJyQrt4&t=5426s
 
 i.e. in SimplePublisher, we want to check before running that generate_message function is implemented.
 
+Also, is it worth making a init_publisher function instead of assuming user will know to call super(UserDefPub, self).__init__(...)? Can we constrain user to this?
+
 """
 
 class SimplePublisher(object):
