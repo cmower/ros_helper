@@ -1,4 +1,5 @@
 import tf
+import numpy as np
 import tf2_ros
 from .msgs_api.geometry import TransformStampedMsg
 
@@ -15,7 +16,7 @@ def _axis_intercept_point_in_plane(trans, quat, i_frame, i_base):
     1 -> y axis
     2 -> z axis
     """
-    _axis = tf.tf.transformations.quaternion_matrix(quat)[:3,i_frame]
+    _axis = tf.transformations.quaternion_matrix(quat)[:3,i_frame]
     return np.array(trans) - _axis * (trans[i_base] / _axis[i_base])
 
 def x_axis_intercept_point_in_xy_plane(trans, quat):
