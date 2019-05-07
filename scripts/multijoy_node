@@ -11,7 +11,7 @@ class MultiJoyParser(object):
         mf.ApproximateTimeSynchronizer([mf.Subscriber('/joy/%d' % i, sens.Joy) for i in xrange(njoys)], 10, njoys*100).registerCallback(self.callback)
 
     def callback(self, *joys):
-        self.pub.publish(sense.MultiJoyMsg(rospy.Time.now(), joys))
+        self.pub.publish(sens.MultiJoyMsg(rospy.Time.now(), joys))
 
 if __name__=='__main__':
     rospy.init_node('multijoy_node')
