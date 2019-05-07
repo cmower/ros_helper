@@ -1,0 +1,20 @@
+#!/usr/bin/env python
+import rospy
+import message_filters as mf
+import ros_helper.msgs_api.sensor as sens
+
+class MultiJoyParser(object):
+
+    def __init__(self):
+        self.pub = rospy.Publisher('multijoy', sens.MultiJoy, queue_size=1)
+        njoys = rospy.get_param('~njoys')
+        mf.ApproximateTimeSynchronizer([mf.Subscriber('/joy/%d' % i, sens.Joy) for i in xrange(njoys)], 10, njoys*100).registerCallback(self.callback)
+
+    def callback(self, *joys):
+        self.pub.publish(sense.MultiJoyMsg(rospy.Time.now(), joys))
+
+if __name__=='__main__':
+    rospy.init_node('multijoy_node')
+    MultiJoyParser()
+    rospy.spin()
+    

@@ -8,14 +8,29 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   tf2
   tf2_ros
+  rospy
   visualization_msgs
+  message_generation
+  )
+
+add_message_files(
+  FILES
+  MultiJoy.msg
+  Keyboard.msg
   )
 
 catkin_python_setup()
 
+generate_messages( 
+  DEPENDENCIES
+  std_msgs
+  sensor_msgs
+  )
+
 catkin_package(
-)
+  CATKIN_DEPENDS message_runtime
+  )
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
-)
+  )
