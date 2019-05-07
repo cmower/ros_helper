@@ -16,8 +16,10 @@ def _axis_intercept_point_in_plane(trans, quat, i_frame, i_base):
     1 -> y axis
     2 -> z axis
     """
-    _axis = tf.transformations.quaternion_matrix(quat)[:3,i_frame]
-    return np.array(trans) - _axis * (trans[i_base] / _axis[i_base])
+    _trans = np.asarray(trans)
+    _quat = np.asarray(quat)
+    _axis = tf.transformations.quaternion_matrix(_quat)[:3,i_frame]
+    return _trans - _axis * (_trans[i_base] / _axis[i_base])
 
 def x_axis_intercept_point_in_xy_plane(trans, quat):
     """
