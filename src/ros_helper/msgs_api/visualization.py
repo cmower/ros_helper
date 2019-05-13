@@ -7,13 +7,9 @@ __all__= ['MarkerMsg', 'StlMeshMsg', 'CubeMsg', 'SphereMsg', 'CylinderMsg', 'Mar
 
 class MarkerMsg(Marker):
 
-    def __init__(self, marker_type, time=None, frame_id=None, color=None, position=None, orientation=None, scale=None):
-
-        # Required init
+    def __init__(self, marker_type=None, time=None, frame_id=None, color=None, position=None, orientation=None, scale=None):
         super(MarkerMsg, self).__init__()
-        self.type = marker_type
-
-        # Handle defaults
+        if marker_type is not None: self.add_marker_type(marker_type)
         if time is not None: self.add_time(time)
         if frame_id is not None: self.add_frame_id(frame_id)
         if color is not None: self.add_color(color)
@@ -28,6 +24,9 @@ class MarkerMsg(Marker):
         # Add other params that are sometimes forgotten, user can always update later
         self.add_id(0)
         self.add_action(Marker.ADD)
+
+    def add_marker_type(self, t):
+        self.type = t
 
     def add_frame_id(self, frame_id):
         self.frame_id = frame_id
@@ -193,11 +192,15 @@ class MarkerArrayMsg(MarkerArray):
 
     def __init__(self, markers=None, nmarkers=None):
         super(MarkerArrayMsg, self).__init__()
-        if type(ms) is list:
+        resolve_ids = False
+        if markers is not None:
             self.markers = markers
-            self.resolve_ids()
-        if nmarkers is not None: self.markers = [None]*nmarkers
-
+            resolve_ids = True
+        if nmarkers is not None:
+            self.markers = [MarkerMsg()]*nmarkers
+            resolve_ids = True
+        if resolve_ids: self.resolve_ids()
+            
     def __setitem__(self, i, m):
         self.markers[i] = m
 
