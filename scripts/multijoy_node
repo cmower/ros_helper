@@ -7,8 +7,8 @@ class MultiJoyParser(object):
 
     def __init__(self):
         self.pub = rospy.Publisher('multijoy', sens.MultiJoy, queue_size=1)
-        njoys = rospy.get_param('~njoys')
-        mf.ApproximateTimeSynchronizer([mf.Subscriber('/joy/%d' % i, sens.Joy) for i in xrange(njoys)], 10, njoys*100).registerCallback(self.callback)
+        joytopics = rospy.get_param('~joytopics') # e.g. in launch file use <rosparam param="joytopics">[joy1, joy2, joy3, joy4]</rosparam>
+        mf.ApproximateTimeSynchronizer([mf.Subscriber(t, sens.Joy) for t in joytopics], 10, len(joytopics)*100).registerCallback(self.callback)
 
     def callback(self, *joys):
         self.pub.publish(sens.MultiJoyMsg(rospy.Time.now(), joys))
