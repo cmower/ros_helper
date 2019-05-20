@@ -29,7 +29,7 @@ class MarkerMsg(Marker):
         self.type = t
 
     def add_frame_id(self, frame_id):
-        self.frame_id = frame_id
+        self.header.frame_id = frame_id
 
     def add_id(self, i):
         self.id = i
@@ -147,19 +147,19 @@ class CubeMsg(MarkerMsg):
 
 class CylinderMsg(MarkerMsg):
 
-    def __init__(self, time=None, frame_id=None, color=None, position=None, orientation=None, scale=None, radius=None, diameter=None, height=None)
+    def __init__(self, time=None, frame_id=None, color=None, position=None, orientation=None, scale=None, radius=None, diameter=None, height=None):
         super(CylinderMsg, self).__init__(Marker.CYLINDER, time, frame_id, color, position, orientation, scale)
         if radius is not None: self.add_radius(radius)
         if diameter is not None: self.add_diameter(diameter)
         if height is not None: self.add_height(height)
 
-    def add_radius(r):
+    def add_radius(self, r):
         self.add_diameter(2.0*r)
 
-    def add_diameter(d):
+    def add_diameter(self, d):
         self.scale.x = self.scale.y = d
 
-    def add_height(h):
+    def add_height(self, h):
         self.scale.z = h
 
 class LineStripMsg(MarkerMsg):
@@ -192,6 +192,7 @@ class MarkerArrayMsg(MarkerArray):
 
     def __init__(self, markers=None, nmarkers=None):
         super(MarkerArrayMsg, self).__init__()
+
         resolve_ids = False
         if markers is not None:
             self.markers = markers
