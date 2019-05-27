@@ -41,10 +41,10 @@ class MarkerMsg(Marker):
         self.action = a
 
     def add_position(self, pos):
-    	_msetter(self.pose.position, XYZ, pos)
+    	msetattr(self.pose.position, XYZ, pos)
 
     def add_orientation(self, ori):
-    	_msetter(self.pose.orientation, XYZW, ori)
+    	msetattr(self.pose.orientation, XYZW, ori)
         
     def append_point(self, pt):
         self.points.append(pt)
@@ -53,7 +53,7 @@ class MarkerMsg(Marker):
         self.points = pts
 
     def add_scale(self, sc):
-    	_msetter(self.scale, XYZ, sc)
+    	msetattr(self.scale, XYZ, sc)
 
     def add_mesh(self, filename, use_embedded_materials=False):
         self.mesh_use_embedded_materials = use_embedded_materials
@@ -63,10 +63,10 @@ class MarkerMsg(Marker):
         typec = type(c)
         if typec is list or typec is tuple:
             if len(c) == 3:
-                _msetter(self.color, RGB, c)
+                msetattr(self.color, RGB, c)
                 self.add_alpha(1.0)
             elif len(c) == 4:
-                _msetter(self.color, RGBA, c)
+                msetattr(self.color, RGBA, c)
         else:
             # Assume given color is std_msgs.msg.ColorRGBA
             self.color = c
@@ -190,29 +190,25 @@ class SphereListMsg(MarkerMsg):
             
 class MarkerArrayMsg(MarkerArray):
 
-    def __init__(self, markers=None, nmarkers=None):
+    def __init__(self, markers):
         super(MarkerArrayMsg, self).__init__()
-
-        resolve_ids = False
-        if markers is not None:
-            self.markers = markers
-            resolve_ids = True
-        if nmarkers is not None:
-            self.markers = [MarkerMsg()]*nmarkers
-            resolve_ids = True
-        if resolve_ids: self.resolve_ids()
-            
-    def __setitem__(self, i, m):
-        self.markers[i] = m
+        self.markers = markers
+        self.resolve_ids()
 
     def __getitem__(self, i):
         return self.markers[i]
-            
+
+    def __setitem__(self, i, m):
+        self.markers[i] = m
+
+    def __len__(self):
+        return len(self.markers)
+        
     def append(self, m):
         self.markers.append(m)
 
     def resolve_ids(self):
-        for i, m in enumerate(self.markers): m.id = i
+        map(lambda im : setattr(im[1], 'id', im[0]), enumerate(self.markers))
 
     def add_time(self, i, t):
         self.markers[i].header.stamp = t        

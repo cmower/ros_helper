@@ -5,17 +5,16 @@ from .utils import *
 
 class PointMsg(Point):
 
-    def __init__(self, pos):
+    def __init__(self, p):
         super(PointMsg, self).__init__()
-        _msetter(self, XYZ, pos)
+        msetattr(self, XYZ, p)
 
     @staticmethod
-    def to_list(pt):
-        return _mgetter(pt, XYZ)
+    def as_np(pt):
+        return np.array(mgetattr(pt, XYZ))        
 
-    @staticmethod
-    def to_np(pt):
-        return np.array(PointMsg.to_list(pt))
+    def to_np(self):
+        return PointMsg.as_np(self)
 
 class TransformStampedMsg(TransformStamped):
 
@@ -24,27 +23,42 @@ class TransformStampedMsg(TransformStamped):
         self.header.stamp = t
         self.header.frame_id = base_frame_id
         self.child_frame_id = child_frame_id
-        _msetter(self.transform.translation, XYZ, trans)
-        _msetter(self.transform.rotation, XYZW, quat)
+        msetattr(self.transform.translation, XYZ, trans)
+        msetattr(self.transform.rotation, XYZW, quat)
 
     @staticmethod
-    def get_trans_quat(tr):
-        return TransformStampedMsg.get_trans(tr), TransformStampedMsg.get_quat(tr)
+    def as_trans_quat(tr):
+        return TransformStampedMsg.as_trans(tr), TransformStampedMsg.as_quat(tr)
 
     @staticmethod
-    def get_trans(tr):
-    	return np.array(_mgetter(tr.transform.translation, XYZ))
+    def as_trans(tr):
+    	return np.array(mgetattr(tr.transform.translation, XYZ))
 
     @staticmethod
-    def get_quat(tr):
-    	return np.array(_mgetter(tr.transform.rotation, XYZW))
+    def as_quat(tr):
+    	return np.array(mgetattr(tr.transform.rotation, XYZW))
 
     @staticmethod
-    def get_matrix(tr):
-   	T = tf.transformations.quaternion_matrix(TransformStampedMsg.get_quat(tr))
-   	T[:3,3] = TransformStampedMsg.get_trans(tr)
+    def as_matrix(tr):
+   	T = tf.transformations.quaternion_matrix(TransformStampedMsg.as_quat(tr))
+   	T[:3,3] = TransformStampedMsg.as_trans(tr)
    	return T
 
     @staticmethod
-    def get_euler(tr):
-   	return tf.transformations.euler_from_quaternion(TransformStampedMsg.get_quat(tr))
+    def as_euler(tr):
+   	return tf.transformations.euler_from_quaternion(TransformStampedMsg.as_quat(tr))
+
+    def to_trans_quat(self):
+        return TransformStampedMsg.as_trans(self), TransformStampedMsg.as_quat(self)
+
+    def to_trans(self):
+        return TransformStampedMsg.as_trans(self)
+
+    def to_quat(self):
+        return TransformStampedMsg.as_quat(self)
+
+    def to_matrix(self):
+        return TransformStampedMsg.as_matrix(self)
+
+    def to_euler(self):
+        return TransformStampedMsg.as_euler(self)    

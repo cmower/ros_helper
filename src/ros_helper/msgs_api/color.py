@@ -1099,4 +1099,4 @@ class ColorMsg(ColorRGBA):
 
     def __init__(self, rgb, a):
         super(ColorMsg, self).__init__()
-        _msetter(self, RGBA, rgb + [a])
+        msetattr(self, RGBA, rgb + [a])

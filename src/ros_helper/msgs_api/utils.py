@@ -1,15 +1,15 @@
 
-__all__ = ['RGB', 'RGBA', 'XYZ', 'XYZW', '_mgetter', '_msetter']
+__all__ = ['RGB', 'RGBA', 'XYZ', 'XYZW', 'mgetattr', 'msetattr']
 
 RGB = ['r', 'g', 'b']
 RGBA = ['r', 'g', 'b', 'a']
 XYZ = ['x', 'y', 'z']
 XYZW = ['x', 'y', 'z', 'w']
 
-def _mgetter(_obj, _ids):
+def mgetattr(obj, ids):
     """Multiple gettattr."""
-    return [getattr(_obj, _id) for _id in _ids]
+    return map(lambda i : getattr(obj, i), ids)
 
-def _msetter(_obj, _ids, _vals):
+def msetattr(obj, ids, vals):
     """Multiple setattr."""
-    for _id, _val in zip(_ids, _vals): setattr(_obj, _id, _val)
+    map(lambda i, v : setattr(obj, i, v), zip(ids, vals))
