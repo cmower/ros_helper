@@ -1,6 +1,6 @@
 # ros_helper
 
-A collection of helper scripts and nodes for ros. 
+A collection of helper scripts and nodes for [ROS](https://www.ros.org/).
 
 ## Todo
 
