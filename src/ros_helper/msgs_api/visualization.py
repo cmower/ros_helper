@@ -1,10 +1,7 @@
-from visualization_msgs.msg import Marker, MarkerArray
-from .color import ColorMsg
-from .geometry import *
 import numpy as np
-from .utils import *
-
-__all__= ['MarkerMsg', 'StlMeshMsg', 'CubeMsg', 'SphereMsg', 'CylinderMsg', 'MarkerArrayMsg', 'LineStripMsg', 'SphereListMsg']
+from visualization_msgs.msg import Marker, MarkerArray
+from .std import ColorMsg
+from .geometry import Vector3Msg, QuaternionMsg, PointMsg
 
 class MarkerMsg(Marker):
 

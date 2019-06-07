@@ -3,9 +3,6 @@ import numpy as np
 import tf2_ros
 from .msgs_api.geometry import TransformStampedMsg
 
-__all__ = ['TfApi', 'x_axis_intercept_point_in_xy_plane', 'y_axis_intercept_point_in_xy_plane', 'z_axis_intercept_point_in_xy_plane']
-
-
 def _axis_intercept_point_in_plane(trans, quat, i_frame, i_base):
     """
     i_frame - denotes axis of frame expressed by trans, quat
@@ -43,6 +40,10 @@ def z_axis_intercept_point_in_xy_plane(trans, quat):
     return _axis_intercept_point_in_plane(trans, quat, 2, 2)
 
 class TfApi(object):
+
+    """
+    Api uses tf2, doesn't work for tf.
+    """
     
     def __init__(self, rospy):
         self.br = tf2_ros.TransformBroadcaster()
@@ -51,13 +52,11 @@ class TfApi(object):
         self.rospy = rospy
         
     def get_tf(self, child_frame_id, base_frame_id):
-        did_recieve = False
         try:
-            trans, quat = TransformStampedMsg.get_trans_quat(self.buff.lookup_transform(base_frame_id, child_frame_id, self.rospy.Time()))
-            did_recieve = True
+            tr = TransformStampedMsg(self.buff.lookup_transform(base_frame_id, child_frame_id, self.rospy.Time()))
         except:
-            trans = quat = None
-        return trans, quat, did_recieve
+            tr = None
+        return tr
     
-    def set_tf(self, t, trans, quat, child_frame_id, base_frame_id):
-        self.br.sendTransform(TransformStampedMsg(t, trans, quat, child_frame_id, base_frame_id))
+    def set_tf(self, time, trans=None, quat=None, child_frame_id=None, base_frame_id=None):
+        self.br.sendTransform(TransformStampedMsg(time, trans, quat, child_frame_id, base_frame_id))

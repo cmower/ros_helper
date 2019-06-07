@@ -1,8 +1,6 @@
 from sensor_msgs.msg import JointState, Joy
 from ros_helper.msg import MultiJoy, Keyboard
 
-__all__=['JointStateMsg', 'JoyMsg', 'MultiJoyMsg', 'KeyboardMsg']
-
 # Keyboard keys, ord : pygame key id
 keyboard_keys = {\
                  48 : 'K_0',\
