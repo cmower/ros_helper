@@ -3,6 +3,10 @@ import rospy
 import pygame
 import ros_helper.msgs_api.sensor as sens
 
+"""
+TODO: Update to use simple_pub_sub
+"""
+
 TOPICS = ['keyboard/binary', 'keyboard/keyup', 'keyboard/keydown']
 
 class KeyboardPublisher(object):
@@ -36,5 +40,9 @@ if __name__=='__main__':
     pygame.display.set_mode((1, 1))
     pygame.display.set_caption('keyboard')
     rospy.init_node('keyboad_node')
-    rospy.Timer(rospy.Duration(1.0/100.0), KeyboardPublisher().update)
+    if rospy.has_param('~hz'):
+        hz = rospy.get_param('~hz')
+    else:
+        hz = 100.0
+    rospy.Timer(rospy.Duration(1.0/hz), KeyboardPublisher().update)
     rospy.spin()

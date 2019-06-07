@@ -1,5 +1,6 @@
 from visualization_msgs.msg import Marker, MarkerArray
-from .geometry import PointMsg
+from .color import ColorMsg
+from .geometry import *
 import numpy as np
 from .utils import *
 
@@ -7,193 +8,340 @@ __all__= ['MarkerMsg', 'StlMeshMsg', 'CubeMsg', 'SphereMsg', 'CylinderMsg', 'Mar
 
 class MarkerMsg(Marker):
 
-    def __init__(self, marker_type=None, time=None, frame_id=None, color=None, position=None, orientation=None, scale=None):
+    def __init__(self, marker_type, **kwargs):
         super(MarkerMsg, self).__init__()
-        if marker_type is not None: self.add_marker_type(marker_type)
-        if time is not None: self.add_time(time)
-        if frame_id is not None: self.add_frame_id(frame_id)
-        if color is not None: self.add_color(color)
-        if position is not None: self.add_position(position)
-        if orientation is not None:
-            self.add_orientation(orientation)
+        
+        if type(marker_type) in [MarkerMsg, Marker]:
+            # Make self a copy of given marker
+            m = marker_type
+            self.header = m.header
+            self.ns = m.ns
+            self.id = m.id
+            self.type = m.type
+            self.action = m.action
+            self.pose = m.pose
+            self.scale = m.scale
+            self.color = m.color
+            self.lifetime = m.lifetime
+            self.frame_locked = m.frame_locked
+            self.points = m.points
+            self.colors = m.colors
+            self.text = m.text
+            self.mesh_resource = m.mesh_resource
+            self.mesh_use_embedded_materials = m.mesh_use_embedded_materials
         else:
-            # Orientation orientation is now same as base 
-            # frame, user can always update using add_orientation
-            self.pose.orientation.w = 1
+            # assumes marker_type specifiesas a marker type as listed in Object Types section here: http://wiki.ros.org/rviz/DisplayTypes/Marker#Object_Types
+            self.marker_type = marker_type
+        self.parse_kwargs(kwargs)
 
-        # Add other params that are sometimes forgotten, user can always update later
-        self.add_id(0)
-        self.add_action(Marker.ADD)
+    def parse_kwargs(self, kwargs):
+        for key, value in kwargs.items():
+            if key == 'scale':
+                self.scale = Vector3Msg(value)
+            elif key == 'color':
+                self.color = ColorMsg(value)
+            elif key == 'colors':
+                self.colors = map(ColorMsg, value)
+            elif key == 'points':
+                self.points = map(PointMsg, value)
+            else:
+                setattr(self, key, value)
 
-    def add_marker_type(self, t):
-        self.type = t
+    #
+    # Generic marker properties
+    #
 
-    def add_frame_id(self, frame_id):
+    @property
+    def namespace(self):
+        return self.ns
+
+    @namespace.setter
+    def namespace(self, n):
+        self.ns = n
+
+    @property
+    def frame_id(self):
+        return self.header.frame_id
+
+    @frame_id.setter
+    def frame_id(self, frame_id):
         self.header.frame_id = frame_id
 
-    def add_id(self, i):
-        self.id = i
+    @property
+    def marker_type(self):
+        return self.type
 
-    def add_time(self, t):
-        self.header.stamp = t
+    @marker_type.setter
+    def marker_type(self, marker_type):
+        self.type = marker_type
 
-    def add_action(self, a):
-        self.action = a
+    @property
+    def time(self):
+        return self.header.stamp
 
-    def add_position(self, pos):
-    	msetattr(self.pose.position, XYZ, pos)
+    @time.setter
+    def time(self, time):
+        self.header.stamp = time
 
-    def add_orientation(self, ori):
-    	msetattr(self.pose.orientation, XYZW, ori)
-        
-    def append_point(self, pt):
-        self.points.append(pt)
+    @property
+    def position(self):
+        return PointMsg.as_np(self.pose.position)
 
-    def add_points(self, pts):
-        self.points = pts
+    @position.setter
+    def position(self, position):
+        self.pose.position = PointMsg(position)
 
-    def add_scale(self, sc):
-    	msetattr(self.scale, XYZ, sc)
+    @property
+    def orientation(self):
+        return QuaternionMsg.as_np(self.pose.orientation)
 
-    def add_mesh(self, filename, use_embedded_materials=False):
-        self.mesh_use_embedded_materials = use_embedded_materials
+    @orientation.setter
+    def orientation(self, o):
+        self.pose.orientation = QuaternionMsg(o)
+
+    @property
+    def alpha(self):
+        return self.color.a
+
+    @alpha.setter
+    def alpha(self, a):
+        self.color.a = a
+
+    #
+    # Properties for a text_view_facing marker.
+    #
+
+    @property
+    def fontsize(self):
+        return self.scale.z
+
+    @fontsize.setter
+    def fontsize(self, fs):
+        assert self.marker_type is Marker.TEXT_VIEW_FACING, "Marker needs to be a TEXT_VIEW_FACING to set a fontsize."
+        self.scale.z = fs
+
+    #
+    # Properties for a mesh marker
+    #
+
+    @property
+    def filename(self):
+        return self.mesh_resource
+
+    @filename.setter
+    def filename(self, filename):
+        assert self.marker_type is Marker.MESH_RESOURCE, "Marker needs to be a MESH_RESOURCE to set a filename."
         self.mesh_resource = filename
 
-    def add_color(self, c):
-        typec = type(c)
-        if typec is list or typec is tuple:
-            if len(c) == 3:
-                msetattr(self.color, RGB, c)
-                self.add_alpha(1.0)
-            elif len(c) == 4:
-                msetattr(self.color, RGBA, c)
-        else:
-            # Assume given color is std_msgs.msg.ColorRGBA
-            self.color = c
+    #
+    # Properties for a sphere/sphere_list/cylinder marker
+    #
 
-    def add_alpha(self, a):
-        self.color.a = a
+    @property
+    def diameter(self):
+        return self.scale.x
+        
+    @diameter.setter
+    def diameter(self, d):
+        if self.marker_type is Marker.SPHERE:
+            self.scale = Vector3Msg([d]*3)
+        elif self.marker_type is Marker.CYLINDER:
+            self.scale.x = self.scale.y = d
+        elif self.marker_type is Marker.SPHERE_LIST:
+            self.scale = Vector3Msg([d]*3)
+        else:
+            raise TypeError("Marker needs to be a SPHERE, CYLINDER, or SPHERE_LIST to set a diameter.")
+
+    @property
+    def radius(self):
+        return self.diameter/2.0
+
+    @radius.setter
+    def radius(self, r):
+        self.diameter = 2.0*r
+
+    #
+    # Properties for an arrow marker
+    #
+
+    @property
+    def start_point(self):
+        return self.points[0]
+
+    @start_point.setter
+    def start_point(self, s):
+        assert self.marker_type is Marker.ARROW, "Marker needs to be an ARROW to set start_point."
+        self.points[0] = PointMsg(s)
+
+    @property
+    def end_point(self):
+        return self.points[1]
+
+    @end_point.setter
+    def end_point(self, e):
+        assert self.marker_type is Marker.ARROW, "Marker needs to be an ARROW to set end_point."
+        self.points[1] = PointMsg(e)
+
+    @property
+    def shaft_diameter(self):
+        return self.scale.x
+
+    @shaft_diameter.setter
+    def shaft_diameter(self, d):
+        assert self.marker_type is Marker.ARROW, "Marker needs to be an ARROW to set shaft_diameter."
+        self.scale.x = d
+
+    @property
+    def head_diameter(self):
+        return self.scale.y
+
+    @head_diameter.setter
+    def head_diameter(self, d):
+        assert self.marker_type is Marker.ARROW, "Marker needs to be an ARROW to set head_diameter."
+        self.scale.y = d
+
+    @property
+    def head_length(self):
+        return self.scale.z
+
+    @head_length.setter
+    def head_length(self, l):
+        assert self.marker_type is Marker.ARROW, "Marker needs to be an ARROW to set head_length."
+        self.scale.z = l
+
+    @property
+    def shaft_radius(self):
+        return self.shaft_diameter/2.0
+
+    @shaft_radius.setter
+    def shaft_radius(self, r):
+        self.shaft_diameter = 2.0 * r
+
+    @property
+    def head_radius(self):
+        return self.head_diameter/2.0
+
+    @head_radius.setter
+    def head_radius(self, r):
+        self.head_diameter = 2.0*r
+
+    #
+    # Properties for a cube/cube_list marker
+    #
+
+    @property
+    def length(self):
+        return self.scale.x
+
+    @length.setter
+    def length(self, l):
+        assert self.marker_type in [Marker.CUBE, Marker.CUBE_LIST], "Marker needs to be either a CUBE or CUBE_LIST to set length."
+        self.scale.x = l
+
+    @property
+    def width(self):
+        return self.scale.y
+
+    @width.setter
+    def width(self, w):
+        assert self.marker_type in [Marker.CUBE, Marker.CUBE_LIST], "Marker needs to be either a CUBE or CUBE_LIST to set width."
+        self.scale.y = w
+
+    @property
+    def height(self):
+        return self.scale.z
+
+    @height.setter
+    def height(self, h):
+        assert self.marker_type in [Marker.CUBE, Marker.CUBE_LIST, Marker.CYLINDER], "Marker needs to be either a CUBE, CUBE_LIST or CYLINDER to set height."
+        self.scale.z = h
+
+    #
+    # Other methods
+    #
+
+    def append_point(self, p):
+        assert self.marker_type in [Marker.SPHERE_LIST, Marker.CUBE_LIST, Marker.POINTS, self.TRIANGLE_LIST], "Marker needs to be either a SPHERE_LIST, CUBE_LIST, POINTS, TRIANGLE_LIST to append points."
+        self.points.append(PointMsg(p))
+
+    def append_color(self, c):
+        assert self.marker_type in [Marker.SPHERE_LIST, Marker.CUBE_LIST, Marker.POINTS, self.TRIANGLE_LIST], "Marker needs to be either a SPHERE_LIST, CUBE_LIST, POINTS, or TRIANGLE_LIST to append colors."
+        self.colors.append(ColorMsg(c))
+
+    def append_point_and_color(self, p, c):
+        self.append_point(p)
+        self.append_color(c)
 
 class StlMeshMsg(MarkerMsg):
 
-    def __init__(self, time=None, frame_id=None, color=None, position=None, orientation=None, scale=None, filename=None):
-        super(StlMeshMsg, self).__init__(Marker.MESH_RESOURCE, time, frame_id, color, position, orientation, scale)
-        if filename is not None: self.add_stl_mesh(filename)
-
-    def add_stl_mesh(self, filename):
-        self.add_mesh(filename, False)
+    def __init__(self, **kwargs):
+        super(StlMeshMsg, self).__init__(Marker.MESH_RESOURCE)
+        self.parse_kwargs(kwargs)
         
 class SphereMsg(MarkerMsg):
     
-    def __init__(self, time=None, frame_id=None, color=None, position=None, scale = None, radius=None, diameter=None):
-        super(SphereMsg, self).__init__(Marker.SPHERE, time, frame_id, color, position, None, scale)
-        if radius is not None: self.add_radius(radius)
-        if diameter is not None: self.add_diameter(diameter)
-
-    def add_radius(self, r):
-        self.add_diameter(2.0*r)
-
-    def add_diameter(self, d):
-        self.add_scale([d]*3)
+    def __init__(self, **kwargs):
+        super(SphereMsg, self).__init__(Marker.SPHERE)
+        self.parse_kwargs(kwargs)
 
 class ArrowMsg(MarkerMsg):
     
-    def __init__(self, time=None, frame_id=None, color=None, scale=None, start_pt=None, end_pt=None, shaft_radius=None, head_radius=None, shaft_diameter=None, head_diameter=None, head_length=None):
-        super(ArrowMsg, self).__init__(Marker.ARROW, time, frame_id, color, None, None, scale)
+    def __init__(self, **kwargs):
+        super(ArrowMsg, self).__init__(Marker.ARROW)
         self.points = [None, None]
-        if start_pt is not None: self.add_start_pt(start_pt)
-        if end_pt is not None: self.add_end_pt(end_pt)
-        if shaft_radius is not None: self.add_shaft_diameter(2.0 * shaft_radius)
-        if head_radius is not None: self.add_head_diameter(2.0 * head_diameter)
-        if shaft_diameter is not None: self.add_shaft_diameter(shaft_diameter)
-        if head_diameter is not None: self.add_head_diameter(head_diameter)
-        if head_length is not None: self.add_head_length(head_length)
-    
-    def add_start_pt(self, p):
-        self.points[0] = p
-
-    def add_end_pt(self, p):
-        self.points[1] = p
-
-    def add_start_and_end_points(self, ps):
-        self.add_start_pt(ps[0])
-        self.add_end_pt(ps[1])
-
-    def add_shaft_diameter(self, d):
-        self.scale.x = d
-
-    def add_head_diameter(self, d):
-        self.scale.y = d
-
-    def add_head_length(self, l):
-        self.scale.z = l
+        self.parse_kwargs(kwargs)
         
 class CubeMsg(MarkerMsg):
 
-    def __init__(self, time=None, frame_id=None, color=None, position=None, orientation=None, scale=None, length=None, width=None, height=None):
-        super(CubeMsg, self).__init__(Marker.CUBE, time, frame_id, color, position, orientation, scale)
-        if length is not None: self.add_length(length)
-        if width is not None: self.add_width(width)
-        if height is not None: self.add_height(height)
-
-    def add_length(self, l):
-        self.scale.x = l
-
-    def add_width(self, w):
-        self.scale.y = w
-
-    def add_height(self, h):
-        self.scale.z = h
+    def __init__(self, **kwargs):
+        super(CubeMsg, self).__init__(Marker.CUBE)
+        self.parse_kwargs(kwargs)
 
 class CylinderMsg(MarkerMsg):
 
-    def __init__(self, time=None, frame_id=None, color=None, position=None, orientation=None, scale=None, radius=None, diameter=None, height=None):
-        super(CylinderMsg, self).__init__(Marker.CYLINDER, time, frame_id, color, position, orientation, scale)
-        if radius is not None: self.add_radius(radius)
-        if diameter is not None: self.add_diameter(diameter)
-        if height is not None: self.add_height(height)
-
-    def add_radius(self, r):
-        self.add_diameter(2.0*r)
-
-    def add_diameter(self, d):
-        self.scale.x = self.scale.y = d
-
-    def add_height(self, h):
-        self.scale.z = h
+    def __init__(self, **kwargs):
+        super(CylinderMsg, self).__init__(Marker.CYLINDER)
+        self.parse_kwargs(kwargs)
 
 class LineStripMsg(MarkerMsg):
 
-    def __init__(self, time, frame_id, line_width, color, points=None):
-        super(LineStripMsg, self).__init__(Marker.LINE_STRIP, time, frame_id)
-        self.add_color(color)
-        self.add_scale([line_width, 0, 0])
-        if type(points) is list:
-            # assume list of Point msgs
-            self.add_points(points)
-        elif type(points) is np.ndarray:
-            # assume n-by-3
-            for p in points: self.append_point(PointMsg(p))
+    def __init__(self, **kwargs):
+        super(LineStripMsg, self).__init__(Marker.LINE_STRIP)
+        self.parse_kwargs(kwargs)
 
 class SphereListMsg(MarkerMsg):
 
-    def __init__(self, time, frame_id, radius, color, points=None):
-        super(SphereListMsg, self).__init__(Marker.SPHERE_LIST, time, frame_id)
-        self.add_color(color)
-        self.add_scale([2.0 * radius]*3)
-        if type(points) is list:
-            # assume list of Point msgs
-            self.add_points(points)
-        elif type(points) is np.ndarray:
-            # assume n-by-3
-            for p in points: self.append_point(PointMsg(p))
+    def __init__(self, **kwargs):
+        super(SphereListMsg, self).__init__(Marker.SPHERE_LIST)
+        self.parse_kwargs(kwargs)
             
 class MarkerArrayMsg(MarkerArray):
 
     def __init__(self, markers):
         super(MarkerArrayMsg, self).__init__()
-        self.markers = markers
+        if type(markers) in [MarkerArrayMsg, MarkerArray]:
+            ms = markers.markers
+        else:
+            ms = markers
+        self.markers = map(MarkerMsg, ms)
         self.resolve_ids()
+        self._iter = 0
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        if self._iter < self.nmarkers:
+            i = self._iter
+            self._iter += 1
+            return self[i]
+        else:
+            self._iter = 0
+            raise StopIteration
+
+    @property
+    def nmarkers(self):
+        return len(self)
 
     def __getitem__(self, i):
         return self.markers[i]
@@ -206,9 +354,10 @@ class MarkerArrayMsg(MarkerArray):
         
     def append(self, m):
         self.markers.append(m)
+        self.resolve_ids()
 
     def resolve_ids(self):
-        map(lambda im : setattr(im[1], 'id', im[0]), enumerate(self.markers))
+        for i, m in enumerate(self): m.id = i
 
-    def add_time(self, i, t):
-        self.markers[i].header.stamp = t        
+    def add_time(self, t):
+        for m in self: m.time = t

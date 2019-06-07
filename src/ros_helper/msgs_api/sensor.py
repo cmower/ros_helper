@@ -1,7 +1,7 @@
 from sensor_msgs.msg import JointState, Joy
 from ros_helper.msg import MultiJoy, Keyboard
 
-__all__=['JointStateMsg', 'JoyMsg', 'MultiJoyMsg', 'Keyboard']
+__all__=['JointStateMsg', 'JoyMsg', 'MultiJoyMsg', 'KeyboardMsg']
 
 # Keyboard keys, ord : pygame key id
 keyboard_keys = {\
@@ -145,38 +145,71 @@ keyboard_keys = {\
 
 class JointStateMsg(JointState):
 
-    def __init__(self, t, q, qd=None, eff=None, names=None):
+    def __init__(self, time, q=None, qd=None, eff=None, names=None):
         super(JointStateMsg, self).__init__()
-        self.header.stamp = t
-        self.position = q
-        if names is not None: self.name = names
-        if qd is not None: self.velocity = qd
-        if eff is not None: self.effort = eff
+        if type(time) in [JointStateMsg, JointState]:
+            js = time
+            self.header = js.header
+            self.name = js.name
+            self.position = js.position
+            self.velocity = js.velocity
+            self.effort = js.effort
+        else:
+            # Assumes time is a rospy.Time.now() and q is a list of joint positions
+            self.header.stamp = time
+            self.position = q
+            if qd is not None: self.velocity = qd
+            if eff is not None: self.effort = eff
+            if names is not None: self.name = names
 
 class JoyMsg(Joy):
 
-    def __init__(self, t, axes, buttons):
+    def __init__(self, time, axes=None, buttons=None):
         super(JoyMsg, self).__init__()
-        self.header.stamp = t
-        self.axes = axes
-        self.buttons = buttons
+        if type(time) in [JoyMsg, Joy]:
+            j = time
+            self.header = j.header
+            self.axes = j.axes
+            self.buttons = j.buttons
+        else:
+            self.header.stamp = time
+            if axes is not None: self.axes = axes
+            if buttons is not None: self.buttons = buttons
 
 class MultiJoyMsg(MultiJoy):
 
-    def __init__(self, t, joys):
+    def __init__(self, time, joys=None):
         super(MultiJoyMsg, self).__init__()
-        self.header.stamp = t
-        self.njoys = len(joys)
-        self.joys = joys
+        if type(time) in [MultiJoyMsg, MultiJoy]:
+            mj = time
+            self.header = mj.header
+            self.njoys = mj.njoys
+            self.joys = mj.joys
+        else:
+            # Assumes joys is not None
+            self.header.stamp = time
+            self.njoys = len(joys)
+            self.joys = joys
         
 class KeyboardMsg(Keyboard):
 
-    def __init__(self, t):
+    def __init__(self, time, **kwargs):
         super(KeyboardMsg, self).__init__()
-        self.add_time(t)
+        if type(time) in [KeyboardMsg, Keyboard]:
+            kb = time
+            self.header = kb.header
+            for k in [k for k in dir(kb) if k.startswith('K')]: setattr(self, k, getattr(kb, k))
+        else:
+            self.time = time
+            for key, value in kwargs.items(): self[key] = value
+                
+    @property
+    def time(self):
+        return self.header.stamp
 
-    def add_time(self, t):
-        self.header.stamp = t
+    @time.setter
+    def time(self, time):
+        self.header.stamp = time
 
     def __setitem__(self, idx, val):
         setattr(self, KeyboardMsg._idx_to_key(idx), val)
@@ -192,12 +225,4 @@ class KeyboardMsg(Keyboard):
             k = idx
         else:
             raise "[ERROR] given idx can only be a int or str."
-        return k    
-
-    @staticmethod
-    def to_keyboardmsg(kb):
-        kbmsg = KeyboardMsg()
-        for idx in keyboard_keys:
-            k = KeyboardMsg._idx_to_key(idx)
-            kbmsg[k] = getattr(kb, k)
-        return kbmsg
+        return k
