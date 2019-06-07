@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import rospy
-import ros_helper.msgs_api.visualization as vis
+import ros_helper.msgs.visualization as vis
 from ros_helper.simple_pub_sub import SimplePublisher
 
 class MeshPublisher(SimplePublisher):
@@ -10,14 +10,21 @@ class MeshPublisher(SimplePublisher):
         self.frame_id = rospy.get_param('~frame_id')
         self.scale = rospy.get_param('~scale')
         self.color = rospy.get_param('~color')
-        super(MeshPublisher, self).__init__(rospy, rospy.get_param('~topic_name'), vis.Marker) 
+        hz = 40.0
+        self.init_pub(rospy, rospy.get_param('~topic_name'), vis.Marker, hz)
+        self.msg = vis.StlMeshMsg(filename=self.filename,\
+                              time=rospy.Time.now(),\
+                              frame_id = self.frame_id,\
+                              scale=self.scale,\
+                              color = self.color)
 
     def generate_message(self):
-        return vis.StlMeshMsg(self.filename, rospy.Time.now(), self.frame_id, self.scale, self.color)
+        self.msg.time = rospy.Time.now()
+        return self.msg
 
 if __name__=='__main__':
     rospy.init_node('mesh_publisher_node')
-    rospy.Timer(rospy.Duration(1.0/50.0), MeshPublisher().update)
+    MeshPublisher()
     rospy.spin()
     
                 

@@ -1,16 +1,7 @@
 #!/usr/bin/env python
 import rospy
 import numpy as np
-from copy import deepcopy
-from visualization_msgs.msg import Marker, MarkerArray
-
-def init_marker(fr):
-    marker = Marker()
-    marker.header.frame_id = fr
-    marker.header.stamp = rospy.Time.now()
-    marker.action = 0
-    marker.pose.orientation.w = 1
-    return marker
+import ros_helper.msgs.visualization as vis
 
 class Particle(object):
 
@@ -30,6 +21,10 @@ class Particle(object):
         self.x = self.r*self.A
         self.y = self.r*self.B
         self.z = self.r*self.C
+
+    @property
+    def position(self):
+        return np.array([self.x, self.y, self.z])
     
 class SpraySim(object):
 
@@ -43,7 +38,8 @@ class SpraySim(object):
         self.spawn_rate = rospy.get_param('~spawn_rate') 
         self.particle_speed = rospy.get_param('~particle_speed') 
         self.particles = []
-        self.particle_pub = rospy.Publisher('spray', MarkerArray, queue_size=1)
+        self.particle_pub = rospy.Publisher('spray', vis.Marker, queue_size=1)
+        self.color = (0.8235294117647058, 0.4117647058823529, 0.11764705882352941, 1.0)
 
         # Set ros timers
         rospy.Timer(rospy.Duration(1.0/50.0), self.publish_particles)
@@ -57,7 +53,7 @@ class SpraySim(object):
         else:
             pub_cone = False
         if pub_cone:
-            self.cone_pub = rospy.Publisher('cone', Marker, queue_size=1)
+            self.cone_pub = rospy.Publisher('cone', vis.Marker, queue_size=1)
             rospy.Timer(rospy.Duration(1.0/50.0), self.publish_cone)
             
     def spawn_new_particles(self, event):
@@ -70,31 +66,18 @@ class SpraySim(object):
         for p in self.particles: p.update()
 
     def publish_particles(self, event):
-        markerarray = MarkerArray()
-        for i, p in enumerate(deepcopy(self.particles)):
-            marker = init_marker(self.frame)
-            marker.type=2
-            marker.id = i
-            marker.pose.position.x = p.x
-            marker.pose.position.y = p.y
-            marker.pose.position.z = p.z
-            marker.scale.x = marker.scale.y = marker.scale.z = self.particle_radius
-            marker.color.a = 1.0
-            marker.color.r = 210.0 / 255.0
-            marker.color.g = 105.0 / 255.0
-            marker.color.b = 30.0 / 255.0
-            markerarray.markers.append(marker)
-        self.particle_pub.publish(markerarray)
+        self.particle_pub.publish(vis.SphereListMsg(time = rospy.Time.now(),\
+                                                    frame_id = self.frame,\
+                                                    points=[p.position for p in self.particles],\
+                                                    color = self.color,\
+                                                    radius = self.particle_radius))
 
     def publish_cone(self, event):
-        marker = init_marker(self.frame)
-        marker.type = 10
-        marker.id = 0
-        marker.scale.x = marker.scale.y = marker.scale.z = 0.5
-        marker.color.a = 0.5
-        marker.color.r = 1.0
-        marker.mesh_resource = "package://ros_helper/resources/cone.stl"
-        self.cone_pub.publish(marker)
+        self.cone_pub.publish(vis.StlMeshMsg(filename="package://ros_helper/resources/cone.stl",\
+                                             frame_id = self.frame,\
+                                             time=rospy.Time.now(),\
+                                             color = [1.0, 0.0, 0.0, 0.5],\
+                                             scale = [0.5, 0.5, 0.5]))
 
 if __name__=='__main__':
     rospy.init_node('rviz_spray_sim_node')

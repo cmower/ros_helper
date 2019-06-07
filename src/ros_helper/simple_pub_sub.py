@@ -13,7 +13,7 @@ i.e. in SimplePublisher, we want to check before running that generate_message f
 
 class SimplePublisher(object):
 
-    def init_pub(self, rospy, topic_name, topic_type, hz, queue_size):
+    def init_pub(self, rospy, topic_name, topic_type, hz, queue_size=1):
         assert hasattr(self, 'generate_message'), "Derived class for SimplePublisher must have a generate_message method implemented."
         self.pub = rospy.Publisher(topic_name, topic_type, queue_size=queue_size)
         rospy.Timer(rospy.Duration(1.0/float(hz)), self.update)
