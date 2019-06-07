@@ -38,7 +38,7 @@ class SpraySim(object):
         self.spawn_rate = rospy.get_param('~spawn_rate') 
         self.particle_speed = rospy.get_param('~particle_speed') 
         self.particles = []
-        self.particle_pub = rospy.Publisher('spray', vis.Marker, queue_size=1)
+        self.particle_pub = rospy.Publisher('spray', vis.SphereListMsg, queue_size=1)
         self.color = (0.8235294117647058, 0.4117647058823529, 0.11764705882352941, 1.0)
 
         # Set ros timers
@@ -53,7 +53,7 @@ class SpraySim(object):
         else:
             pub_cone = False
         if pub_cone:
-            self.cone_pub = rospy.Publisher('cone', vis.Marker, queue_size=1)
+            self.cone_pub = rospy.Publisher('cone', vis.StlMeshMsg, queue_size=1)
             rospy.Timer(rospy.Duration(1.0/50.0), self.publish_cone)
             
     def spawn_new_particles(self, event):
