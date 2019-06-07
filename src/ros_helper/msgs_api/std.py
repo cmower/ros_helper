@@ -1,4 +1,6 @@
 from std_msgs.msg import *
+from .utils import *
+import colors
 
 class BoolMsg(Bool):
 
@@ -65,3 +67,22 @@ class UInt64Msg(UInt64):
   def __init__(self, d):
     super(UInt64Msg, self).__init__()
     self.data = d
+
+class ColorMsg(ColorRGBA):
+
+    def __init__(self, c):
+        super(ColorMsg, self).__init__()
+        if type(c) in [ColorRGBA, ColorMsg]:
+            for d in RGBA: setattr(self, d, getattr(c, d))
+        else:
+            # assumes input is numpy array or list or tuple
+            n = len(c)
+            if n == 3:
+                dims = RGB
+                self.a = 1.0
+            elif n == 4:
+                dims = RGBA
+            else:
+                raise TypeError("Given c is incorrect length.") # not sure if a better error type should be used 
+            msetattr(self, dims, c)
+    
