@@ -6,7 +6,6 @@ A collection of helper scripts and nodes for ros.
 
 * Update `package.xml` deps.
 * Sort out `__all__` in `src`
-* Consider name changes, e.g. `msgs_api` to `msgs`, i.e. drop the `_api`.
 * Update `rviz_spray_sim` to use `ros_helper`
 * Update naming conventions in scripts, e.g. do we need `_node` at end?
 * Consider converting all use of lists to np arrays, see [here](https://www.freecodecamp.org/news/if-you-have-slow-loops-in-python-you-can-fix-it-until-you-cant-3a39e03b6f35/). This may have an adverse affect however, I am not sure if ROS will handle np arrays when serializing msgs. Will need to test. 

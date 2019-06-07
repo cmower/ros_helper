@@ -1,7 +1,7 @@
 import tf
 import numpy as np
 import tf2_ros
-from .msgs_api.geometry import TransformStampedMsg
+from .msgs.geometry import TransformStampedMsg
 
 def _axis_intercept_point_in_plane(trans, quat, i_frame, i_base):
     """
