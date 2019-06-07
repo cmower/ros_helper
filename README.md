@@ -10,5 +10,5 @@ A collection of helper scripts and nodes for [ROS](https://www.ros.org/).
 
 ### Long term
 
-* Documentation.
+* Documentation (Wiki).
 * A C++ version.
