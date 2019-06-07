@@ -4,7 +4,6 @@ A collection of helper scripts and nodes for ros.
 
 ## Todo
 
-* Update `package.xml` deps.
 * Sort out `__all__` in `src`
 * Update `rviz_spray_sim` to use `ros_helper`
 * Update naming conventions in scripts, e.g. do we need `_node` at end?

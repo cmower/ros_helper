@@ -1,24 +1,28 @@
 <?xml version="1.0"?>
 <package format="2">
+  
   <name>ros_helper</name>
   <version>0.0.0</version>
-  <description>The ros_helper package</description>
+  <description>The ros_helper package.</description>
 
+  <author email="chris.mower@ed.ac.uk">Chris E. Mower</author>
   <maintainer email="chris.mower@ed.ac.uk">Chris E. Mower</maintainer>
   <license>GPLv3</license>
   <url type="website">https://github.com/cmower/ros_helper</url>
-  <author email="chris.mower@ed.ac.uk">Chris E. Mower</author>
+  
   <buildtool_depend>catkin</buildtool_depend>
-  <depend>geometry_msgs</depend>
+  <build_depend>message_generation</build_depend>
+
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
-  <depend>tf</depend>
-  <depend>tf2</depend>
-  <depend>tf2_ros</depend>
-  <depend>visualization_msgs</depend>
-  <depend>rospy</depend>
-  <depend>python-pygame</depend>
-  <build_depend>message_generation</build_depend>
+  
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>tf</exec_depend>
+  <exec_depend>tf2</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>visualization_msgs</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>python-pygame</exec_depend>
   <exec_depend>message_runtime</exec_depend>
 
 </package>
