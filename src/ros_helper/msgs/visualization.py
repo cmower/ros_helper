@@ -322,19 +322,9 @@ class MarkerArrayMsg(MarkerArray):
             ms = markers
         self.markers = map(MarkerMsg, ms)
         self.resolve_ids()
-        self._iter = 0
 
     def __iter__(self):
-        return self
-
-    def next(self):
-        if self._iter < self.nmarkers:
-            i = self._iter
-            self._iter += 1
-            return self[i]
-        else:
-            self._iter = 0
-            raise StopIteration
+        return iter(self.markers)
 
     @property
     def nmarkers(self):
