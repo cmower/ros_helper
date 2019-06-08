@@ -140,12 +140,10 @@ class MarkerMsg(Marker):
         
     @diameter.setter
     def diameter(self, d):
-        if self.marker_type is Marker.SPHERE:
-            self.scale = Vector3Msg([d]*3)
+        if self.marker_type in [Marker.SPHERE, Marker.SPHERE_LIST]:
+            self.scale.x = self.scale.y = self.scale.z = d
         elif self.marker_type is Marker.CYLINDER:
             self.scale.x = self.scale.y = d
-        elif self.marker_type is Marker.SPHERE_LIST:
-            self.scale = Vector3Msg([d]*3)
         else:
             raise TypeError("Marker needs to be a SPHERE, CYLINDER, or SPHERE_LIST to set a diameter.")
 
@@ -223,7 +221,7 @@ class MarkerMsg(Marker):
         self.head_diameter = 2.0*r
 
     #
-    # Properties for a cube/cube_list marker
+    # Properties for a cube/cube_list marker, note that height is apart of cylinder too.
     #
 
     @property
