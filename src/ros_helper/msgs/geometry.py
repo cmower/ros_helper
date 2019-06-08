@@ -82,4 +82,4 @@ class TransformStampedMsg(TransformStamped):
         return T
 
     def to_euler(self):
-        return self.transform.rotation.to_np()
+        return self.transform.rotation.to_euler()
