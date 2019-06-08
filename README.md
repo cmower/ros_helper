@@ -12,3 +12,4 @@ A collection of helper scripts and nodes for [ROS](https://www.ros.org/). For in
 
 * Documentation (Wiki).
 * A C++ version.
+* Make public.
