@@ -316,15 +316,20 @@ class MarkerArrayMsg(MarkerArray):
 
     def __init__(self, markers):
         super(MarkerArrayMsg, self).__init__()
-        if type(markers) in [MarkerArrayMsg, MarkerArray]:
-            ms = markers.markers
-        else:
-            ms = markers
-        self.markers = map(MarkerMsg, ms)
+        self.markers = map(MarkerMsg, markers if type(markers) not in [MarkerArrayMsg, MarkerArray] else markers.markers)
         self.resolve_ids()
 
     def __iter__(self):
         return iter(self.markers)
+
+    @property
+    def time(self):
+        assert self.nmarkers > 0, "At least one marker is required to get the time attribute."
+        return self[0].time
+
+    @time.setter
+    def time(self, t):
+        for m in self: m.time = t
 
     @property
     def nmarkers(self):
@@ -345,6 +350,3 @@ class MarkerArrayMsg(MarkerArray):
 
     def resolve_ids(self):
         for i, m in enumerate(self): m.id = i
-
-    def add_time(self, t):
-        for m in self: m.time = t
