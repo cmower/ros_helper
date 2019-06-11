@@ -1,7 +1,8 @@
+import rospy
 import numpy as np
 from visualization_msgs.msg import Marker, MarkerArray
 from .std import ColorMsg
-from .geometry import Vector3Msg, QuaternionMsg, PointMsg
+from .geometry import Vector3Msg, QuaternionMsg, PointMsg, Point, Quaternion
 
 class MarkerMsg(Marker):
 
@@ -53,8 +54,9 @@ class MarkerMsg(Marker):
         return self.ns
 
     @namespace.setter
-    def namespace(self, n):
-        self.ns = n
+    def namespace(self, ns):
+        assert type(ns) is str, "Namespace must be a string!"
+        self.ns = ns
 
     @property
     def frame_id(self):
@@ -62,6 +64,7 @@ class MarkerMsg(Marker):
 
     @frame_id.setter
     def frame_id(self, frame_id):
+        assert type(frame_id) is str, "Frame ID must be a string!"
         self.header.frame_id = frame_id
 
     @property
@@ -70,6 +73,8 @@ class MarkerMsg(Marker):
 
     @marker_type.setter
     def marker_type(self, marker_type):
+        assert type(marker_type) is int, "Marker type must be an integer!"
+        assert 0 <= marker_type <= 11, "Marker type must be in range [0, 11]. See http://docs.ros.org/api/visualization_msgs/html/msg/Marker.html"
         self.type = marker_type
 
     @property
@@ -78,6 +83,7 @@ class MarkerMsg(Marker):
 
     @time.setter
     def time(self, time):
+        assert type(time) is rospy.rostime.Time, "Time must be a rospy.rostime.Time"
         self.header.stamp = time
 
     @property
@@ -86,6 +92,8 @@ class MarkerMsg(Marker):
 
     @position.setter
     def position(self, position):
+        typ = type(position)
+        assert typ is np.ndarray or typ is PointMsg or typ is Point, "Position must either be a numpy array, a PointMsg, or Point."
         self.pose.position = PointMsg(position)
 
     @property
@@ -94,6 +102,8 @@ class MarkerMsg(Marker):
 
     @orientation.setter
     def orientation(self, o):
+        typ = type(position)
+        assert typ is np.ndarray or typ is QuaternionMsg or typ is Quaternion, "Orientation must either be a numpy array, a QuaternionMsg, or Quaternion."
         self.pose.orientation = QuaternionMsg(o)
 
     @property
@@ -102,6 +112,8 @@ class MarkerMsg(Marker):
 
     @alpha.setter
     def alpha(self, a):
+        assert type(a) is float, "Alpha must be a float."
+        assert 0 <= a <= 1.0, "Alpha must be in range [0, 1]."
         self.color.a = a
 
     #
@@ -115,6 +127,9 @@ class MarkerMsg(Marker):
     @fontsize.setter
     def fontsize(self, fs):
         assert self.marker_type is Marker.TEXT_VIEW_FACING, "Marker needs to be a TEXT_VIEW_FACING to set a fontsize."
+        typ = type(fs)
+        assert typ is float or typ is int, "Fontsize must be either a float or int."
+        assert fs > 0.0, "Fontsize must be positive."
         self.scale.z = fs
 
     #
@@ -128,6 +143,7 @@ class MarkerMsg(Marker):
     @filename.setter
     def filename(self, filename):
         assert self.marker_type is Marker.MESH_RESOURCE, "Marker needs to be a MESH_RESOURCE to set a filename."
+        assert type(filename) is str, "Filename must be a string."
         self.mesh_resource = filename
 
     #
@@ -140,6 +156,8 @@ class MarkerMsg(Marker):
         
     @diameter.setter
     def diameter(self, d):
+        assert type(d) is float, "Diameter must be a float."
+        assert d > 0.0, "Diameter must be positive."
         if self.marker_type in [Marker.SPHERE, Marker.SPHERE_LIST]:
             self.scale.x = self.scale.y = self.scale.z = d
         elif self.marker_type is Marker.CYLINDER:
@@ -166,6 +184,8 @@ class MarkerMsg(Marker):
     @start_point.setter
     def start_point(self, s):
         assert self.marker_type is Marker.ARROW, "Marker needs to be an ARROW to set start_point."
+        typ = type(s)
+        assert typ is np.ndarray or typ is PointMsg or typ is Point, "Start point must be either a numpy array, PointMsg, or Point."
         self.points[0] = PointMsg(s)
 
     @property
@@ -175,6 +195,8 @@ class MarkerMsg(Marker):
     @end_point.setter
     def end_point(self, e):
         assert self.marker_type is Marker.ARROW, "Marker needs to be an ARROW to set end_point."
+        typ = type(s)
+        assert typ is np.ndarray or typ is PointMsg or typ is Point, "End point must be either a numpy array, PointMsg, or Point."        
         self.points[1] = PointMsg(e)
 
     @property
@@ -184,6 +206,8 @@ class MarkerMsg(Marker):
     @shaft_diameter.setter
     def shaft_diameter(self, d):
         assert self.marker_type is Marker.ARROW, "Marker needs to be an ARROW to set shaft_diameter."
+        assert type(d) is float, "Shaft diameter must be a float."
+        assert d > 0.0, "Shaft diameter must be positive."
         self.scale.x = d
 
     @property
@@ -193,6 +217,8 @@ class MarkerMsg(Marker):
     @head_diameter.setter
     def head_diameter(self, d):
         assert self.marker_type is Marker.ARROW, "Marker needs to be an ARROW to set head_diameter."
+        assert type(d) is float, "Head diameter must be a float."
+        assert d > 0.0, "Head diameter must be positive."
         self.scale.y = d
 
     @property
@@ -202,6 +228,8 @@ class MarkerMsg(Marker):
     @head_length.setter
     def head_length(self, l):
         assert self.marker_type is Marker.ARROW, "Marker needs to be an ARROW to set head_length."
+        assert type(l) is float, "Head length must be a float."
+        assert l > 0.0, "Head length must be positive."        
         self.scale.z = l
 
     @property
@@ -231,6 +259,8 @@ class MarkerMsg(Marker):
     @length.setter
     def length(self, l):
         assert self.marker_type in [Marker.CUBE, Marker.CUBE_LIST], "Marker needs to be either a CUBE or CUBE_LIST to set length."
+        assert type(l) is float, "Length must be a float."
+        assert l > 0.0, "Length must be positive."
         self.scale.x = l
 
     @property
@@ -240,6 +270,8 @@ class MarkerMsg(Marker):
     @width.setter
     def width(self, w):
         assert self.marker_type in [Marker.CUBE, Marker.CUBE_LIST], "Marker needs to be either a CUBE or CUBE_LIST to set width."
+        assert type(w) is float, "Width must be a float."
+        assert w > 0.0, "Width must be positive."        
         self.scale.y = w
 
     @property
@@ -249,6 +281,8 @@ class MarkerMsg(Marker):
     @height.setter
     def height(self, h):
         assert self.marker_type in [Marker.CUBE, Marker.CUBE_LIST, Marker.CYLINDER], "Marker needs to be either a CUBE, CUBE_LIST or CYLINDER to set height."
+        assert type(h) is float, "Height must be a float."
+        assert h > 0.0, "Height must be positive."                
         self.scale.z = h
 
     #
