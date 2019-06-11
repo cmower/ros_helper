@@ -1,4 +1,4 @@
-import rospy
+from  rospy.rostime import Time
 import numpy as np
 from visualization_msgs.msg import Marker, MarkerArray
 from .std import ColorMsg
@@ -83,7 +83,7 @@ class MarkerMsg(Marker):
 
     @time.setter
     def time(self, time):
-        assert type(time) is rospy.rostime.Time, "Time must be a rospy.rostime.Time"
+        assert type(time) is Time, "Time must be a rospy.rostime.Time"
         self.header.stamp = time
 
     @property
