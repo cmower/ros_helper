@@ -9,7 +9,14 @@ class MarkerMsg(Marker):
     def __init__(self, marker_type, **kwargs):
         super(MarkerMsg, self).__init__()
         
-        if type(marker_type) in [MarkerMsg, Marker]:
+        if type(marker_type) in [MarkerMsg,\
+                                 Marker,\
+                                 SphereListMsg,\
+                                 LineStripMsg,\
+                                 CylinderMsg,\
+                                 CubeMsg,\
+                                 ArrowMsg,\
+                                 StlMeshMsg]:
             # Make self a copy of given marker
             m = marker_type
             self.header = m.header
@@ -92,8 +99,7 @@ class MarkerMsg(Marker):
 
     @position.setter
     def position(self, position):
-        typ = type(position)
-        assert typ is np.ndarray or typ is PointMsg or typ is Point, "Position must either be a numpy array, a PointMsg, or Point."
+        assert type(position) in [np.ndarray, list, tuple, PointMsg, Point], "Position must either be a list, tuple, numpy array, a PointMsg, or Point."
         self.pose.position = PointMsg(position)
 
     @property
@@ -101,10 +107,9 @@ class MarkerMsg(Marker):
         return QuaternionMsg.as_np(self.pose.orientation)
 
     @orientation.setter
-    def orientation(self, o):
-        typ = type(position)
-        assert typ is np.ndarray or typ is QuaternionMsg or typ is Quaternion, "Orientation must either be a numpy array, a QuaternionMsg, or Quaternion."
-        self.pose.orientation = QuaternionMsg(o)
+    def orientation(self, orientation):
+        assert type(orientation) in [np.ndarray, list, tuple, QuaternionMsg, Quaternion], "Orientation must either be a list, tuple, numpy array, a QuaternionMsg, or Quaternion."
+        self.pose.orientation = QuaternionMsg(orientation)
 
     @property
     def alpha(self):
@@ -127,8 +132,7 @@ class MarkerMsg(Marker):
     @fontsize.setter
     def fontsize(self, fs):
         assert self.marker_type is Marker.TEXT_VIEW_FACING, "Marker needs to be a TEXT_VIEW_FACING to set a fontsize."
-        typ = type(fs)
-        assert typ is float or typ is int, "Fontsize must be either a float or int."
+        assert type(fs) in [float, int], "Fontsize must be either a float or int."
         assert fs > 0.0, "Fontsize must be positive."
         self.scale.z = fs
 
@@ -184,8 +188,7 @@ class MarkerMsg(Marker):
     @start_point.setter
     def start_point(self, s):
         assert self.marker_type is Marker.ARROW, "Marker needs to be an ARROW to set start_point."
-        typ = type(s)
-        assert typ is np.ndarray or typ is PointMsg or typ is Point, "Start point must be either a numpy array, PointMsg, or Point."
+        assert type(s) in [list, tuple, np.ndarray, PointMsg, Point], "Start point must be either a list, tuple, numpy array, PointMsg, or Point."
         self.points[0] = PointMsg(s)
 
     @property
@@ -195,8 +198,7 @@ class MarkerMsg(Marker):
     @end_point.setter
     def end_point(self, e):
         assert self.marker_type is Marker.ARROW, "Marker needs to be an ARROW to set end_point."
-        typ = type(s)
-        assert typ is np.ndarray or typ is PointMsg or typ is Point, "End point must be either a numpy array, PointMsg, or Point."        
+        assert type(e) in [list, tuple, np.ndarray, PointMsg, Point], "End point must be either a list, tuple, numpy array, PointMsg, or Point."
         self.points[1] = PointMsg(e)
 
     @property
