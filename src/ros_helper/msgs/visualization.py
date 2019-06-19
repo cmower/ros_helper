@@ -346,9 +346,10 @@ class SphereListMsg(MarkerMsg):
             
 class MarkerArrayMsg(MarkerArray):
 
-    def __init__(self, markers):
+    def __init__(self, markers, time=None):
         super(MarkerArrayMsg, self).__init__()
         self.markers = map(MarkerMsg, markers if type(markers) not in [MarkerArrayMsg, MarkerArray] else markers.markers)
+        if time is not None: self.time = time
         self.resolve_ids()
 
     def __iter__(self):
