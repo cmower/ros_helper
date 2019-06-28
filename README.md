@@ -79,7 +79,8 @@ rospy.spin()
   * Function/classes
 * Add Exotica helper functionality, e.g. simple manual initializer setup. 
 * A C++ version and helper functionality specific to C++. 
-* Make public.
+* Unit-testing.
+* Make public (maybe).
 
 ### "May never happen" term
 
