@@ -80,7 +80,9 @@ rospy.spin()
 ### Long term
 
 * Move to Python 3
-* Documentation (Wiki).
+* Documentation
+  * Wiki
+  * Function/classes
 * Add Exotica helper functionality, e.g. simple manual initializer setup. 
 * A C++ version and helper functionality specific to C++. 
 * Make public.
