@@ -1,8 +1,9 @@
-from  rospy.rostime import Time
 import numpy as np
+from  rospy.rostime import Time
 from visualization_msgs.msg import Marker, MarkerArray
 from .std import ColorMsg
 from .geometry import Vector3Msg, QuaternionMsg, PointMsg, Point, Quaternion
+from ..rh_utils import get_class_heirarchy
 
 #
 # Error definitions
@@ -20,8 +21,8 @@ class MarkerMsg(Marker):
     def __init__(self, marker_type, **kwargs):
         super(MarkerMsg, self).__init__()
         
-        if type(marker_type) in MARKER_MSG_TYPES:
-            # Make self a copy of given marker
+        if Marker in get_object_class_hierarchy(marker_type):
+            # marker_type is a marker -> make self a copy of given marker
             m = marker_type
             self.header = m.header
             self.ns = m.ns
@@ -39,7 +40,7 @@ class MarkerMsg(Marker):
             self.mesh_resource = m.mesh_resource
             self.mesh_use_embedded_materials = m.mesh_use_embedded_materials
         else:
-            # assumes marker_type specifiesas a marker type as listed in Object Types section here: http://wiki.ros.org/rviz/DisplayTypes/Marker#Object_Types
+            # assumes marker_type specifies a marker type as listed in Object Types section here: http://wiki.ros.org/rviz/DisplayTypes/Marker#Object_Types
             self.marker_type = marker_type
         self.parse_kwargs(kwargs)
 
@@ -387,7 +388,12 @@ class MarkerArrayMsg(MarkerArray):
 
     def __init__(self, markers, time=None):
         super(MarkerArrayMsg, self).__init__()
-        self.markers = map(MarkerMsg, markers if type(markers) not in MARKER_MSG_TYPES else markers.markers)
+        if MarkerArray in get_object_class_hierarchy(markers):
+            # Given a marker array or MarkerArrayMsg -> make self a copy of markers
+            self.markers = map(MarkerMsg, markers.markers)
+        else:
+            # Assumes given a list of markers
+            self.markers = map(MarkerMsg, markers)
         if time is not None: self.time = time
         self.resolve_ids()
 
@@ -422,13 +428,3 @@ class MarkerArrayMsg(MarkerArray):
 
     def resolve_ids(self):
         for i, m in enumerate(self): m.id = i
-
-MARKER_MSG_TYPES = [MarkerMsg,\
-                    Marker,\
-                    SphereMsg,\
-                    SphereListMsg,\
-                    LineStripMsg,\
-                    CylinderMsg,\
-                    CubeMsg,\
-                    ArrowMsg,\
-                    StlMeshMsg]        

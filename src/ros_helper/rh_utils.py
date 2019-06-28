@@ -1,5 +1,9 @@
 import os
+import inspect
 import numpy as np
+
+def get_object_class_hierarchy(obj):
+    return inspect.getmro(type(obj))
 
 def mgetattr(obj, ids):
     """Multiple gettattr."""
