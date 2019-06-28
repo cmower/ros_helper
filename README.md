@@ -16,5 +16,7 @@ A collection of helper scripts and nodes for [ROS](https://www.ros.org/). For in
 * Documentation (Wiki).
 * A C++ version and helper functionality specific to C++. 
 * Make public.
-* Tentative:
-  * Move main functionality of `ros_helper` to C++ and wrap around with Python (e.g. Pybind).
+
+### "May never happen" term
+
+* Move main functionality of `ros_helper` to C++ and wrap around with Python (e.g. Pybind).
