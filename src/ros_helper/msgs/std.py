@@ -1,5 +1,5 @@
+import numpy as np
 from std_msgs.msg import *
-from ..rh_utils import msetattr
 import colors
 
 RGB = ['r', 'g', 'b']
@@ -75,18 +75,45 @@ class UInt64Msg(UInt64):
 class ColorMsg(ColorRGBA):
 
     def __init__(self, c):
-        super(ColorMsg, self).__init__()
-        if type(c) in [ColorRGBA, ColorMsg]:
-            for d in RGBA: setattr(self, d, getattr(c, d))
+      super(ColorMsg, self).__init__()
+      if type(c) in [ColorRGBA, ColorMsg]:
+        for d in RGBA: setattr(self, d, getattr(c, d))
+      else:
+        # assumes input is numpy array or list or tuple
+        n = len(c)        
+        if n == 3:
+          self.rgb = c
+          self.alpha = 1.0 # help user by ensuring they remember to set a=1, can always be changed later.
+        elif n == 4:
+          self.rgba = c
         else:
-            # assumes input is numpy array or list or tuple
-            n = len(c)
-            if n == 3:
-                dims = RGB
-                self.a = 1.0 # help user by ensuring they remember to set a=1, can always be changed later.
-            elif n == 4:
-                dims = RGBA
-            else:
-                raise TypeError("Given c is incorrect length.") # not sure if a better error type should be used 
-            msetattr(self, dims, c)
-    
+          raise TypeError("Given c is incorrect length.") # not sure if a better error type should be used 
+              
+    @property
+    def rgb(self):
+      return [self.r, self.g, self.b]
+
+    @rgb.setter
+    def rgb(self, rgb):
+      self.r = rgb[0]
+      self.g = rgb[1]
+      self.b = rgb[2]
+
+    @property
+    def rgba(self):
+      return [self.r, self.g, self.b, self.a]
+
+    @rgba.setter
+    def rgba(self, rgba):
+      self.r = rgba[0]
+      self.g = rgba[1]
+      self.b = rgba[2]
+      self.a = rgba[3]
+
+    @property
+    def alpha(self):
+      return self.a
+
+    @alpha.setter
+    def alpher(self, a):
+      self.a = a

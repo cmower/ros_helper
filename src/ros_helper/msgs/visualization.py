@@ -61,6 +61,30 @@ class MarkerMsg(Marker):
     #
 
     @property
+    def rgba(self):
+        return self.color
+
+    @rgba.setter
+    def rgba(self, c):
+        self.color = ColorMsg(c)
+
+    @property
+    def rgb(self):
+        return self.color.rgb
+
+    @rgb.setter
+    def rgb(self, c):
+        self.color = ColorMsg(c)
+
+    @property
+    def rgba(self):
+        return self.color.rgba
+
+    @rgba.setter
+    def rgba(self, c):
+        self.color = ColorMsg(c)
+
+    @property
     def namespace(self):
         return self.ns
 

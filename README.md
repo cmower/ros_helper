@@ -6,47 +6,62 @@ A collection of helper code for [ROS](https://www.ros.org/). For instructions, e
 
 ## Publish spherical markers
 
-Normal method for a typical example. This  assumes you want to publish a red marker with position/orientation `pos`/`ori` (numpy arrays) in the world frame `"world_frame"` and with radius `rad`.
+Normal implementation for a typical example. This assumes you want to publish a red marker at 20hz with position/orientation `pos`/`ori` (numpy arrays) in the world frame `"world_frame"` and with radius `rad`.
 ```python
 import rospy
+import numpy as np
 from visualization_msgs.msg import Marker
+
+rospy.init_node('example_node')
+pos = np.array([1, 2, 3])
+ori = np.array([0, 0, 0, 1])
+rad = 0.5
 
 pub = rospy.Publisher('sphere', Marker, queue_size=1)
 
-... code ...
+def update(event): 
+  marker = Marker()
+  marker.id = 0
+  marker.header.frame_id = "world_frame"
+  marker.header.stamp = rospy.Time.now()
+  marker.type = Marker.SPHERE
+  marker.action = Marker.ADD
+  marker.scale.x = 2 * rad
+  marker.scale.y = 2 * rad
+  marker.scale.z = 2 * rad
+  marker.pose.position.x = pos[0]
+  marker.pose.position.y = pos[1]
+  marker.pose.position.z = pos[2]
+  marker.pose.orientation.x = ori[0]
+  marker.pose.orientation.y = ori[1]
+  marker.pose.orientation.z = ori[2]
+  marker.pose.orientation.w = ori[3]
+  marker.color.r = 1.0
+  marker.color.a = 1.0
+  
+  pub.publish(marker)
 
-marker = Marker()
-marker.id = 0
-marker.header.stamp = rospy.Time.now()
-marker.header.frame_id = "world_frame"
-marker.type = Marker.SPHERE
-marker.action = Marker.ADD
-marker.scale.x = 2 * rad
-marker.scale.y = 2 * rad
-marker.scale.z = 2 * rad
-marker.pose.position.x = pos[0]
-marker.pose.position.y = pos[1]
-marker.pose.position.z = pos[2]
-marker.pose.orientation.x = ori[0]
-marker.pose.orientation.y = ori[1]
-marker.pose.orientation.z = ori[2]
-marker.pose.orientation.w = ori[3]
-marker.color.r = 1.0
-marker.color.a = 1.0
-
-pub.publish(marker)
+rospy.Timer(rospy.Duration(1.0 / 20.0), update)
+rospy.spin()
 ```
 
 Using `ros_helper` you can achieve the same task using the following.
 ```python
 import rospy
+from ros_helper.simple_sub_pub import SimplePublisher
 import ros_helper.msgs.visualziation as vis
 
-pub = rospy.Publisher('sphere', vis.SphereMsg, queue_size=1)
+rospy.init_node('example_node')
+pos = np.array([1, 2, 3])
+ori = np.array([0, 0, 0, 1])
+rad = 0.5
 
-... code ...
+def generate_message()
+  return vis.SphereMsg(time=rospy.Time.now(), frame_id="world_frame", positon=pos, orientation=ori, radius=rad, rgba=[1, 0, 0, 1])
+  
+SimplePublisher(rospy, 'sphere', vis.SphereMsg, 20, queue_size=1, generate_message_handle = generate_message)
+rospy.spin()
 
-pub.publish(vis.SphereMsg(time=rospy.Time.now(), frame_id="world_frame", positon=pos, orientation=ori, radius=rad, color=[1, 0, 0, 1]))
 ```
 
 ## Todo
