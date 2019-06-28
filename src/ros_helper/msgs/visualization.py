@@ -3,7 +3,7 @@ from  rospy.rostime import Time
 from visualization_msgs.msg import Marker, MarkerArray
 from .std import ColorMsg
 from .geometry import Vector3Msg, QuaternionMsg, PointMsg, Point, Quaternion
-from ..rh_utils import get_class_heirarchy
+from ..rh_utils import get_object_class_hierarchy
 
 #
 # Error definitions
