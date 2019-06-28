@@ -38,6 +38,7 @@ class SimpleConstPublisher(SimplePublisher):
 
     def __init__(self, rospy, topic_name, topic_type, hz, msg, queue_size=1):
         self.rospy = rospy
+        self.msg = msg
         if hasattr(msg, 'header'):
             # time needs to be updated
             self.update_time = self.add_time
