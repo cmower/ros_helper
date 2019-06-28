@@ -2,7 +2,7 @@
 
 A collection of helper code for [ROS](https://www.ros.org/). For instructions, explanations, and examples see the wiki [here](https://github.com/cmower/ros_helper/wiki) (unfinished!). The main reason this package exists is that writing packages/modules for ROS tends to lead to a lot of code repetition; this package attempts to address this issue. `ros_helper` also provides a number of other facilities that are "helpful"!
 
-# Simple examples
+# Examples
 
 ## Publish spherical markers
 
@@ -69,8 +69,9 @@ rospy.spin()
 ### Short term 
 
 * Update `keyboard_node` to use `simple_pub_sub`
-* Proper exception handling and colored logging to terminal.
+* Proper exception handling and colored logging to terminal, consider Python [`logging`](https://docs.python.org/2/library/logging.html).
 * Update other classes in `simple_pub_sub` to be aligned with the new updates to publisher.
+* Finish `experiments` module.
 
 ### Long term
 
