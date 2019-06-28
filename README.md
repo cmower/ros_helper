@@ -71,6 +71,8 @@ rospy.spin()
 * Finish `experiments` module.
 * Update examples, e.g. the scripts names, and make more.
 * Cleaner initialization handling in `msgs`, like new additions to `visualization`.
+* Move the many property attributes of `MarkerMsg` to respective derived classes in `visualization.py` to avoid errors. 
+* Some scripts seem to have irregular spacing. Check through and ensure code complies with [PEP 8](https://www.python.org/dev/peps/pep-0008/). 
 
 ### Long term
 
