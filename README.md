@@ -56,8 +56,7 @@ from ros_helper.simple_pub_sub import SimpleConstPublisher
 import ros_helper.msgs.visualization as vis
 
 rospy.init_node('example_node')
-msg = vis.SphereMsg(frame_id="world", position=[1, 2, 3], orientation=[0, 0, 0, 1], radius=0.5, rgba=[1, 0, 0, 1])
-SimpleConstPublisher(rospy, 'sphere', vis.SphereMsg, 20, msg)
+SimpleConstPublisher(rospy, 'sphere', vis.SphereMsg, 20, vis.SphereMsg(frame_id="world", position=[1, 2, 3], orientation=[0, 0, 0, 1], radius=0.5, rgba=[1, 0, 0, 1]))
 rospy.spin()
 ```
 
