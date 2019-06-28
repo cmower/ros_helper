@@ -6,15 +6,18 @@ A collection of helper code for [ROS](https://www.ros.org/). For instructions, e
 
 ## Publish spherical markers
 
-Normal implementation for a typical example. This assumes you want to publish a red marker at 20hz with position/orientation `pos`/`ori` (numpy arrays) in the world frame `"world_frame"` and with radius `rad`.
+Goal is to write a Python script that  publishes a sphere marker to Rviz, as shown in the image. This assumes you want to publish a red marker at 20hz with position/orientation `pos`/`ori` (lists, often NumPy arrays) in the world frame `"world"` and with radius `rad`.
+
+![]()
+
+Normal implementation without using `ros_helper`. 
 ```python
 import rospy
-import numpy as np
 from visualization_msgs.msg import Marker
 
 rospy.init_node('example_node')
-pos = np.array([1, 2, 3])
-ori = np.array([0, 0, 0, 1])
+pos = [1, 2, 3]
+ori = [0, 0, 0, 1]
 rad = 0.5
 
 pub = rospy.Publisher('sphere', Marker, queue_size=1)
@@ -22,7 +25,7 @@ pub = rospy.Publisher('sphere', Marker, queue_size=1)
 def update(event): 
   marker = Marker()
   marker.id = 0
-  marker.header.frame_id = "world_frame"
+  marker.header.frame_id = "world"
   marker.header.stamp = rospy.Time.now()
   marker.type = Marker.SPHERE
   marker.action = Marker.ADD
@@ -45,23 +48,23 @@ rospy.Timer(rospy.Duration(1.0 / 20.0), update)
 rospy.spin()
 ```
 
-Using `ros_helper` you can achieve the same task using the following.
+Using `ros_helper` you can simplify the code to the following.
 ```python
+#!/usr/bin/env python
 import rospy
-from ros_helper.simple_sub_pub import SimplePublisher
-import ros_helper.msgs.visualziation as vis
+from ros_helper.simple_pub_sub import SimplePublisher
+import ros_helper.msgs.visualization as vis
 
 rospy.init_node('example_node')
-pos = np.array([1, 2, 3])
-ori = np.array([0, 0, 0, 1])
+pos = [1, 2, 3]
+ori = [0, 0, 0, 1]
 rad = 0.5
 
-def generate_message()
-  return vis.SphereMsg(time=rospy.Time.now(), frame_id="world_frame", positon=pos, orientation=ori, radius=rad, rgba=[1, 0, 0, 1])
+def generate_message():
+  return vis.SphereMsg(time=rospy.Time.now(), frame_id="world", position=pos, orientation=ori, radius=rad,  rgba=[1, 0, 0, 1])
   
 SimplePublisher(rospy, 'sphere', vis.SphereMsg, 20, queue_size=1, generate_message_handle = generate_message)
 rospy.spin()
-
 ```
 
 ## Todo
@@ -72,6 +75,7 @@ rospy.spin()
 * Proper exception handling and colored logging to terminal, consider Python [`logging`](https://docs.python.org/2/library/logging.html).
 * Update other classes in `simple_pub_sub` to be aligned with the new updates to publisher.
 * Finish `experiments` module.
+* Update examples, e.g. the scripts names, and make more.
 
 ### Long term
 
