@@ -4,19 +4,23 @@ from visualization_msgs.msg import Marker, MarkerArray
 from .std import ColorMsg
 from .geometry import Vector3Msg, QuaternionMsg, PointMsg, Point, Quaternion
 
+#
+# Error definitions
+#
+
+class NamespaceError(TypeError):
+    pass
+
+#
+# Msg classes
+#  
+
 class MarkerMsg(Marker):
 
     def __init__(self, marker_type, **kwargs):
         super(MarkerMsg, self).__init__()
         
-        if type(marker_type) in [MarkerMsg,\
-                                 Marker,\
-                                 SphereListMsg,\
-                                 LineStripMsg,\
-                                 CylinderMsg,\
-                                 CubeMsg,\
-                                 ArrowMsg,\
-                                 StlMeshMsg]:
+        if type(marker_type) in MARKER_MSG_TYPES:
             # Make self a copy of given marker
             m = marker_type
             self.header = m.header
@@ -62,7 +66,7 @@ class MarkerMsg(Marker):
 
     @namespace.setter
     def namespace(self, ns):
-        assert type(ns) is str, "Namespace must be a string!"
+        if type(ns) is not str: NamespaceError("Namespace must be a string!")
         self.ns = ns
 
     @property
@@ -80,7 +84,7 @@ class MarkerMsg(Marker):
 
     @marker_type.setter
     def marker_type(self, marker_type):
-        assert type(marker_type) is int, "Marker type must be an integer!"
+        assert type(marker_type) is int, "Marker type must be an integer! Have you checked MARKER_MSG_TYPES is up-to-date?"
         assert 0 <= marker_type <= 11, "Marker type must be in range [0, 11]. See http://docs.ros.org/api/visualization_msgs/html/msg/Marker.html"
         self.type = marker_type
 
@@ -261,20 +265,29 @@ class MarkerMsg(Marker):
     @length.setter
     def length(self, l):
         assert self.marker_type in [Marker.CUBE, Marker.CUBE_LIST], "Marker needs to be either a CUBE or CUBE_LIST to set length."
-        assert type(l) is float, "Length must be a float."
+        l = float(l)
         assert l > 0.0, "Length must be positive."
         self.scale.x = l
 
     @property
     def width(self):
-        return self.scale.y
-
+        if self.marker_type in [Marker.CUBE, Marker.CUBE_LIST]:
+            return self.scale.y
+        elif self.marker_type is Marker.LINE_STRIP:
+            return self.scale.x
+        else:
+            raise TypeError("Did not recognise marker type, got {}".format(self.marker_type))
+    
     @width.setter
     def width(self, w):
-        assert self.marker_type in [Marker.CUBE, Marker.CUBE_LIST], "Marker needs to be either a CUBE or CUBE_LIST to set width."
-        assert type(w) is float, "Width must be a float."
-        assert w > 0.0, "Width must be positive."        
-        self.scale.y = w
+        w = float(w)
+        assert w > 0.0, "Width must be positive."
+        if self.marker_type in [Marker.CUBE, Marker.CUBE_LIST]:
+            self.scale.y = w
+        elif self.marker_type is Marker.LINE_STRIP:
+            self.scale.x = w
+        else:
+            raise TypeError("Marker needs to be either a CUBE or CUBE_LIST to set width.")
 
     @property
     def height(self):
@@ -283,7 +296,7 @@ class MarkerMsg(Marker):
     @height.setter
     def height(self, h):
         assert self.marker_type in [Marker.CUBE, Marker.CUBE_LIST, Marker.CYLINDER], "Marker needs to be either a CUBE, CUBE_LIST or CYLINDER to set height."
-        assert type(h) is float, "Height must be a float."
+        h = float(h)
         assert h > 0.0, "Height must be positive."                
         self.scale.z = h
 
@@ -350,7 +363,7 @@ class MarkerArrayMsg(MarkerArray):
 
     def __init__(self, markers, time=None):
         super(MarkerArrayMsg, self).__init__()
-        self.markers = map(MarkerMsg, markers if type(markers) not in [MarkerArrayMsg, MarkerArray] else markers.markers)
+        self.markers = map(MarkerMsg, markers if type(markers) not in MARKER_MSG_TYPES else markers.markers)
         if time is not None: self.time = time
         self.resolve_ids()
 
@@ -385,3 +398,13 @@ class MarkerArrayMsg(MarkerArray):
 
     def resolve_ids(self):
         for i, m in enumerate(self): m.id = i
+
+MARKER_MSG_TYPES = [MarkerMsg,\
+                    Marker,\
+                    SphereMsg,\
+                    SphereListMsg,\
+                    LineStripMsg,\
+                    CylinderMsg,\
+                    CubeMsg,\
+                    ArrowMsg,\
+                    StlMeshMsg]        

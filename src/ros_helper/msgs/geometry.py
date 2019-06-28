@@ -1,10 +1,7 @@
 import tf
 import numpy as np
 from geometry_msgs.msg import *
-from .utils import *
-
-XYZ = ['x', 'y', 'z']
-XYZW = ['x', 'y', 'z', 'w']
+from ..rh_utils import *
 
 class Vector3Msg(Vector3):
 

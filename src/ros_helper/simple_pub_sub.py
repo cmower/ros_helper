@@ -13,9 +13,22 @@ i.e. in SimplePublisher, we want to check before running that generate_message f
 
 class SimplePublisher(object):
 
-    def init_pub(self, rospy, topic_name, topic_type, hz, queue_size=1):
-        assert hasattr(self, 'generate_message'), "Derived class for SimplePublisher must have a generate_message method implemented."
+    def __init__(self, rospy, topic_name, topic_type, hz, queue_size=1, generate_message_handle=None):
+        self.init_pub(rospy, topic_name, topic_type, hz, queue_size, generate_message_handle)
+
+    def init_pub(self, rospy, topic_name, topic_type, hz, queue_size=1, generate_message_handle=None):
+
+        # Check input
+        if generate_message_handle is None:
+            assert hasattr(self, 'generate_message'), "Derived class for SimplePublisher must have a generate_message method implemented."
+        else:
+            assert callable(generate_message_handle), "Given generate_message_handle must be callable"
+            self.generate_message = generate_message_handle
+
+        # Setup ros publisher
         self.pub = rospy.Publisher(topic_name, topic_type, queue_size=queue_size)
+
+        # Setup ros timer, self.update will be called at a frequency of hz 
         rospy.Timer(rospy.Duration(1.0/float(hz)), self.update)
 
     def update(self, event):

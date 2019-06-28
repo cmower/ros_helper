@@ -1,5 +1,5 @@
 from std_msgs.msg import *
-from .utils import msetattr
+from ..rh_utils import msetattr
 import colors
 
 RGB = ['r', 'g', 'b']
