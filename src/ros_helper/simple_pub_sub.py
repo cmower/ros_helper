@@ -34,6 +34,28 @@ class SimplePublisher(object):
     def update(self, event):
         self.pub.publish(self.generate_message())
 
+class SimpleConstPublisher(SimplePublisher):
+
+    def __init__(self, rospy, topic_name, topic_type, hz, msg, queue_size=1):
+        self.rospy = rospy
+        if hasattr(msg, 'header'):
+            # time needs to be updated
+            self.update_time = self.add_time
+        else:
+            # time does not need to be updated
+            self.update_time = self.dont_add_time
+        self.init_pub(rospy, topic_name, topic_type, hz, queue_size)
+
+    def add_time(self):
+        self.msg.header.stamp = self.rospy.Time.now()
+
+    def dont_add_time(self):
+        pass
+
+    def generate_message(self):
+        self.update_time()
+        return self.msg
+    
 class SimpleSubscriber(object):
 
     def init_sub(self, rospy, topic_name, topic_type):
