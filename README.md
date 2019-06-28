@@ -52,18 +52,12 @@ Using `ros_helper` you can simplify the code to the following.
 ```python
 #!/usr/bin/env python
 import rospy
-from ros_helper.simple_pub_sub import SimplePublisher
+from ros_helper.simple_pub_sub import SimpleConstPublisher
 import ros_helper.msgs.visualization as vis
 
 rospy.init_node('example_node')
-pos = [1, 2, 3]
-ori = [0, 0, 0, 1]
-rad = 0.5
-
-def generate_message():
-  return vis.SphereMsg(time=rospy.Time.now(), frame_id="world", position=pos, orientation=ori, radius=rad,  rgba=[1, 0, 0, 1])
-  
-SimplePublisher(rospy, 'sphere', vis.SphereMsg, 20, queue_size=1, generate_message_handle = generate_message)
+msg = vis.SphereMsg(frame_id="world", position=[1, 2, 3], orientation=[0, 0, 0, 1], radius=0.5, rgba=[1, 0, 0, 1])
+SimpleConstPublisher(rospy, 'sphere', vis.SphereMsg, 20, msg)
 rospy.spin()
 ```
 

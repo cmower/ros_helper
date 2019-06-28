@@ -1,12 +1,9 @@
 #!/usr/bin/env python
 import rospy
-from ros_helper.simple_pub_sub import SimplePublisher
+from ros_helper.simple_pub_sub import SimpleConstPublisher
 import ros_helper.msgs.visualization as vis
 
 rospy.init_node('example_node')
-
-def generate_message():
-  return vis.SphereMsg(time=rospy.Time.now(), frame_id="world", position=[1, 2, 3], orientation=[0, 0, 0, 1], radius=0.5, rgba=[1, 0, 0, 1])
-  
-SimplePublisher(rospy, 'sphere', vis.SphereMsg, 20, queue_size=1, generate_message_handle = generate_message)
+msg = vis.SphereMsg(frame_id="world", position=[1, 2, 3], orientation=[0, 0, 0, 1], radius=0.5, rgba=[1, 0, 0, 1])
+SimpleConstPublisher(rospy, 'sphere', vis.SphereMsg, 20, msg)
 rospy.spin()
