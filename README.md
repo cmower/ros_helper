@@ -80,8 +80,8 @@ rospy.spin()
 * Add Exotica helper functionality, e.g. simple manual initializer setup. 
 * A C++ version and helper functionality specific to C++. 
 * Unit-testing.
-* Make public (maybe).
 
 ### "May never happen" term
 
 * Move main functionality of `ros_helper` to C++ and wrap around with Python (e.g. Pybind).
+* Make public (maybe).
