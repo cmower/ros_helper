@@ -1,20 +1,13 @@
 #!/usr/bin/env python
 import rospy
-import message_filters as mf
-import ros_helper.msgs_api.sensor as sens
+import ros_helper.msgs.sensor as sens
+from ros_helper.simple_pub_sub import SimpleSyncSubscriber
 
-class MultiJoyParser(object):
-
-    def __init__(self):
-        self.pub = rospy.Publisher('multijoy', sens.MultiJoy, queue_size=1)
-        joytopics = rospy.get_param('~joytopics') # e.g. in launch file use <rosparam param="joytopics">[joy1, joy2, joy3, joy4]</rosparam> (cf. 1.2 Examples in http://wiki.ros.org/roslaunch/XML/rosparam)
-        mf.ApproximateTimeSynchronizer([mf.Subscriber(t, sens.Joy) for t in joytopics], 10, len(joytopics)*100).registerCallback(self.callback)
-
-    def callback(self, *joys):
-        self.pub.publish(sens.MultiJoyMsg(rospy.Time.now(), joys))
+def callback(msgs):
+    pub.publish(sens.MultiJoyMsg(rospy.Time.now(), msgs))
 
 if __name__=='__main__':
     rospy.init_node('multijoy_node')
-    MultiJoyParser()
+    pub = rospy.Publisher('multijoy', sens.MultiJoyMsg, queue_size=1)
+    SimpleSyncSubscriber(rospy, rospy.get_param('~joytopics'), sens.MultiJoyMsg, callback_handle=callback)
     rospy.spin()
-    

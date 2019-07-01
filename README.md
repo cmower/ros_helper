@@ -66,7 +66,6 @@ rospy.spin()
 
 * Update `keyboard_node` to use `simple_pub_sub`, perhaps consider moving away from pygame. 
 * Proper exception handling and colored logging to terminal, consider Python [`logging`](https://docs.python.org/2/library/logging.html).
-* Update other classes in `simple_pub_sub` to be aligned with the new updates to publisher.
 * Finish `experiments` module.
 * Update examples, e.g. the scripts names, and make more.
 * Cleaner initialization handling in `msgs`, like new additions to `visualization`.
