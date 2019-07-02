@@ -3,7 +3,7 @@
   <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find ros_helper)/resources/example_stl_mesh_publisher.rviz"/> 
 
   <node pkg="ros_helper" type="stl_mesh_publisher_node" name="stl_mesh_publisher_node">
-    <param name="topic_name" type="string" value="cone"/>
+    <param name="topic" type="string" value="cone"/>
     <param name="filename" type="string" value="package://ros_helper/resources/cone.stl"/>
     <param name="frame_id" type="string" value="world"/>
     <rosparam param="scale">[1, 1, 1]</rosparam>
