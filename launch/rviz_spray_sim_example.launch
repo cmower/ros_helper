@@ -1,10 +1,12 @@
 <launch>
-  <node pkg="tf" type="static_transform_publisher" name="link_broadcaster" args="1 0 0 0 0 0 1 world spray_frame 100" />
-  <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find ros_helper)/resources/example_rviz_spray_sim.rviz"/> 
+
+  <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find ros_helper)/resources/example_rviz_spray_sim.rviz"/>
+
+  <node pkg="ros_helper" type="example_rviz_spray_sim" name="rviz_spray_sim_example_node"/>
 
   <node pkg="ros_helper" type="rviz_spray_sim_node" name="rviz_spray_sim_node">
     <param name="particle_radius" type="double" value="0.05"/>
-    <param name="cone_theta" type="double" value="0.39269908169"/> <!-- 30 deg -->
+    <param name="cone_theta" type="double" value="0.39269908169"/> <!-- 30 deg, note that red cone in rviz is only approximately 30 deg -->
     <param name="cone_radius" type="double" value="1.0"/>
     <param name="frame" type="string" value="spray_frame"/>
     <param name="spawn_rate" type="int" value="100"/>
