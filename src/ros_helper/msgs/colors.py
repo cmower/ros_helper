@@ -6,10 +6,7 @@ green = (0.0, 1.0, 0.0)
 blue = (0.0, 0.0, 1.0)
 black = (0.0, 0.0, 0.0)
 white = (1.0, 1.0, 1.0)
-
-def grey(s = 0.5):
-    assert 0.0 < s < 1.0, "Given s out of range."
-    return (s,)*3
+grey = (0.5, 0.5, 0.5)
 
 # Wiki and Ral standard definitions
 
