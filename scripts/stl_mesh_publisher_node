@@ -1,30 +1,9 @@
 #!/usr/bin/env python
 import rospy
 from ros_helper.msgs.visualization import StlMeshMsg
-from ros_helper.simple_pub_sub import SimplePublisher
-
-class MeshPublisher(SimplePublisher):
-
-    def __init__(self):
-        self.filename = rospy.get_param('~filename')
-        self.frame_id = rospy.get_param('~frame_id')
-        self.scale = rospy.get_param('~scale')
-        self.color = rospy.get_param('~color')
-        hz = 40.0
-        self.init_pub(rospy, rospy.get_param('~topic_name'), StlMeshMsg, hz)
-        self.msg = StlMeshMsg(filename=self.filename,\
-                              time=rospy.Time.now(),\
-                              frame_id = self.frame_id,\
-                              scale=self.scale,\
-                              color = self.color)
-
-    def generate_message(self):
-        self.msg.time = rospy.Time.now()
-        return self.msg
+from ros_helper.simple_pub_sub import SimpleConstPublisher
 
 if __name__=='__main__':
     rospy.init_node('mesh_publisher_node')
-    MeshPublisher()
+    SimpleConstPublisher(rospy, rospy.get_param('~topic'), StlMeshMsg, 40, StlMeshMsg(filename=rospy.get_param('~filename'), color=rospy.get_param('~color'), scale=rospy.get_param('~scale')))
     rospy.spin()
-    
-                
