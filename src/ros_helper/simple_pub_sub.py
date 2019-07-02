@@ -12,10 +12,10 @@ i.e. in SimplePublisher, we want to check before running that generate_message f
 
 class SimplePublisher(object):
 
-    def __init__(self, rospy, topic_name, topic_type, hz, queue_size=1, generate_message_handle=None):
-        self.init_pub(rospy, topic_name, topic_type, hz, queue_size, generate_message_handle)
+    def __init__(self, rospy, topic, msg_class, hz, queue_size=1, generate_message_handle=None):
+        self.init_pub(rospy, topic, msg_class, hz, queue_size, generate_message_handle)
 
-    def init_pub(self, rospy, topic_name, topic_type, hz, queue_size=1, generate_message_handle=None):
+    def init_pub(self, rospy, topic, msg_class, hz, queue_size=1, generate_message_handle=None):
 
         # Check input
         if generate_message_handle is None:
@@ -37,7 +37,7 @@ class SimplePublisher(object):
         self.__number_of_messages_published = 0
 
         # Setup ros publisher
-        self.__pub = rospy.Publisher(topic_name, topic_type, queue_size=queue_size)
+        self.__pub = rospy.Publisher(topic, msg_class, queue_size=queue_size)
 
         # Setup ros timer with method self.update as handle
         rospy.Timer(rospy.Duration(dt), self.update)
@@ -52,7 +52,7 @@ class SimplePublisher(object):
 
 class SimpleConstPublisher(SimplePublisher):
 
-    def __init__(self, rospy, topic_name, topic_type, hz, msg, queue_size=1):
+    def __init__(self, rospy, topic, msg_class, hz, msg, queue_size=1):
 
         # Init rospy and msg
         self.__rospy = rospy
@@ -67,7 +67,7 @@ class SimpleConstPublisher(SimplePublisher):
             self.__update_time = self.__dont_add_time
 
         # Init pub
-        self.init_pub(rospy, topic_name, topic_type, hz, queue_size)
+        self.init_pub(rospy, topic, msg_class, hz, queue_size)
 
     def __add_time(self):
         self.__msg.header.stamp = self.__rospy.Time.now()
@@ -81,10 +81,10 @@ class SimpleConstPublisher(SimplePublisher):
     
 class SimpleSubscriber(object):
 
-    def __init__(self, rospy, topic_name, topic_type, callback_handle=None):
-        self.init_sub(rospy, topic_name, topic_type, callback_handle)
+    def __init__(self, rospy, topic, msg_class, callback_handle=None):
+        self.init_sub(rospy, topic, msg_class, callback_handle)
 
-    def init_sub(self, rospy, topic_name, topic_type, callback_handle=None):
+    def init_sub(self, rospy, topic, msg_class, callback_handle=None):
 
         # Check input and set users callback
         if callback_handle is None:
@@ -98,7 +98,7 @@ class SimpleSubscriber(object):
         self.__number_of_messages_recieved = 0
 
         # Init subscriber
-        rospy.Subscriber(topic_name, topic_type, self.__callback)
+        rospy.Subscriber(topic, msg_class, self.__callback)
 
     def __pass_user_input(self, msg):
         pass
@@ -118,40 +118,33 @@ class SimpleSubscriber(object):
 
 class SimpleMultiSubscriber(object):
 
-    def __init__(self, rospy, topic_names, topic_types, callback_handles = None):
+    def __init__(self, rospy, topics, msg_classes, callback_handles = None):
 
         # Check input
-        assert len(topic_names) == len(topic_types), "[ERROR] topic_names must be same length as topic_types"
+        if not isinstance(msg_classes, (list, tuple)): msg_classes = [msg_classes]*len(topics)
+        assert len(topics) == len(msg_classes), "[ERROR] topics must be same length as msg_classes"
         if callback_handles is None:
-            callback_handles = [None]*len(topic_types)
+            callback_handles = [None]*len(msg_classes)
         else:
-            assert len(callback_handles) == len(topic_types), "[ERROR] callback_handles must be same length as topic_names and topic_types"
+            assert len(callback_handles) == len(topics), "[ERROR] callback_handles must be same length as topics and msg_classes"
 
         # Init dictionary of subs
-        self.__subs = {}
-        for topic_name, topic_type, callback_handle in zip(topic_names, topic_types, callback_handles): self.__subs[topic_name] = SimpleSubscriber(rospy, topic_name, topic_type, callback_handle)
-
-        # Init vars
-        self.__topic_names = topic_names
+        self.__subs = {topic : SimpleSubscriber(rospy, topic, msg_class, callback) for topic, msg_class, callback in zip(topics, msg_classes, callback_handles)}
 
     def Msg(self, topic):
         return self.__subs[topic].Msg
 
     def NumberOfMessagesRecieved(self, topic):
-        return self.__subs[topic].NumberOfMessagesRecieved 
+        return self.__subs[topic].NumberOfMessagesRecieved
 
 class SimpleSyncSubscriber(object):
 
-    def __init__(self, rospy, topic_names, topic_types, callback_handle=None):
+    def __init__(self, rospy, topics, msg_classes, callback_handle=None):
 
         # Import and check input
         import message_filters as mf
-        if len(topic_types) == 1:
-            topic_types = [topic_types] * len(topic_names)
-        else:
-            assert len(topic_names) == len(topic_types), "[ERROR] topic_types must be length 1 or same length as topic_names"
-
-        # Check input
+        if not isinstance(msg_classes, (list, tuple)): msg_classes = [msg_classes]*len(topics)
+            
         if callback_handle is None:
             self.__user_callback = self.__pass_user_callback
         else:
@@ -159,15 +152,15 @@ class SimpleSyncSubscriber(object):
             self.__user_callback = callback_handle
 
         # Setup approximate time sync sub (maybe allow user to ammend these in later vers)
-        mf.ApproximateTimeSynchronizer([mf.Subscriber(topic_name, topic_type) for topic_name, topic_type in zip(topic_names, topic_types)],\
+        mf.ApproximateTimeSynchronizer([mf.Subscriber(topic, msg_class) for topic, msg_class in zip(topics, msg_classes)],\
                                        10,\
-                                       len(topic_names)*100).registerCallback(self.__callback)
+                                       len(topics)*100).registerCallback(self.__callback)
 
         # Init vars
         self.__msgs = None
         self.__number_of_messages_recieved = 0
-        self.__topic_names = topic_names
-        self.__topic_names_maps = {topic : i for i, topic in enumerate(topic_names)}
+        self.__topics = topics
+        self.__topics_maps = {topic : i for i, topic in enumerate(topics)}
 
     def __pass_user_callback(self, msgs):
         pass
@@ -186,7 +179,7 @@ class SimpleSyncSubscriber(object):
         return self.__number_of_messages_recieved
 
     def Msg(self, topic):
-        return self.__msgs[self.__topic_names_map[topic]]
+        return self.__msgs[self.__topics_map[topic]]
         
         
         
