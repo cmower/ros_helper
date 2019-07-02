@@ -3,26 +3,19 @@ import rospy
 import numpy as np
 from ros_helper.transform import TfApi
 
-if __name__ == '__main__':
+def time():
+    t = rospy.Time.now()
+    return t, t.to_sec()
 
-    # Init
+if __name__ == '__main__':
     rospy.init_node('rviz_spray_sim_example_node')
     tfapi = TfApi(rospy)
     rate = rospy.Rate(100)
-    trans = [0, 0, 0]
-    t0 = rospy.Time.now().to_sec()
+    trans = [0]*3
+    _, t0 = time()
 
-    # Main loop
     while not rospy.is_shutdown():
-
-        # Get current time
-        time = rospy.Time.now()
-
-        # Update position using time
-        trans[1] = 0.5 * np.sin(time.to_sec() - t0)
-
-        # Publish tf frame
-        tfapi.set_tf(time, trans, (0, 0, 0, 1), 'spray_frame', 'world')
-
-        # Sleep
+        rtime, sec  = time()
+        trans[1] = 0.5 * np.sin(sec - t0)
+        tfapi.set_tf(rtime, trans, (0, 0, 0, 1), 'spray_frame', 'world')
         rate.sleep()
