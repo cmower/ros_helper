@@ -115,5 +115,5 @@ class ColorMsg(ColorRGBA):
       return self.a
 
     @alpha.setter
-    def alpher(self, a):
+    def alpha(self, a):
       self.a = a

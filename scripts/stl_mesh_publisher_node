@@ -5,5 +5,5 @@ from ros_helper.simple_pub_sub import SimpleConstPublisher
 
 if __name__=='__main__':
     rospy.init_node('mesh_publisher_node')
-    SimpleConstPublisher(rospy, rospy.get_param('~topic'), StlMeshMsg, 40, StlMeshMsg(filename=rospy.get_param('~filename'), color=rospy.get_param('~color'), scale=rospy.get_param('~scale')))
+    SimpleConstPublisher(rospy, rospy.get_param('~topic'), StlMeshMsg, 40, StlMeshMsg(filename=rospy.get_param('~filename'), frame_id=rospy.get_param('~frame_id'), color=rospy.get_param('~color'), scale=rospy.get_param('~scale')))
     rospy.spin()
