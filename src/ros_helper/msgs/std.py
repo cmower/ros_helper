@@ -1,6 +1,7 @@
 import numpy as np
 from std_msgs.msg import *
 import colors
+from ..rh_utils import msetattr, mgetattr, get_object_class_hierarchy
 
 RGB = ['r', 'g', 'b']
 RGBA = ['r', 'g', 'b', 'a']
@@ -76,8 +77,8 @@ class ColorMsg(ColorRGBA):
 
     def __init__(self, c):
       super(ColorMsg, self).__init__()
-      if type(c) in [ColorRGBA, ColorMsg]:
-        for d in RGBA: setattr(self, d, getattr(c, d))
+      if ColorRGBA in get_object_class_heirarchy(c):
+        msetattr(self, RGBA, mgetattr(c, RGBA))
       else:
         # assumes input is numpy array or list or tuple
         n = len(c)        
@@ -88,27 +89,22 @@ class ColorMsg(ColorRGBA):
           self.rgba = c
         else:
           raise TypeError("Given c is incorrect length.") # not sure if a better error type should be used 
-              
+        
     @property
     def rgb(self):
-      return [self.r, self.g, self.b]
+      return mgetattr(self, RGB)
 
     @rgb.setter
     def rgb(self, rgb):
-      self.r = rgb[0]
-      self.g = rgb[1]
-      self.b = rgb[2]
+      msetattr(self, RGB, rgb)
 
     @property
     def rgba(self):
-      return [self.r, self.g, self.b, self.a]
+      return mgetattr(self, RGBA)
 
     @rgba.setter
     def rgba(self, rgba):
-      self.r = rgba[0]
-      self.g = rgba[1]
-      self.b = rgba[2]
-      self.a = rgba[3]
+      msetattr(self, RGBA, rgba)
 
     @property
     def alpha(self):
