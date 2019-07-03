@@ -70,13 +70,14 @@ class UInt64Msg(UInt64):
       self.data = d.data if UInt64 in get_object_class_hierarchy(d) else d
 
 class ColorMsg(ColorRGBA):
-    RGB = ['r', 'g', 'b']
-    RGBA = ['r', 'g', 'b', 'a']
+
+    __RGB = ['r', 'g', 'b']
+    __RGBA = ['r', 'g', 'b', 'a']
 
     def __init__(self, c):
         super(ColorMsg, self).__init__()
         if ColorRGBA in get_object_class_heirarchy(c):
-            msetattr(self, RGBA, mgetattr(c, RGBA))
+            msetattr(self, self.__RGBA, mgetattr(c, self.__RGBA))
         else:
             # assumes input is numpy array or list or tuple
             n = len(c)
@@ -90,19 +91,19 @@ class ColorMsg(ColorRGBA):
 
     @property
     def rgb(self):
-        return mgetattr(self, RGB)
+        return mgetattr(self, self.__RGB)
 
     @rgb.setter
     def rgb(self, rgb):
-        msetattr(self, RGB, rgb)
+        msetattr(self, self.__RGB, rgb)
 
     @property
     def rgba(self):
-        return mgetattr(self, RGBA)
+        return mgetattr(self, self.__RGBA)
 
     @rgba.setter
     def rgba(self, rgba):
-        msetattr(self, RGBA, rgba)
+        msetattr(self, self.__RGBA, rgba)
 
     @property
     def alpha(self):
