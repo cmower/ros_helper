@@ -291,8 +291,8 @@ class WrenchMsg(Wrench):
         super(WrenchMsg, self).__init__()
         raise NotImplementedError("WrenchMsg is not yet implemented!")
 
-class WrenchStampdedMsg(WrenchStampded):
+class WrenchStampedMsg(WrenchStamped):
 
     def __init__(self):
-        super(WrenchStampdedMsg, self).__init__()
-        raise NotImplementedError("WrenchStampdedMsg is not yet implemented!")
+        super(WrenchStampedMsg, self).__init__()
+        raise NotImplementedError("WrenchStampedMsg is not yet implemented!")

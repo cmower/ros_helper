@@ -1,11 +1,53 @@
-from visualization_msgs.msg import Marker, MarkerArray
+from visualization_msgs.msg import *
 from .std import ColorMsg
 from .geometry import Vector3Msg, QuaternionMsg, PointMsg, Point, Quaternion
 from ..rh_utils import get_object_class_hierarchy
 
 #
-# Main marker msg base class
+# Msg classes
 #
+
+class ImageMarkerMsg(ImageMarker):
+
+    def __init__(self):
+        super(ImageMarkerMsg, self).__init__()
+        raise NotImplementedError("ImageMarkerMsg is not yet implemented")
+
+class InteractiveMarkerMsg(InteractiveMarker):
+
+    def __init__(self):
+        super(InteractiveMarkerMsg, self).__init__()
+        raise NotImplementedError("InteractiveMarkerMsg is not yet implemented")
+
+class InteractiveMarkerControlMsg(InteractiveMarkerControl):
+
+    def __init__(self):
+        super(InteractiveMarkerControlMsg, self).__init__()
+        raise NotImplementedError("InteractiveMarkerControlMsg is not yet implemented")
+
+class InteractiveMarkerFeedbackMsg(InteractiveMarkerFeedback):
+
+    def __init__(self):
+        super(InteractiveMarkerFeedbackMsg, self).__init__()
+        raise NotImplementedError("InteractiveMarkerFeedbackMsg is not yet implemented")
+
+class InteractiveMarkerInitMsg(InteractiveMarkerInit):
+
+    def __init__(self):
+        super(InteractiveMarkerInitMsg, self).__init__()
+        raise NotImplementedError("InteractiveMarkerInitMsg is not yet implemented")
+
+class InteractiveMarkerPoseMsg(InteractiveMarkerPose):
+
+    def __init__(self):
+        super(InteractiveMarkerPoseMsg, self).__init__()
+        raise NotImplementedError("InteractiveMarkerPoseMsg is not yet implemented")
+
+class InteractiveMarkerUpdateMsg(InteractiveMarkerUpdate):
+
+    def __init__(self):
+        super(InteractiveMarkerUpdateMsg, self).__init__()
+        raise NotImplementedError("InteractiveMarkerUpdateMsg is not yet implemented")
 
 class MarkerMsg(Marker):
 
@@ -138,8 +180,60 @@ class MarkerMsg(Marker):
     def alpha(self, a):
         self.color.a = float(a)
 
+class MarkerArrayMsg(MarkerArray):
+
+    def __init__(self, markers, time=None):
+        super(MarkerArrayMsg, self).__init__()
+        if MarkerArray in get_object_class_hierarchy(markers):
+            # Given a marker array or MarkerArrayMsg -> make self a copy of markers
+            markers_ = markers.markers
+        else:
+            # Assumes given a list of markers
+            markers_ = markers
+        self.markers = map(MarkerMsg, markers_)
+        if time is not None: self.time = time
+        self.resolve_ids()
+
+    def __iter__(self):
+        return iter(self.markers)
+
+    @property
+    def time(self):
+        assert self.nmarkers > 0, "At least one marker is required to get the time attribute."
+        return self[0].time
+
+    @time.setter
+    def time(self, t):
+        for m in self: m.time = t
+
+    @property
+    def nmarkers(self):
+        return len(self)
+
+    def __getitem__(self, i):
+        return self.markers[i]
+
+    def __setitem__(self, i, m):
+        self.markers[i] = m
+
+    def __len__(self):
+        return len(self.markers)
+
+    def append(self, m):
+        self.markers.append(m)
+        self.resolve_ids()
+
+    def resolve_ids(self):
+        for i, m in enumerate(self): m.id = i
+
+class MenuEntryMsg(MenuEntry):
+
+    def __init__(self):
+        super(MenuEntryMsg, self).__init__()
+        raise NotImplementedError("MenuEntryMsg is not yet implemented")
+
 #
-# Helper classes for derivs
+# Helper super classes for additional derived classes below
 #
 
 class _LineMsg(MarkerMsg):
@@ -204,7 +298,6 @@ class _SphereMsg(MarkerMsg):
     @radius.setter
     def radius(self, r):
         self.diameter = 2.0*float(r)
-
 
 # ARROW = 0
 
@@ -286,8 +379,6 @@ class SphereMsg(_SphereMsg):
     def __init__(self, **kwargs):
         super(SphereMsg, self).__init__(Marker.SPHERE)
         self.parse_kwargs(kwargs)
-
-
 
 # CYLINDER = 3
 
@@ -411,53 +502,3 @@ class TriangleList(MarkerMsg):
     def __init__(self, **kwargs):
         super(TriangleList, self).__init__(Marker.TRIANGLE_LIST)
         self.parse_kwargs(kwargs)
-
-#
-# Marker array msg support
-#
-
-class MarkerArrayMsg(MarkerArray):
-
-    def __init__(self, markers, time=None):
-        super(MarkerArrayMsg, self).__init__()
-        if MarkerArray in get_object_class_hierarchy(markers):
-            # Given a marker array or MarkerArrayMsg -> make self a copy of markers
-            markers_ = markers.markers
-        else:
-            # Assumes given a list of markers
-            markers_ = markers
-        self.markers = map(MarkerMsg, markers_)
-        if time is not None: self.time = time
-        self.resolve_ids()
-
-    def __iter__(self):
-        return iter(self.markers)
-
-    @property
-    def time(self):
-        assert self.nmarkers > 0, "At least one marker is required to get the time attribute."
-        return self[0].time
-
-    @time.setter
-    def time(self, t):
-        for m in self: m.time = t
-
-    @property
-    def nmarkers(self):
-        return len(self)
-
-    def __getitem__(self, i):
-        return self.markers[i]
-
-    def __setitem__(self, i, m):
-        self.markers[i] = m
-
-    def __len__(self):
-        return len(self.markers)
-
-    def append(self, m):
-        self.markers.append(m)
-        self.resolve_ids()
-
-    def resolve_ids(self):
-        for i, m in enumerate(self): m.id = i

@@ -1,5 +1,6 @@
-from sensor_msgs.msg import JointState, Joy
+from sensor_msgs.msg import *
 from ros_helper.msg import MultiJoy, Keyboard
+from ..rh_utils import *
 
 # Keyboard keys, ord : pygame key id
 keyboard_keys = {\
@@ -141,11 +142,63 @@ keyboard_keys = {\
                  122 : 'K_z'\
 }
 
+#
+# Msg classes
+#
+
+class BatteryStateMsg(BatteryState):
+
+    def __init__(self):
+        super(BatteryStateMsg, self).__init__()
+        raise NotImplementedError("BatteryStateMsg is not yet implemented")
+
+class CameraInfoMsg(CameraInfo):
+
+    def __init__(self):
+        super(CameraInfoMsg, self).__init__()
+        raise NotImplementedError("CameraInfoMsg is not yet implemented")
+
+class ChannelFloat32Msg(ChannelFloat32):
+
+    def __init__(self):
+        super(ChannelFloat32Msg, self).__init__()
+        raise NotImplementedError("ChannelFloat32Msg is not yet implemented")
+
+class CompressedImageMsg(CompressedImage):
+
+    def __init__(self):
+        super(CompressedImageMsg, self).__init__()
+        raise NotImplementedError("CompressedImageMsg is not yet implemented")
+
+class FluidPressureMsg(FluidPressure):
+
+    def __init__(self):
+        super(FluidPressureMsg, self).__init__()
+        raise NotImplementedError("FluidPressureMsg is not yet implemented")
+
+class IlluminanceMsg(Illuminance):
+
+    def __init__(self):
+        super(IlluminanceMsg, self).__init__()
+        raise NotImplementedError("IlluminanceMsg is not yet implemented")
+
+class ImageMsg(Image):
+
+    def __init__(self):
+        super(ImageMsg, self).__init__()
+        raise NotImplementedError("ImageMsg is not yet implemented")
+
+class ImuMsg(Imu):
+
+    def __init__(self):
+        super(ImuMsg, self).__init__()
+        raise NotImplementedError("ImuMsg is not yet implemented")
+
 class JointStateMsg(JointState):
 
-    def __init__(self, time, q=None, qd=None, eff=None, names=None):
+    def __init__(self, position, velocity=None, effort=None, name=None, time=None):
         super(JointStateMsg, self).__init__()
-        if type(time) in [JointStateMsg, JointState]:
+        if JointState in get_object_class_hierarchy(position):
             js = time
             self.header = js.header
             self.name = js.name
@@ -153,42 +206,172 @@ class JointStateMsg(JointState):
             self.velocity = js.velocity
             self.effort = js.effort
         else:
-            # Assumes time is a rospy.Time.now() and q is a list of joint positions
-            self.header.stamp = time
-            self.position = q
-            if qd is not None: self.velocity = qd
-            if eff is not None: self.effort = eff
-            if names is not None: self.name = names
+            self.position = position
+            if velocity is not None: self.velocity = velocity
+            if effort is not None: self.effort = effort
+            if name is not None: self.name = name
+            if time is not None: self.time = time
+
+    def __getitem__(self, i):
+        return [self.name[i], self.position[i], self.velocity[i], self.effort[i]]
+
+    def __setitem(self, i, state):
+        self.name[i] = state[0]
+        self.position[i] = state[1]
+        self.velocity[i] = state[2]
+        self.effort[i] = state[3]
+
+    def __len__(self):
+        return len(self.position)
+
+    @property
+    def time(self):
+        return self.header.stamp
+
+    @time.setter
+    def time(self, t):
+        self.header.stamp = t
+
+    @property
+    def njoints(self):
+        return len(self)
 
 class JoyMsg(Joy):
 
-    def __init__(self, time, axes=None, buttons=None):
+    def __init__(self, axes, buttons=None, time=None):
         super(JoyMsg, self).__init__()
-        if type(time) in [JoyMsg, Joy]:
-            j = time
+        if Joy in get_object_class_hierarchy(axes):
+            j = axes
             self.header = j.header
             self.axes = j.axes
             self.buttons = j.buttons
         else:
-            self.header.stamp = time
-            if axes is not None: self.axes = axes
+            self.axes = axes
             if buttons is not None: self.buttons = buttons
+            if time is not None: self.time = time
 
-class MultiJoyMsg(MultiJoy):
+    @property
+    def time(self):
+        return self.header.stamp
 
-    def __init__(self, time, joys=None):
-        super(MultiJoyMsg, self).__init__()
-        if type(time) in [MultiJoyMsg, MultiJoy]:
-            mj = time
-            self.header = mj.header
-            self.njoys = mj.njoys
-            self.joys = mj.joys
-        else:
-            # Assumes joys is not None
-            self.header.stamp = time
-            self.njoys = len(joys)
-            self.joys = joys
-        
+    @time.setter
+    def time(self, t):
+        self.header.stamp = t
+
+    @property
+    def nbuttons(self):
+        return len(self.buttons)
+
+    @property
+    def naxes(self):
+        return len(self.naxes)
+
+class JoyFeedbackMsg(JoyFeedback):
+
+    def __init__(self):
+        super(JoyFeedbackMsg, self).__init__()
+        raise NotImplementedError("JoyFeedbackMsg is not yet implemented")
+
+class JoyFeedbackArrayMsg(JoyFeedbackArray):
+
+    def __init__(self):
+        super(JoyFeedbackArrayMsg, self).__init__()
+        raise NotImplementedError("JoyFeedbackArrayMsg is not yet implemented")
+
+class LaserEchoMsg(LaserEcho):
+
+    def __init__(self):
+        super(LaserEchoMsg, self).__init__()
+        raise NotImplementedError("LaserEchoMsg is not yet implemented")
+
+class LaserScanMsg(LaserScan):
+
+    def __init__(self):
+        super(LaserScanMsg, self).__init__()
+        raise NotImplementedError("LaserScanMsg is not yet implemented")
+
+class MagneticFieldMsg(MagneticField):
+
+    def __init__(self):
+        super(MagneticFieldMsg, self).__init__()
+        raise NotImplementedError("MagneticFieldMsg is not yet implemented")
+
+class MultiDOFJointStateMsg(MultiDOFJointState):
+
+    def __init__(self):
+        super(MultiDOFJointStateMsg, self).__init__()
+        raise NotImplementedError("MultiDOFJointStateMsg is not yet implemented")
+
+class MultiEchoLaserScanMsg(MultiEchoLaserScan):
+
+    def __init__(self):
+        super(MultiEchoLaserScanMsg, self).__init__()
+        raise NotImplementedError("MultiEchoLaserScanMsg is not yet implemented")
+
+class NavSatFixMsg(NavSatFix):
+
+    def __init__(self):
+        super(NavSatFixMsg, self).__init__()
+        raise NotImplementedError("NavSatFixMsg is not yet implemented")
+
+class NavSatStatusMsg(NavSatStatus):
+
+    def __init__(self):
+        super(NavSatStatusMsg, self).__init__()
+        raise NotImplementedError("NavSatStatusMsg is not yet implemented")
+
+class PointCloudMsg(PointCloud):
+
+    def __init__(self):
+        super(PointCloudMsg, self).__init__()
+        raise NotImplementedError("PointCloudMsg is not yet implemented")
+
+class PointCloud2Msg(PointCloud2):
+
+    def __init__(self):
+        super(PointCloud2Msg, self).__init__()
+        raise NotImplementedError("PointCloud2Msg is not yet implemented")
+
+class PointFieldMsg(PointField):
+
+    def __init__(self):
+        super(PointFieldMsg, self).__init__()
+        raise NotImplementedError("PointFieldMsg is not yet implemented")
+
+class RangeMsg(Range):
+
+    def __init__(self):
+        super(RangeMsg, self).__init__()
+        raise NotImplementedError("RangeMsg is not yet implemented")
+
+class RegionOfInterestMsg(RegionOfInterest):
+
+    def __init__(self):
+        super(RegionOfInterestMsg, self).__init__()
+        raise NotImplementedError("RegionOfInterestMsg is not yet implemented")
+
+class RelativeHumidityMsg(RelativeHumidity):
+
+    def __init__(self):
+        super(RelativeHumidityMsg, self).__init__()
+        raise NotImplementedError("RelativeHumidityMsg is not yet implemented")
+
+class TemperatureMsg(Temperature):
+
+    def __init__(self):
+        super(TemperatureMsg, self).__init__()
+        raise NotImplementedError("TemperatureMsg is not yet implemented")
+
+class TimeReferenceMsg(TimeReference):
+
+    def __init__(self):
+        super(TimeReferenceMsg, self).__init__()
+        raise NotImplementedError("TimeReferenceMsg is not yet implemented")
+
+#
+# Additional message classes
+#
+
 class KeyboardMsg(Keyboard):
 
     def __init__(self, time, **kwargs):
@@ -200,7 +383,7 @@ class KeyboardMsg(Keyboard):
         else:
             self.time = time
             for key, value in kwargs.items(): self[key] = value
-                
+
     @property
     def time(self):
         return self.header.stamp
@@ -224,3 +407,18 @@ class KeyboardMsg(Keyboard):
         else:
             raise "[ERROR] given idx can only be a int or str."
         return k
+
+class MultiJoyMsg(MultiJoy):
+
+    def __init__(self, time, joys=None):
+        super(MultiJoyMsg, self).__init__()
+        if type(time) in [MultiJoyMsg, MultiJoy]:
+            mj = time
+            self.header = mj.header
+            self.njoys = mj.njoys
+            self.joys = mj.joys
+        else:
+            # Assumes joys is not None
+            self.header.stamp = time
+            self.njoys = len(joys)
+            self.joys = joys
