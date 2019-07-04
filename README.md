@@ -76,6 +76,7 @@ rospy.spin()
 ### Long term
 
 * Move to Python 3
+* Finish implementing all classes in `msgs`
 * Documentation
   * Wiki
   * Function/classes
