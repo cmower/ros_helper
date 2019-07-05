@@ -1,4 +1,4 @@
-from actionlib_msgs.msgs import *
+from actionlib_msgs.msg import *
 
 class GoalIDMsg(GoalID):
 
