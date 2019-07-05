@@ -10,28 +10,53 @@ i.e. in SimplePublisher, we want to check before running that generate_message f
 
 """
 
+def Repeater(rospy, hz, fun):
+    """
+    Repeater
+
+    Continuously call a function.
+
+    Syntax
+    ------
+
+      Repeater(rospy, hz, fun)
+
+    Parameters
+    ----------
+
+      rospy (module) : rospy module
+      hz (int/float) : If hz >= 1.0 then hz is assumed to be the frequency in Hertz, otherwise if 0 < hz < 1.0 then it is assumed to be the difference in time (i.e. a dt).
+      fun (function) : Function handle to continuously repeat calling. Note, it must contain one parameters; often fun(event).
+
+    """
+
+    # hz -> dt
+    typ = type(hz)
+    if typ is int:
+        dt = 1.0 / float(hz)
+    elif typ is float:
+        dt = hz if hz < 1.0 else 1.0/hz
+    else:
+        raise ValueError("hz must be an int or float")
+    dt = abs(dt) # ensure dt is positive
+
+    # Setup ros timer
+    rospy.Timer(rospy.Duration(dt), fun)
+
 class SimplePublisher(object):
 
-    def __init__(self, rospy, topic, msg_class, hz, queue_size=1, generate_message_handle=None):
-        self.init_pub(rospy, topic, msg_class, hz, queue_size, generate_message_handle)
+    def __init__(self, rospy, topic, msg_class, hz, queue_size=1, handle=None):
+        self.init_pub(rospy, topic, msg_class, hz, queue_size, handle)
 
-    def init_pub(self, rospy, topic, msg_class, hz, queue_size=1, generate_message_handle=None):
+    def init_pub(self, rospy, topic, msg_class, hz, queue_size=1, handle=None):
 
         # Check input
-        if generate_message_handle is None:
+        if handle is None:
             assert hasattr(self, 'generate_message'), "Derived class for SimplePublisher must have a generate_message method implemented."
         else:
-            assert callable(generate_message_handle), "[ERROR] Given generate_message_handle must be callable"
-            self.generate_message = generate_message_handle
+            assert callable(handle), "[ERROR] Given handle must be callable"
+            self.generate_message = handle
 
-        typ = type(hz)
-        if typ is int:
-            dt = 1.0 / float(hz)
-        elif typ is float:
-            dt = hz if hz < 1.0 else 1.0/hz
-        else:
-            raise ValueError("hz must be an int or float")
-        dt = abs(dt) # ensure dt is positive
 
         # Setup counter
         self.__number_of_messages_published = 0
@@ -40,7 +65,7 @@ class SimplePublisher(object):
         self.__pub = rospy.Publisher(topic, msg_class, queue_size=queue_size)
 
         # Setup ros timer with method self.update as handle
-        rospy.Timer(rospy.Duration(dt), self.update)
+        Repeater(rospy, hz, self.update)
 
     @property
     def NumberOfMessagesPublished(self):
@@ -78,7 +103,7 @@ class SimpleConstPublisher(SimplePublisher):
     def generate_message(self):
         self.__update_time()
         return self.__msg
-    
+
 class SimpleSubscriber(object):
 
     def __init__(self, rospy, topic, msg_class, callback_handle=None):
@@ -144,7 +169,7 @@ class SimpleSyncSubscriber(object):
         # Import and check input
         import message_filters as mf
         if not isinstance(msg_classes, (list, tuple)): msg_classes = [msg_classes]*len(topics)
-            
+
         if callback_handle is None:
             self.__user_callback = self.__pass_user_callback
         else:
@@ -164,7 +189,7 @@ class SimpleSyncSubscriber(object):
 
     def __pass_user_callback(self, msgs):
         pass
-        
+
     def __callback(self, *msgs):
         self.__msgs = msgs
         self.__number_of_messages_recieved += len(msgs)
@@ -180,7 +205,3 @@ class SimpleSyncSubscriber(object):
 
     def Msg(self, topic):
         return self.__msgs[self.__topics_map[topic]]
-        
-        
-        
-        
