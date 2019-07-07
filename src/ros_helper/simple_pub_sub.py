@@ -10,89 +10,86 @@ i.e. in SimplePublisher, we want to check before running that generate_message f
 
 """
 
-def Repeater(rospy, hz, fun):
-    """
-    Repeater
+class Repeater(object):
 
-    Continuously call a function.
+    def __init__(self, rospy, hz, func, pass_event=False):
+        self.init_repeater(rospy, hz, func, pass_event)
 
-    Syntax
-    ------
+    def init_repeater(self, rospy, hz, func, pass_event=False):
 
-      Repeater(rospy, hz, fun)
+        # Setup update function
+        self.__func = func
 
-    Parameters
-    ----------
-
-      rospy (module) : rospy module
-      hz (int/float) : If hz >= 1.0 then hz is assumed to be the frequency in Hertz, otherwise if 0 < hz < 1.0 then it is assumed to be the difference in time (i.e. a dt).
-      fun (function) : Function handle to continuously repeat calling. Note, it must contain one parameters; often fun(event).
-
-    """
-
-    # hz -> dt
-    typ = type(hz)
-    if typ is int:
-        dt = 1.0 / float(hz)
-    elif typ is float:
-        dt = hz if hz < 1.0 else 1.0/hz
-    else:
-        raise ValueError("hz must be an int or float")
-    dt = abs(dt) # ensure dt is positive
-
-    # Setup ros timer
-    rospy.Timer(rospy.Duration(dt), fun)
-
-class SimplePublisher(object):
-
-    def __init__(self, rospy, topic, msg_class, hz, queue_size=1, handle=None):
-        self.init_pub(rospy, topic, msg_class, hz, queue_size, handle)
-
-    def init_pub(self, rospy, topic, msg_class, hz, queue_size=1, handle=None):
-
-        # Check input
-        if handle is None:
-            assert hasattr(self, 'generate_message'), "Derived class for SimplePublisher must have a generate_message method implemented."
+        # hz -> dt
+        typ = type(hz)
+        if typ is int:
+            dt = 1.0 / float(hz)
+        elif typ is float:
+            dt = hz if hz < 1.0 else 1.0/hz
         else:
-            assert callable(handle), "[ERROR] Given handle must be callable"
-            self.generate_message = handle
+            raise ValueError("hz must be an int or float")
+        dt = abs(dt) # ensure dt is positive
 
+        # Setup ros timer
+        self.__timer = rospy.Timer(rospy.Duration(dt), self.__update_pass_event if pass_event else self.__update_no_pass_event)
+
+    def __update_pass_event(self, event):
+        self.__func(event)
+
+    def __update_no_pass_event(self, event):
+        self.__func()
+
+    def stop(self):
+        self.__timer.shutdown()
+
+    def get_timer(self):
+        return self.__timer
+
+class SimplePublisher(Repeater):
+
+    def __init__(self, rospy, topic, msg_class, hz, gen_msg_handle, queue_size=1): 
+        self.init_pub(rospy, topic, msg_class, hz, gen_msg_handle, queue_size)
+
+    def init_pub(self, rospy, topic, msg_class, hz, gen_msg_handle=None, queue_size=1):
+
+        # Set generate message, if using a derived class then must have attribute generate_message
+        self.__generate_message = self.generate_message if gen_msg_handle is None else gen_msg_handle
 
         # Setup counter
         self.__number_of_messages_published = 0
 
-        # Setup ros publisher
+        # Setup ros publisher and repeater
         self.__pub = rospy.Publisher(topic, msg_class, queue_size=queue_size)
+        self.init_repeater(rospy, hz, self.__publish_message)
 
-        # Setup ros timer with method self.update as handle
-        Repeater(rospy, hz, self.update)
+
+    def __publish_message(self):
+        self.__pub.publish(self.__generate_message())
+        self.__number_of_messages_published += 1
 
     @property
     def NumberOfMessagesPublished(self):
         return self.__number_of_messages_published
 
-    def update(self, event):
-        self.__pub.publish(self.generate_message())
-        self.__number_of_messages_published += 1
+    @property
+    def NumberOfConnections(self):
+        return self.__pub.get_num_connections()
+
+    def stop(self):
+        self.get_timer().shutdown()
+        self.__pub.unregister()
 
 class SimpleConstPublisher(SimplePublisher):
 
-    def __init__(self, rospy, topic, msg_class, hz, msg, queue_size=1):
+    def __init__(self, rospy, topic, hz, msg, queue_size=1):
 
         # Init rospy and msg
         self.__rospy = rospy
         self.__msg = msg
 
-        # Check if msg requires time to be added at every update iteration
-        if hasattr(msg, 'header'):
-            # true -> time needs to be updated
-            self.__update_time = self.__add_time
-        else:
-            # false -> time does not need to be updated
-            self.__update_time = self.__dont_add_time
-
-        # Init pub
-        self.init_pub(rospy, topic, msg_class, hz, queue_size)
+        # Init update time function and publisher
+        self.__update_time = self.__add_time if hasattr(msg, 'header') else self.__dont_add_time
+        self.init_pub(rospy, topic, type(msg), hz, queue_size=queue_size)
 
     def __add_time(self):
         self.__msg.header.stamp = self.__rospy.Time.now()
@@ -106,10 +103,10 @@ class SimpleConstPublisher(SimplePublisher):
 
 class SimpleSubscriber(object):
 
-    def __init__(self, rospy, topic, msg_class, callback_handle=None):
-        self.init_sub(rospy, topic, msg_class, callback_handle)
+    def __init__(self, rospy, topic, msg_class, callback_handle=None, callback_args=None):
+        self.init_sub(rospy, topic, msg_class, callback_handle, callback_args)
 
-    def init_sub(self, rospy, topic, msg_class, callback_handle=None):
+    def init_sub(self, rospy, topic, msg_class, callback_handle=None, callback_args=None):
 
         # Check input and set users callback
         if callback_handle is None:
@@ -123,7 +120,7 @@ class SimpleSubscriber(object):
         self.__number_of_messages_recieved = 0
 
         # Init subscriber
-        rospy.Subscriber(topic, msg_class, self.__callback)
+        self.__sub = rospy.Subscriber(topic, msg_class, self.__callback, callback_args=callback_args)
 
     def __pass_user_input(self, msg):
         pass
@@ -136,10 +133,17 @@ class SimpleSubscriber(object):
     def NumberOfMessagesRecieved(self):
         return self.__number_of_messages_recieved
 
+    @property
+    def NumberOfConnections(self):
+        return self.__sub.get_num_connections()
+
     def __callback(self, msg):
         self.__msg = msg
         self.__number_of_messages_recieved += 1
         self.__user_callback(msg)
+
+    def stop(self):
+        self.__sub.unregister()
 
 class SimpleMultiSubscriber(object):
 
@@ -154,6 +158,7 @@ class SimpleMultiSubscriber(object):
             assert len(callback_handles) == len(topics), "[ERROR] callback_handles must be same length as topics and msg_classes"
 
         # Init dictionary of subs
+        self.topics = topics
         self.__subs = {topic : SimpleSubscriber(rospy, topic, msg_class, callback) for topic, msg_class, callback in zip(topics, msg_classes, callback_handles)}
 
     def Msg(self, topic):
@@ -161,6 +166,12 @@ class SimpleMultiSubscriber(object):
 
     def NumberOfMessagesRecieved(self, topic):
         return self.__subs[topic].NumberOfMessagesRecieved
+
+    def NumberOfConnections(self, topic):
+        return self.__subs[topic].NumberOfConnections
+
+    def stop(self):
+        for topic in self.topics: self.__subs[topic].stop()
 
 class SimpleSyncSubscriber(object):
 
