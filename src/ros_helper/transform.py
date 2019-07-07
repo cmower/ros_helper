@@ -1,6 +1,5 @@
 import tf
 import numpy as np
-import tf2_ros
 from .msgs.geometry import TransformStampedMsg
 
 def _axis_intercept_point_in_plane(trans, quat, i_frame, i_base):
@@ -72,17 +71,18 @@ class TfApi(object):
     """
 
     def __init__(self, rospy):
-        self.br = tf2_ros.TransformBroadcaster()
-        self.buff = tf2_ros.Buffer()
-        tf2_ros.TransformListener(self.buff)
-        self.rospy = rospy
+        import tf2_ros
+        self.__br = tf2_ros.TransformBroadcaster()
+        self.__buff = tf2_ros.Buffer()
+        tf2_ros.TransformListener(self.__buff)
+        self.__rospy = rospy
 
     def get_tf(self, child_frame_id, base_frame_id):
         try:
-            tr = TransformStampedMsg(self.buff.lookup_transform(base_frame_id, child_frame_id, self.rospy.Time()))
+            tr = TransformStampedMsg(self.__buff.lookup_transform(base_frame_id, child_frame_id, self.__rospy.Time()))
         except:
             tr = None
         return tr
 
     def set_tf(self, trans, quat=[0, 0, 0, 1], time=None, child_frame_id='', base_frame_id=''):
-        self.br.sendTransform(TransformStampedMsg(trans, quat=quat, time=time, child_frame_id=child_frame_id, base_frame_id=base_frame_id))
+        self.__br.sendTransform(TransformStampedMsg(trans, quat=quat, time=time, child_frame_id=child_frame_id, base_frame_id=base_frame_id))
