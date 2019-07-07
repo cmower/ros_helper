@@ -1,5 +1,7 @@
 import os
+import time
 import inspect
+import rosbag 
 import pandas as pd
 import numpy as np
 from .utils import *
@@ -13,7 +15,23 @@ see here: https://github.com/cmower/experiment_comparison_of_formulations_for_sp
 
 """
 
-print "[WARN] ros_helper.experiments is still in development, do not use!"
+raise NotImplementedError("ros_helper.experiments is still in development, do not use!")
+
+def rosbag2pandas(filename):
+    pass
+
+class Timer(object):
+
+    def tic(self):
+        self.__start = time.time()
+
+    def toc(self, start=self.__start):
+        end = time.time()
+        self.__duration = end - start
+
+    @property
+    def Duration(self):
+        return self.__duration
 
 #
 # Base packet class and some common inherited classes
