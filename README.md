@@ -8,7 +8,7 @@ A collection of helper code for [ROS](https://www.ros.org/). For instructions, e
 
 Goal is to write a Python script that  publishes a sphere marker to Rviz, as shown in the image. This assumes you want to publish a red marker at 20hz with position/orientation `pos`/`ori` (lists, often NumPy arrays) in the world frame `"world"` and with radius `rad`.
 
-![](https://raw.githubusercontent.com/cmower/ros_helper/master/doc/images/sphere.png?token=AB6K7QDBJKPBJR2OCIGEXF25D5MEQ)
+![](https://github.com/cmower/ros_helper/blob/master/doc/images/sphere.png?raw=true)
 
 Normal implementation without using `ros_helper`. 
 ```python
