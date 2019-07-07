@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<Environment namespace="environment">
+<Environment>
 
-  <TransformFrames namespace="wall">
+  <TransformFrames namespace="wall" world_frame="world">
     <Frame name=""/>
   </TransformFrames>
 
