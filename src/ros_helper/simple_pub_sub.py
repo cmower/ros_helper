@@ -79,6 +79,20 @@ class SimplePublisher(Repeater):
         self.get_timer().shutdown()
         self.__pub.unregister()
 
+class SimpleTfStaticPublisher(Repeater):
+
+    def __init__(self, rospy, transforms, hz):
+        from .transform import TfApi
+        self.tf_api = TfApi(rospy)
+        self.__transforms = transforms
+        self.__rospy = rospy
+        self.init_repeater(rospy, hz, self.__send)
+
+    def __send(self):
+        for transform in self.__transforms:
+            transform.time = self.__rospy.Time.now()
+            self.tf_api.set_tf(transform)
+
 class SimpleConstPublisher(SimplePublisher):
 
     def __init__(self, rospy, topic, hz, msg, queue_size=1):

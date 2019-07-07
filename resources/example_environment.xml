@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<Environment namespace="environment">
+
+  <TransformFrames namespace="wall">
+    <Frame name=""/>
+  </TransformFrames>
+
+  <Markers namespace="wall">
+    <Sphere name=""/>
+    <Cube/>
+    <StlMesh/>
+  </Markers>
+  
+</Environment>
