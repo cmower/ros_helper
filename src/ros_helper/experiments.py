@@ -25,7 +25,7 @@ class Timer(object):
     def tic(self):
         self.__start = time.time()
 
-    def toc(self, start=self.__start):
+    def toc(self):
         end = time.time()
         self.__duration = end - start
 
@@ -41,10 +41,6 @@ class Packet(object):
 
     def __init__(self, col_names, ndata, dtype):
 
-        # Input check
-        is_array_str(col)
-        is_strictly_positive_int(ndata)
-
         # Assign parameters
         self.col_names = col_names
         self.__dtype = dtype
@@ -59,22 +55,12 @@ class Packet(object):
         return self.__data.shape[1]
 
     def __setitem__(self, i, v):
-        
-        # Input check
-        is_int(i)
-        in_int_range(i, self.ndata)
-        is_array_dtype(v, self.__dtype)
-        if len(v) is not self.ncols:
-            raise TypeError("expected data length of %d, for %d" % (self.ndata, len(v)))
-
+    
         # Assign data
         self.__data[i,:] = np.asarray(v, dtype=self.__dtype)
 
     def __getitem__(self, i):
 
-        # Input check
-        is_int(i)
-        in_int_range(i, self.ndata)
 
         return self.__data[i,:]
 
@@ -87,10 +73,6 @@ class Packet(object):
 class KukaLWRJointTrajectory(Packet):
 
     def __init__(self, name, ndata):
-
-        # Input check
-        is_str(name)
-        is_strictly_positive_int(ndata)
 
         # Setup packet                               
         if len(name) is 0:
@@ -107,10 +89,6 @@ class KukaLWRJointTrajectory(Packet):
 class Position3Trajectory(Packet):
 
     def __init__(self, name, ndata):
-
-        # Input check
-        is_str(name)
-        is_strictly_positive_int(ndata)
 
         # Setup packet
         if len(name) is 0:
@@ -129,14 +107,6 @@ class Position3Trajectory(Packet):
 class Container(object):
 
     def __init__(self, name, init, ndata, path2data):
-
-        # Input check
-        is_dict_keys_str(init)
-        for v in init.values():
-            if Packet not in inspect.getmro(type(v)):
-                raise TypeError("Must inherit from Packet")
-        is_strictly_positive_int(ndata)
-        is_dir(path2data)
 
         # Setup
         self.name = name
