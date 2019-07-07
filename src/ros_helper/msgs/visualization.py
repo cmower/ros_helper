@@ -54,6 +54,9 @@ class MarkerMsg(Marker):
     def __init__(self, marker_type, **kwargs):
         super(MarkerMsg, self).__init__()
 
+        # Ensure orientation is [0,0,0,1] if user doesn't specify 
+        self.pose.orientation = QuaternionMsg()
+
         if Marker in get_object_class_hierarchy(marker_type):
             # marker_type is a marker -> make self a copy of given marker
             m = marker_type
@@ -62,20 +65,20 @@ class MarkerMsg(Marker):
             self.id = m.id
             self.type = m.type
             self.action = m.action
-            self.pose = m.pose
+            self.pose = PoseMsg(m.pose)
             self.scale = m.scale
-            self.color = m.color
+            self.color = ColorMsg(m.color)
             self.lifetime = m.lifetime
             self.frame_locked = m.frame_locked
-            self.points = m.points
-            self.colors = m.colors
+            self.points = map(PointMsg, m.points)
+            self.colors = map(ColorMsg, m.colors)
             self.text = m.text
             self.mesh_resource = m.mesh_resource
             self.mesh_use_embedded_materials = m.mesh_use_embedded_materials
         else:
             # assumes marker_type specifies a marker type as listed in Object Types section here: http://wiki.ros.org/rviz/DisplayTypes/Marker#Object_Types
             self.marker_type = marker_type
-        self.parse_kwargs(kwargs)
+        self.parse_kwargs(kwargs)  
 
     def parse_kwargs(self, kwargs):
         for key, value in kwargs.items():
@@ -173,6 +176,14 @@ class MarkerMsg(Marker):
         self.pose.orientation = QuaternionMsg(orientation)
 
     @property
+    def rpy(self):
+        return QuaternionMsg(self.pose.orientation).to_rpy()
+
+    @rpy.setter
+    def rpy(self, rpy):
+        self.pose.orientation = QuaternionMsg(rpy) # internally converted to quat
+
+    @property
     def alpha(self):
         return self.color.a
 
@@ -184,13 +195,7 @@ class MarkerArrayMsg(MarkerArray):
 
     def __init__(self, markers, time=None):
         super(MarkerArrayMsg, self).__init__()
-        if MarkerArray in get_object_class_hierarchy(markers):
-            # Given a marker array or MarkerArrayMsg -> make self a copy of markers
-            markers_ = markers.markers
-        else:
-            # Assumes given a list of markers
-            markers_ = markers
-        self.markers = map(MarkerMsg, markers_)
+        self.markers = map(MarkerMsg, markers.markers if MarkerArray in get_object_class_hierarchy(markers) else markers)
         if time is not None: self.time = time
         self.resolve_ids()
 
@@ -199,7 +204,6 @@ class MarkerArrayMsg(MarkerArray):
 
     @property
     def time(self):
-        assert self.nmarkers > 0, "At least one marker is required to get the time attribute."
         return self[0].time
 
     @time.setter
