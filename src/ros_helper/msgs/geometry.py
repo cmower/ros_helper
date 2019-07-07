@@ -117,8 +117,16 @@ class PoseMsg(Pose):
             self.orientation = QuaternionMsg(trans.orientation)
         else:
             # assume trans/quat are a tuple, list, or np.array
-            self.position = PointMsg(trans)
-            self.orientation = QuaternionMsg(quat)
+            if len(trans) == 3:
+                # assumes quat is defined
+                trans_ = trans
+                quat_ = quat
+            else:
+                # assumes trans is 6 or 7 in length, i.e. 3 trans and 3/4 ori
+                trans_ = trans[:3]
+                quat_ = trans[3:]
+            self.position = PointMsg(trans_)
+            self.orientation = QuaternionMsg(quat_)
 
     def to_np(self):
         T = tf.transformations.quaternion_matrix(self.orientation.to_np())
