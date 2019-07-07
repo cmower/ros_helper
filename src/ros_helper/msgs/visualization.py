@@ -196,7 +196,7 @@ class MarkerArrayMsg(MarkerArray):
     def __init__(self, markers, time=None):
         super(MarkerArrayMsg, self).__init__()
         self.markers = map(MarkerMsg, markers.markers if MarkerArray in get_object_class_hierarchy(markers) else markers)
-        if time is not None: self.time = time
+        self.time = time
         self.resolve_ids()
 
     def __iter__(self):
@@ -204,11 +204,12 @@ class MarkerArrayMsg(MarkerArray):
 
     @property
     def time(self):
-        return self[0].time
+        return self.__time
 
     @time.setter
     def time(self, t):
         for m in self: m.time = t
+        self.__time = t
 
     @property
     def nmarkers(self):
