@@ -1,5 +1,4 @@
 import inspect
-import numpy as np
 
 XYZ = ['x', 'y', 'z']
 XYZW = ['x', 'y', 'z', 'w']
