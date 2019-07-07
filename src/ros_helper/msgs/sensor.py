@@ -1,6 +1,6 @@
 from sensor_msgs.msg import *
 from ros_helper.msg import MultiJoy, Keyboard
-from ..rh_utils import *
+from ..utils import *
 
 # Keyboard keys, ord : pygame key id
 keyboard_keys = {\

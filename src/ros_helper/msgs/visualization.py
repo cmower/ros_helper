@@ -1,7 +1,7 @@
 from visualization_msgs.msg import *
 from .std import ColorMsg
 from .geometry import Vector3Msg, QuaternionMsg, PointMsg, Point, Quaternion
-from ..rh_utils import get_object_class_hierarchy
+from ..utils import get_object_class_hierarchy
 
 #
 # Msg classes

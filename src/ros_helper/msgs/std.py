@@ -1,7 +1,7 @@
 import numpy as np
 from std_msgs.msg import *
 import colors
-from ..rh_utils import msetattr, mgetattr, get_object_class_hierarchy
+from ..utils import msetattr, mgetattr, get_object_class_hierarchy
 
 class BoolMsg(Bool):
 
