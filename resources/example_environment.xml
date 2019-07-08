@@ -43,4 +43,13 @@
 	  position="-1+2*np.random.rand(3)"/>
   </MarkerArray>
 
+  <Markers>
+	<Sphere topic="env/sphere"
+			hz="20"
+			diameter="0.5"
+			frame_id="world"
+			position="-0.2, 0.2, 1.0"
+			rgba="0.4, 0.1, 0.1, 0.5"/>
+  </Markers>
+
 </Environment>

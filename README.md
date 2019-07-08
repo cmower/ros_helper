@@ -112,6 +112,8 @@ Tags in the `MarkerArray` fields follow the same pattern as in `ros_helper.msgs.
 </node>
 ```
 
+See `example_environment.xml` for updates to functionality of `publish_environment_node`.
+
 ## Todo
 
 ### Short term

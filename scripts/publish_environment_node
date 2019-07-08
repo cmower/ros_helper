@@ -3,12 +3,30 @@ import rospy
 import numpy as np
 from math import pi
 import xml.etree.ElementTree as eltree
-from ros_helper.msgs.visualization import *
+import ros_helper.msgs.visualization as vis
 from ros_helper.msgs.geometry import TransformStampedMsg
 from ros_helper.simple_pub_sub import SimpleConstPublisher, SimpleTfStaticPublisher
 
 def str_list_to_np_array(str_list):
     return np.asarray(eval(str_list), dtype=float)
+
+def treat_properties_before_append(props):
+    propsout = props.copy()
+
+    for key, value in props.items():
+        if key in ['position',\
+                   'orientation',\
+                   'rpy',\
+                   'color',\
+                   'rgba',\
+                   'rgb',\
+                   'pose',\
+                   'scale',\
+                   'start_point',\
+                   'end_point']:
+            propsout[key] = str_list_to_np_array(value)
+
+    return propsout
 
 class TransformObj(object):
 
@@ -94,12 +112,12 @@ class MarkerArrayObj(object):
         for marker_el in spec:
 
             # Grab marker class and properties
-            marker_class = eval('%sMsg' % marker_el.tag)
+            marker_class = eval('vis.%sMsg' % marker_el.tag)
             properties = marker_el.attrib
             properties['namespace'] = namespace
 
             # Treat special case for Marker tag
-            if marker_class is MarkerMsg:
+            if marker_class is vis.MarkerMsg:
                 # if Marker is given then marker_type or type must be given
                 if 'marker_type' in properties:
                     marker_type = int(properties.pop('marker_type'))
@@ -112,34 +130,15 @@ class MarkerArrayObj(object):
                 if 'marker_type' in properties: properties.pop('marker_type')
                 if 'type' in properties: properties.pop('type')
 
-                properties = self.treat_properties_before_append(properties)
-                markers.append(MarkerMsg(marker_type, properties=properties))
+                properties = treat_properties_before_append(properties)
+                markers.append(vis.MarkerMsg(marker_type, properties=properties))
             else:
-                properties = self.treat_properties_before_append(properties)
+                properties = treat_properties_before_append(properties)
                 markers.append(marker_class(properties=properties))
 
 
         # extract markers
-        self.__marker_array = MarkerArrayMsg(markers=markers)
-
-    def treat_properties_before_append(self, props):
-
-        propsout = props.copy()
-
-        for key, value in props.items():
-            if key in ['position',\
-                       'orientation',\
-                       'rpy',\
-                       'color',\
-                       'rgba',\
-                       'rgb',\
-                       'pose',\
-                       'scale',\
-                       'start_point',\
-                       'end_point']:
-                propsout[key] = str_list_to_np_array(value)
-
-        return propsout
+        self.__marker_array = vis.MarkerArrayMsg(markers=markers)
 
     @property
     def topic(self):
@@ -153,6 +152,47 @@ class MarkerArrayObj(object):
     def hz(self):
         return self.__hz
 
+class MarkerObj(object):
+
+    def __init__(self, spec):
+
+        marker_class = eval("vis.%sMsg"%spec.tag)
+        properties = spec.attrib
+        self.__topic = properties.pop('topic')
+        if 'hz' in properties:
+            self.__hz = float(properties.pop('hz'))
+        else:
+            self.__hz = 20.0
+        if marker_class is vis.MarkerMsg:
+            if 'marker_type' in properties:
+                marker_type=int(properties.pop('marker_type'))
+            elif 'type' in properties:
+                marker_type=int(properties.pop('type'))
+            else:
+                raise IOError('a type or marker_type must be given for Marker')
+
+            # Remove marker_type/type tags if repeated
+            if 'marker_type' in properties: properties.pop('marker_type')
+            if 'type' in properties: properties.pop('type')
+
+            properties = treat_properties_before_append(properties)
+            self.__marker = vis.MarkerMsg(marker_type, properties=properties)
+        else:
+            properties = treat_properties_before_append(properties)
+            self.__marker = marker_class(properties=properties)
+
+    @property
+    def topic(self):
+        return self.__topic
+
+    @property
+    def hz(self):
+        return self.__hz
+
+    @property
+    def marker(self):
+        return self.__marker
+
 class XMLLoad(object):
 
     def __init__(self):
@@ -160,6 +200,7 @@ class XMLLoad(object):
         # Init
         self.__transforms = []
         self.__marker_arrays = []
+        self.__markers = []
 
         # Extract
         for child in eltree.parse(rospy.get_param("~filename")).getroot():
@@ -167,12 +208,17 @@ class XMLLoad(object):
                 self.parse_transforms(child)
             elif child.tag == 'MarkerArray':
                 self.parse_marker_array(child)
+            elif child.tag == 'Markers':
+                self.parse_markers(child)
             else:
                 raise IOError("Did not recognise tag in environment config, got %s." % child.tag)
 
+
+    def parse_markers(self, tree):
+        for child in tree: self.__markers.append(MarkerObj(child))
+
     def parse_transforms(self, tree):
-        for child in tree:
-            self.__transforms.append(TransformObj(child, tree.attrib))
+        for child in tree: self.__transforms.append(TransformObj(child, tree.attrib))
 
     def parse_marker_array(self, tree):
         self.__marker_arrays.append(MarkerArrayObj(tree))
@@ -184,6 +230,10 @@ class XMLLoad(object):
     @property
     def MarkerArrays(self):
         return self.__marker_arrays
+
+    @property
+    def Markers(self):
+        return self.__markers
 
 if __name__=='__main__':
 
@@ -202,5 +252,11 @@ if __name__=='__main__':
                              marker_array.topic,\
                              marker_array.hz,\
                              marker_array.marker_array)
+
+    for marker in env.Markers:
+        SimpleConstPublisher(rospy,\
+                             marker.topic,\
+                             marker.hz,\
+                             marker.marker)
 
     rospy.spin()
