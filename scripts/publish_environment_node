@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import rospy
 import numpy as np
+from math import pi
 import xml.etree.ElementTree as eltree
 from ros_helper.msgs.visualization import *
 from ros_helper.msgs.geometry import TransformStampedMsg
