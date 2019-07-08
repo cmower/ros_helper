@@ -56,6 +56,62 @@ SimpleConstPublisher(rospy, 'sphere', 20, vis.SphereMsg(frame_id="world", positi
 rospy.spin()
 ```
 
+## Publish an environment and static frames
+
+The goal here is to publish multiple markers and static frames. `ros_helper` provides an easy way to create a configuration and publish. For example, see the image for the goal we want to achieve. 
+
+![]()
+
+Normally we would have to setup all the static frames in the launch file and create a script to publish the markers we want. This can be avoided using the `publish_environment_node` provided by `ros_helper`. All that is required is a configuration `.xml` file. For the above example, use the following. 
+
+```xml
+<?xml version="1.0"?>
+<Environment>
+
+  <StaticTransforms base_frame="world" hz="0.005">
+	<Frame name="wall_frame" trans="1, 1, 0.5"/>
+	<Frame name="table_frame" trans="-1, -0.5, 0.2"/>
+  </StaticTransforms>
+
+  <StaticTransforms base_frame="table_frame" hz="20">
+	<Frame name="cone_frame" trans="0, 0, 0.2" rpy="1.0, 0, 0"/>
+  </StaticTransforms>
+
+  <StaticTransforms base_frame="wall_frame" hz="20">
+	<Frame name="sphere_frame" trans="0, 2, 0"/>
+  </StaticTransforms>
+
+  <MarkerArray topic="env/wall" namespace="wall" hz="20">
+	<Cube name="wall" scale="1, 1, 1" rgba="0, 0, 1, 0.5" frame_id="wall_frame"/>
+	<Sphere name="sphere" radius="0.4" rgba="0.4, 0.2, 0.1, 0.5" frame_id="sphere_frame"/>
+  </MarkerArray>
+
+  <MarkerArray topic="env/table" namespace="table" hz="25">
+	<Cube name="table"
+		  length="0.2"
+		  height="0.4"
+		  width="0.2"
+		  rgba="1, 0.2, 1, 0.5"
+		  frame_id="table_frame"/>
+
+    <StlMesh name="Cone"
+			 scale= "1, 1, 1"
+			 color="1, 0, 1, 0.5"
+			 frame_id="cone_frame"
+			 filename="package://ros_helper/resources/cone.stl"/>
+  </MarkerArray>
+
+</Environment>
+```
+
+Tags in the `MarkerArray` fields follow the same pattern as in `ros_helper.msgs.visualization`. To publish the environment, add the following into your launch file.
+
+```xml
+<node pkg="ros_helper" type="publish_environment_node" name="publish_environment_node">
+	<param name="filename" type="string" value="/path/to/environment_config.xml"/>
+</node>
+```
+
 ## Todo
 
 ### Short term
