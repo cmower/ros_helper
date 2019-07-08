@@ -7,7 +7,7 @@
   </StaticTransforms>
 
   <StaticTransforms base_frame="table_frame" hz="20">
-    <Frame name="cone_frame" trans="0, 0, 0.2" rpy="1.0, 0, 0"/>
+    <Frame name="cone_frame" trans="0, 0, 0.2" rpy="deg(90.0), 0, 0"/>
   </StaticTransforms>
 
   <StaticTransforms base_frame="wall_frame" hz="20">

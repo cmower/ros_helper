@@ -10,6 +10,9 @@ from ros_helper.simple_pub_sub import SimpleConstPublisher, SimpleTfStaticPublis
 def str_list_to_np_array(str_list):
     return np.asarray(eval(str_list), dtype=float)
 
+def deg(x):
+    return np.radians(x)
+
 def treat_properties_before_append(props):
     propsout = props.copy()
 
