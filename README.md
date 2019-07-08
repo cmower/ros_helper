@@ -67,6 +67,7 @@ rospy.spin()
 * Some scripts seem to have irregular spacing. Check through and ensure code complies with [PEP 8](https://www.python.org/dev/peps/pep-0008/).
   * Consider using pep8ify, see [here](https://github.com/spulec/pep8ify).
 * Un-hackify `publish_environment_node`. Further functionality?
+* Clean interfaces in `simple_pub_sub`.
 
 ### Long term
 
