@@ -60,7 +60,7 @@ rospy.spin()
 
 The goal here is to publish multiple markers and static frames. `ros_helper` provides an easy way to create a configuration and publish. For example, see the image for the goal we want to achieve. 
 
-![]()
+![](https://raw.githubusercontent.com/cmower/ros_helper/master/doc/images/publish_environment_node_example.png?token=AB6K7QC66BPL4TWG3PWM3EC5FSGFU)
 
 Normally we would have to setup all the static frames in the launch file and create a script to publish the markers we want. This can be avoided using the `publish_environment_node` provided by `ros_helper`. All that is required is a configuration `.xml` file. For the above example, use the following. 
 
