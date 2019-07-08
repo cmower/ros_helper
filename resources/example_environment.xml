@@ -2,36 +2,36 @@
 <Environment>
 
   <StaticTransforms base_frame="world" hz="0.005">
-	<Frame name="wall_frame" trans="1, 1, 0.5"/>
-	<Frame name="table_frame" trans="-1, -0.5, 0.2"/>
+    <Frame name="wall_frame" trans="1, 1, 0.5"/>
+    <Frame name="table_frame" trans="-1, -0.5, 0.2"/>
   </StaticTransforms>
 
   <StaticTransforms base_frame="table_frame" hz="20">
-	<Frame name="cone_frame" trans="0, 0, 0.2" rpy="1.0, 0, 0"/>
+    <Frame name="cone_frame" trans="0, 0, 0.2" rpy="1.0, 0, 0"/>
   </StaticTransforms>
 
   <StaticTransforms base_frame="wall_frame" hz="20">
-	<Frame name="sphere_frame" trans="0, 2, 0"/>
+    <Frame name="sphere_frame" trans="0, 2, 0"/>
   </StaticTransforms>
 
   <MarkerArray topic="env/wall" namespace="wall" hz="20">
-	<Cube name="wall" scale="1, 1, 1" rgba="0, 0, 1, 0.5" frame_id="wall_frame"/>
-	<Sphere name="sphere" radius="0.4" rgba="0.4, 0.2, 0.1, 0.5" frame_id="sphere_frame"/>
+    <Cube name="wall" scale="1, 1, 1" rgba="0, 0, 1, 0.5" frame_id="wall_frame"/>
+    <Sphere name="sphere" radius="0.4" rgba="0.4, 0.2, 0.1, 0.5" frame_id="sphere_frame"/>
   </MarkerArray>
 
   <MarkerArray topic="env/table" namespace="table" hz="25">
-	<Cube name="table"
-		  length="0.2"
-		  height="0.4"
-		  width="0.2"
-		  rgba="1, 0.2, 1, 0.5"
-		  frame_id="table_frame"/>
+    <Cube name="table"
+	  length="0.2"
+	  height="0.4"
+	  width="0.2"
+	  rgba="1, 0.2, 1, 0.5"
+	  frame_id="table_frame"/>
 
     <StlMesh name="Cone"
-			 scale= "1, 1, 1"
-			 color="1, 0, 1, 0.5"
-			 frame_id="cone_frame"
-			 filename="package://ros_helper/resources/cone.stl"/>
+	     scale= "1, 1, 1"
+	     color="1, 0, 1, 0.5"
+	     frame_id="cone_frame"
+	     filename="package://ros_helper/resources/cone.stl"/>
   </MarkerArray>
 
   <MarkerArray topic="env/text" namespace="other" hz="20">
