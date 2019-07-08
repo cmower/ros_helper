@@ -1,0 +1,205 @@
+#!/usr/bin/env python
+import rospy
+import numpy as np
+import xml.etree.ElementTree as eltree
+from ros_helper.msgs.visualization import *
+from ros_helper.msgs.geometry import TransformStampedMsg
+from ros_helper.simple_pub_sub import SimpleConstPublisher, SimpleTfStaticPublisher
+
+def str_list_to_np_array(str_list):
+    return np.asarray(eval(str_list), dtype=float)
+
+class TransformObj(object):
+
+    def __init__(self, spec, group_attribs):
+
+        # Init group attribibutes from group_attribs
+
+        if 'hz' in group_attribs:
+            self.__hz = float(group_attribs['hz'])
+        else:
+            self.__hz = 20.0
+
+        if 'base_frame' in group_attribs:
+            base_frame = group_attribs['base_frame']
+            if base_frame == '': base_frame = 'world'
+        else:
+            base_frame = 'world'
+
+        # Init frame properties from spec
+
+        ## Get params that are assumed to exist
+        child_frame = spec.attrib['name']
+
+        ## Get params that can not exist
+        if 'trans' in spec.attrib:
+            trans = str_list_to_np_array(spec.attrib['trans'])
+        else:
+            trans = [0, 0, 0]
+
+        if 'quat' in spec.attrib:
+            quat = str_list_to_np_array(spec.attrib['quat'])
+            quat_exists = True
+        else:
+            quat = [0, 0, 0, 1]
+            quat_exists = False
+
+        if 'rpy' in spec.attrib:
+            quat  = str_list_to_np_array(spec.attrib['rpy']) # rpy angles handled in TransformStampedMsg
+            if quat_exists:
+                raise IOError("quat and rpy tags are defined in config, this is ambigous!")
+            rpy_exists = True
+        else:
+            if not quat_exists: quat = [0, 0, 0, 1] # dont overwrite quat if given
+            rpy_exists = True
+
+        # Input check
+        if len(trans) > 3 and quat_exists:
+            raise IOError("a quat tag and more than 3 elements exist in trans tag, this is ambiguous!")
+        if len(trans) > 3 and rpy_exists:
+            raise IOError("a rpy tag and more than 3 elements exist in trans tag, this is ambiguous!")
+
+        # Setup transform
+        self.__transform = TransformStampedMsg(trans=trans, quat=quat, child_frame_id=child_frame, base_frame_id=base_frame)
+
+    @property
+    def transform(self):
+        return self.__transform
+
+    @property
+    def hz(self):
+        return self.__hz
+
+class MarkerArrayObj(object):
+
+    def __init__(self, spec):
+
+        # Init vars
+        markers = []
+
+        # Init group attribibutes
+
+        ## required attributes
+        namespace = spec.attrib['namespace']
+        self.__topic = spec.attrib['topic']
+
+        # attributes that arent required
+        if 'hz' in spec.attrib:
+            self.__hz = float(spec.attrib['hz'])
+        else:
+            self.__hz = 20.0
+
+        # Get markers
+        for marker_el in spec:
+
+            # Grab marker class and properties
+            marker_class = eval('%sMsg' % marker_el.tag)
+            properties = marker_el.attrib
+            properties['namespace'] = namespace
+
+            # Treat special case for Marker tag
+            if marker_class is MarkerMsg:
+                # if Marker is given then marker_type or type must be given
+                if 'marker_type' in properties:
+                    marker_type = int(properties.pop('marker_type'))
+                elif 'type' in properties:
+                    marker_type = int(properties.pop('type'))
+                else:
+                    raise IOError('a type or marker_type must be given for Marker')
+
+                # Remove marker_type/type tags if repeated
+                if 'marker_type' in properties: properties.pop('marker_type')
+                if 'type' in properties: properties.pop('type')
+
+                properties = self.treat_properties_before_append(properties)
+                markers.append(MarkerMsg(marker_type, properties=properties))
+            else:
+                properties = self.treat_properties_before_append(properties)
+                markers.append(marker_class(properties=properties))
+
+
+        # extract markers
+        self.__marker_array = MarkerArrayMsg(markers=markers)
+
+    def treat_properties_before_append(self, props):
+
+        propsout = props.copy()
+
+        for key, value in props.items():
+            if key in ['position',\
+                       'orientation',\
+                       'rpy',\
+                       'color',\
+                       'rgba',\
+                       'rgb',\
+                       'pose',\
+                       'scale',\
+                       'start_point',\
+                       'end_point']:
+                propsout[key] = str_list_to_np_array(value)
+
+        return propsout
+
+    @property
+    def topic(self):
+        return self.__topic
+
+    @property
+    def marker_array(self):
+        return self.__marker_array
+
+    @property
+    def hz(self):
+        return self.__hz
+
+class XMLLoad(object):
+
+    def __init__(self):
+
+        # Init
+        self.__transforms = []
+        self.__marker_arrays = []
+
+        # Extract
+        for child in eltree.parse(rospy.get_param("~filename")).getroot():
+            if child.tag == 'StaticTransforms':
+                self.parse_transforms(child)
+            elif child.tag == 'MarkerArray':
+                self.parse_marker_array(child)
+            else:
+                raise IOError("Did not recognise tag in environment config, got %s." % child.tag)
+
+    def parse_transforms(self, tree):
+        for child in tree:
+            self.__transforms.append(TransformObj(child, tree.attrib))
+
+    def parse_marker_array(self, tree):
+        self.__marker_arrays.append(MarkerArrayObj(tree))
+
+    @property
+    def StaticTransforms(self):
+        return self.__transforms
+
+    @property
+    def MarkerArrays(self):
+        return self.__marker_arrays
+
+if __name__=='__main__':
+
+    # Init
+    rospy.init_node('publish_environment_node')
+    env = XMLLoad()
+
+    # Setup publishers and spin
+    for transform in env.StaticTransforms:
+        SimpleTfStaticPublisher(rospy,\
+                                transform.transform,\
+                                transform.hz)
+
+    for marker_array in env.MarkerArrays:
+        SimpleConstPublisher(rospy,\
+                             marker_array.topic,\
+                             marker_array.hz,\
+                             marker_array.marker_array)
+
+    rospy.spin()

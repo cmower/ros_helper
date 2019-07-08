@@ -68,15 +68,14 @@ rospy.spin()
 * Finish `experiments` module.
 * Update examples, e.g. the scripts names, and make more.
 * Cleaner initialization handling in `msgs`, like new additions to `visualization`.
-* Move the many property attributes of `MarkerMsg` to respective derived classes in `visualization.py` to avoid errors. 
 * Some scripts seem to have irregular spacing. Check through and ensure code complies with [PEP 8](https://www.python.org/dev/peps/pep-0008/). 
-* Recall, one of the original ideas was to not do lots of input checks and leave that to users responsibility. So is there a need for all the `is_` functions in `rh_utils.py`? Also, perhaps input checking and exception handling should be incorporated to aid easier debugging (i.e. see point below)? This would probably be worth making a whole new module, i.e. `error_handling_utils.py` or something like that...
-* Proper exception handling and colored logging to terminal, consider Python [`logging`](https://docs.python.org/2/library/logging.html). Also, could we log to `./logs` in catkin workspace? Is all this really worth it?
-* Complete the `publish_environment_node` and an example.
+  * Consider using pep8ify, see [here](https://github.com/spulec/pep8ify). 
+* Un-hackify `publish_environment_node`. Further functionality? 
 
 ### Long term
 
 * Move to Python 3
+* Proper exception handling and colored logging to terminal, consider Python [`logging`](https://docs.python.org/2/library/logging.html). Also, could we log to `./logs` in catkin workspace? Is all this really worth it?
 * Finish implementing all classes in `msgs`
 * Documentation
   * Wiki

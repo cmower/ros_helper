@@ -183,12 +183,8 @@ class QuaternionMsg(Quaternion):
             else:
                 raise ValueError("Expected input to be length 3 or 4, got %d" % n)
 
-        # Cast quat_ as np.array and normalize
-        quat_ = np.asarray(quat_)
-        quat_ /= np.linalg.norm(quat_)
-
         # Set attr
-        msetattr(self, XYZW, quat_)
+        msetattr(self, XYZW, np.asarray(quat_) / np.linalg.norm(quat_)) # ensure quat_ is normalized
 
     def to_rpy(self):
         return tf.transformations.euler_from_quaternion(self.to_np())
@@ -213,8 +209,12 @@ class TransformMsg(Transform):
             self.translation = Vector3Msg(trans.translation)
             self.rotation = QuaternionMsg(trans.rotation)
         else:
-            self.translation = Vector3Msg(trans)
-            self.rotation = QuaternionMsg(quat)
+            if len(trans) is 3:
+                self.translation = Vector3Msg(trans)
+                self.rotation = QuaternionMsg(quat)
+            else:
+                self.translation = Vector3Msg(trans[:3])
+                self.rotation = QuaternionMsg(trans[3:])
 
     def to_np(self):
         T = self.rotation.to_matrix()
@@ -249,7 +249,7 @@ class TransformStampedMsg(TransformStamped):
 
     @time.setter
     def time(self, t):
-        self.header.stamp = time
+        self.header.stamp = t
 
     def to_np(self):
         return self.transform.to_np()

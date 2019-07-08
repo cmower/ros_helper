@@ -1,6 +1,6 @@
 from visualization_msgs.msg import *
+from .geometry import *
 from .std import ColorMsg
-from .geometry import Vector3Msg, QuaternionMsg, PointMsg, Point, Quaternion
 from ..utils import get_object_class_hierarchy
 
 #
@@ -54,7 +54,7 @@ class MarkerMsg(Marker):
     def __init__(self, marker_type, **kwargs):
         super(MarkerMsg, self).__init__()
 
-        # Ensure orientation is [0,0,0,1] if user doesn't specify 
+        # Ensure orientation is [0,0,0,1] if user doesn't specify
         self.pose.orientation = QuaternionMsg()
 
         if Marker in get_object_class_hierarchy(marker_type):
@@ -78,10 +78,19 @@ class MarkerMsg(Marker):
         else:
             # assumes marker_type specifies a marker type as listed in Object Types section here: http://wiki.ros.org/rviz/DisplayTypes/Marker#Object_Types
             self.marker_type = marker_type
-        self.parse_kwargs(kwargs)  
+        self.parse_kwargs(kwargs)
 
     def parse_kwargs(self, kwargs):
-        for key, value in kwargs.items():
+
+        # If properties kw given then extract
+        if 'properties' in kwargs:
+            properties = kwargs.pop('properties')
+            properties.update(kwargs.copy()) # add any remaining properties from kwargs
+        else:
+            properties = kwargs
+
+        # Parse properties
+        for key, value in properties.items():
             if key == 'scale':
                 self.scale = Vector3Msg(value)
             elif key == 'color':

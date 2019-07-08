@@ -47,7 +47,7 @@ class Repeater(object):
 
 class SimplePublisher(Repeater):
 
-    def __init__(self, rospy, topic, msg_class, hz, gen_msg_handle, queue_size=1): 
+    def __init__(self, rospy, topic, msg_class, hz, gen_msg_handle, queue_size=1):
         self.init_pub(rospy, topic, msg_class, hz, gen_msg_handle, queue_size)
 
     def init_pub(self, rospy, topic, msg_class, hz, gen_msg_handle=None, queue_size=1):
@@ -61,7 +61,6 @@ class SimplePublisher(Repeater):
         # Setup ros publisher and repeater
         self.__pub = rospy.Publisher(topic, msg_class, queue_size=queue_size)
         self.init_repeater(rospy, hz, self.__publish_message)
-
 
     def __publish_message(self):
         self.__pub.publish(self.__generate_message())
@@ -81,17 +80,16 @@ class SimplePublisher(Repeater):
 
 class SimpleTfStaticPublisher(Repeater):
 
-    def __init__(self, rospy, transforms, hz):
+    def __init__(self, rospy, transform, hz):
         from .transform import TfApi
-        self.tf_api = TfApi(rospy)
-        self.__transforms = transforms
+        self.__tf_api = TfApi(rospy)
+        self.__transform = transform
         self.__rospy = rospy
         self.init_repeater(rospy, hz, self.__send)
 
     def __send(self):
-        for transform in self.__transforms:
-            transform.time = self.__rospy.Time.now()
-            self.tf_api.set_tf(transform)
+        self.__transform.time = self.__rospy.Time.now()
+        self.__tf_api.set_tf(self.__transform)
 
 class SimpleConstPublisher(SimplePublisher):
 
@@ -102,11 +100,19 @@ class SimpleConstPublisher(SimplePublisher):
         self.__msg = msg
 
         # Init update time function and publisher
-        self.__update_time = self.__add_time if hasattr(msg, 'header') else self.__dont_add_time
+        if hasattr(msg, 'header'):
+            self.__update_time = self.__add_time_to_header
+        elif hasattr(msg, 'time'):
+            self.__update_time = self.__add_time
+        else:
+            self.__update_time = self.__dont_add_time
         self.init_pub(rospy, topic, type(msg), hz, queue_size=queue_size)
 
-    def __add_time(self):
+    def __add_time_to_header(self):
         self.__msg.header.stamp = self.__rospy.Time.now()
+
+    def __add_time(self):
+        self.__msg.time = self.__rospy.Time.now()
 
     def __dont_add_time(self):
         pass
