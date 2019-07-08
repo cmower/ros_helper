@@ -34,4 +34,13 @@
 			 filename="package://ros_helper/resources/cone.stl"/>
   </MarkerArray>
 
+  <MarkerArray topic="env/text" namespace="other" hz="20">
+    <Text name="text"
+	  text="Hello World"
+	  color="0,0,0,1"
+	  frame_id="world"
+	  fontsize="0.2"
+	  position="-1+2*np.random.rand(3)"/>
+  </MarkerArray>
+
 </Environment>
