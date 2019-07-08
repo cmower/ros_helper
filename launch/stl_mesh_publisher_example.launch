@@ -1,6 +1,6 @@
 <launch>
 
-  <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find ros_helper)/resources/example_stl_mesh_publisher.rviz"/> 
+  <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find ros_helper)/resources/rviz/example_stl_mesh_publisher.rviz"/> 
 
   <node pkg="ros_helper" type="stl_mesh_publisher_node" name="stl_mesh_publisher_node">
     <param name="topic" type="string" value="cone"/>

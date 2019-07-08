@@ -4,6 +4,6 @@
     <param name="filename" type="string" value="$(find ros_helper)/resources/example_environment.xml"/>
   </node>
 
-  <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find ros_helper)/resources/example_publish_environment.rviz"/>
+  <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find ros_helper)/resources/rviz/example_publish_environment.rviz"/>
 
 </launch>

@@ -1,6 +1,6 @@
 <launch>
 
-  <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find ros_helper)/resources/example_rviz_spray_sim.rviz"/>
+  <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find ros_helper)/resources/rviz/example_rviz_spray_sim.rviz"/>
 
   <node pkg="ros_helper" type="example_rviz_spray_sim" name="rviz_spray_sim_example_node"/>
 
