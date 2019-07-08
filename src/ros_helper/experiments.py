@@ -4,6 +4,8 @@ import inspect
 import rosbag 
 import pandas as pd
 import numpy as np
+from collections import deque
+from functools import wraps
 from .utils import *
 
 """
@@ -22,16 +24,57 @@ def rosbag2pandas(filename):
 
 class Timer(object):
 
-    def tic(self):
-        self.__start = time.time()
+    """
+    Timer 
 
-    def toc(self):
-        end = time.time()
-        self.__duration = end - start
+    Timer decorator class for timing functions and collecting the results.
+
+    Example
+    -------
+      Assume you have a function called solve, and you want to time how long it takes to
+      complete. Use the timer class to easily gather this data as follows.
+
+      : ---
+      solver_timer = Timer()
+      
+      @solver_timer.timeit
+      def solve():
+          # code that you want to time
+
+      #
+      # Perform solve as many times as you like
+      #
+      for _ in xrange(20):
+          solve()
+
+      print solver_timer.Average
+      : ---
+
+      The output will be the average solver time.
+    """
+
+    def __init__(self):
+        self.__data = deque([])
+
+    def timeit(self, func):
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            start = time.time()
+            result = func(*args, **kwargs)
+            end = time.time()
+            self.__data.append(end - start)
+            return result
+        
+        return wrapper
 
     @property
-    def Duration(self):
-        return self.__duration
+    def Data(self):
+        return np.asarray(self.__data)
+
+    @property
+    def Average(self):
+        return self.Data.mean()
 
 #
 # Base packet class and some common inherited classes
