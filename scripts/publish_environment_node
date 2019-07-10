@@ -2,6 +2,7 @@
 import rospy
 import numpy as np
 from numpy import array
+from numpy import ones
 from math import pi
 import xml.etree.ElementTree as eltree
 import ros_helper.msgs.visualization as vis
@@ -10,6 +11,9 @@ from ros_helper.simple_pub_sub import SimpleConstPublisher, SimpleTfStaticPublis
 
 def str_list_to_np_array(str_list):
     return np.asarray(eval(str_list), dtype=float)
+
+def ones3():
+    return ones(3)
 
 def deg(x):
     return np.radians(x)
