@@ -118,7 +118,7 @@ See `example_environment.xml` for updates to functionality of `publish_environme
 
 ### Short term
 
-* Update `keyboard_node` to use `simple_pub_sub`, perhaps consider moving away from pygame.
+* Update `keyboard_node` to use `simple_pub_sub`, perhaps consider moving away from pygame. Also, clean `KeyboardMsg` in `sensor.py`.
 * Finish `experiments` module.
 * Update examples, e.g. the scripts names, and make more.
 * Cleaner initialization handling in `msgs`, like new additions to `visualization`.

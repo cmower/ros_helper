@@ -1,39 +1,25 @@
 #!/usr/bin/env python
 import rospy
 import pygame
-import ros_helper.msgs_api.sensor as sens
+from ros_helper.msgs.sensor import KeyboardMsg
+from ros_helper.simple_pub_sub import SimplePublisher
 
 """
 TODO: Update to use simple_pub_sub
 """
 
-TOPICS = ['keyboard/binary', 'keyboard/keyup', 'keyboard/keydown']
+msg = KeyboardMsg()
 
-class KeyboardPublisher(object):
+def generate_message():
+    msg.time = rospy.Time.now()
 
-    def __init__(self):
-        self.msg_binary = sens.KeyboardMsg()
-        self.pub = {}
-        for t in TOPICS: self.pub[t] = rospy.Publisher(t, sens.Keyboard, queue_size=1)
+    for ev in pygame.event.get():
+        if ev.type==pygame.KEYUP:
+            msg[ev.key] = 0
+        if ev.type==pygame.KEYDOWN:
+            msg[ev.key] = 1
 
-    def update(self, event):
-
-        # Init
-        self.msg_binary.add_time(rospy.Time.now())
-        msg_keyup = sens.KeyboardMsg(rospy.Time.now())
-        msg_keydown = sense.KeyboardMsg(rospy.Time.now())
-
-        # Transfer keyboard state in pygame -> msgs
-        for ev in pygame.event.get():
-            if ev.type == pygame.KEYUP:
-                self.msg_binary[ev.key] = 0
-                msg_keyup[ev.key] = 1
-            if ev.type == pygame.KEYDOWN:
-                self.msg_binary[ev.key] = 1
-                msg_keydown[ev.key] = 1
-
-        # Publish msgs
-        for t, m in zip(TOPICS,[self.msg_binary, msg_keyup, msg_keydown]): self.pub[t].publish(m)
+    return msg
 
 if __name__=='__main__':
     pygame.init()
@@ -44,5 +30,5 @@ if __name__=='__main__':
         hz = rospy.get_param('~hz')
     else:
         hz = 100.0
-    rospy.Timer(rospy.Duration(1.0/hz), KeyboardPublisher().update)
+    SimplePublisher(rospy, 'keyboard', KeyboardMsg, hz, gen_msg_handle=generate_message)
     rospy.spin()

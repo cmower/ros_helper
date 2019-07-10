@@ -1,6 +1,7 @@
 from sensor_msgs.msg import *
 from ros_helper.msg import MultiJoy, Keyboard
 from ..utils import *
+import numpy as np
 
 # Keyboard keys, ord : pygame key id
 keyboard_keys = {\
@@ -238,7 +239,7 @@ class JointStateMsg(JointState):
 
 class JoyMsg(Joy):
 
-    def __init__(self, axes, buttons=None, time=None):
+    def __init__(self, axes=[], buttons=[], time=None):
         super(JoyMsg, self).__init__()
         if Joy in get_object_class_hierarchy(axes):
             j = axes
@@ -247,8 +248,16 @@ class JoyMsg(Joy):
             self.buttons = j.buttons
         else:
             self.axes = axes
-            if buttons is not None: self.buttons = buttons
+            self.buttons = buttons
             if time is not None: self.time = time
+
+    @property
+    def Buttons(self):
+        return np.asarray(self.buttons)
+
+    @property
+    def Axes(self):
+        return np.asarray(self.axes)
 
     @property
     def time(self):
@@ -374,14 +383,14 @@ class TimeReferenceMsg(TimeReference):
 
 class KeyboardMsg(Keyboard):
 
-    def __init__(self, time, **kwargs):
+    def __init__(self, time=None, **kwargs):
         super(KeyboardMsg, self).__init__()
-        if type(time) in [KeyboardMsg, Keyboard]:
+        if Keyboard in get_object_class_hierarchy(time):
             kb = time
             self.header = kb.header
             for k in [k for k in dir(kb) if k.startswith('K')]: setattr(self, k, getattr(kb, k))
         else:
-            self.time = time
+            if time is not None: self.time = time
             for key, value in kwargs.items(): self[key] = value
 
     @property
@@ -422,3 +431,116 @@ class MultiJoyMsg(MultiJoy):
             self.header.stamp = time
             self.njoys = len(joys)
             self.joys = joys
+
+class LogitechF710JoyMsg(JoyMsg):
+
+    def __init__(self, axes=[], buttons=[], time=None, green_light_on=False):
+        super(LogitechF710JoyMsg, self).__init__(axes, buttons, time)
+
+        # Setup button mappings
+        if not green_light_on:
+            self.AXIS_L_HORI = 0
+            self.AXIS_L_VERT = 1
+            self.AXIS_R_HORI = 3
+            self.AXIS_R_VERT = 4
+            self.AXIS_LT = 2
+            self.AXIS_RT = 5
+            self.AXIS_D_PAD_HORI = 6
+            self.AXIS_D_PAD_VERT = 7
+        else:
+            self.AXIS_L_HORI = 6
+            self.AXIS_L_VERT = 7
+            self.AXIS_R_HORI = 3
+            self.AXIS_R_VERT = 4
+            self.AXIS_LT = 2
+            self.AXIS_RT = 5
+            self.AXIS_D_PAD_HORI = 0
+            self.AXIS_D_PAD_VERT = 1
+
+        self.BUTTON_A = 0
+        self.BUTTON_B = 1
+        self.BUTTON_X = 2
+        self.BUTTON_Y = 3
+        self.BUTTON_LB = 4
+        self.BUTTON_RB = 5
+        self.BUTTON_BACK = 6
+        self.BUTTON_START = 7
+        self.BUTTON_LOGITECH = 8
+        self.BUTTON_L3 = 9
+        self.BUTTON_R3 = 10
+
+    @property
+    def axis_left_hori(self):
+        return self.axes[self.AXIS_L_HORI]
+
+    @property
+    def axis_left_vert(self):
+        return self.axes[self.AXIS_L_VERT]
+
+    @property
+    def axis_right_hori(self):
+        return self.axes[self.AXIS_R_HORI]
+
+    @property
+    def axis_right_vert(self):
+        return self.axes[self.AXIS_R_VERT]
+
+    @property
+    def axis_lt(self):
+        return self.axes[self.AXIS_LT]
+
+    @property
+    def axis_rt(self):
+        return self.axes[self.AXIS_RT]
+
+    @property
+    def axis_d_pad_hori(self):
+        return self.axes[self.AXIS_D_PAD_HORI]
+
+    @property
+    def axis_d_pad_vert(self):
+        return self.axes[self.AXIS_D_PAD_VERT]
+
+    @property
+    def button_a(self):
+        return self.buttons[self.BUTTON_A]
+
+    @property
+    def button_b(self):
+        return self.buttons[self.BUTTON_B]
+
+    @property
+    def button_x(self):
+        return self.buttons[self.BUTTON_X]
+
+    @property
+    def button_y(self):
+        return self.buttons[self.BUTTON_Y]
+
+    @property
+    def button_lb(self):
+        return self.buttons[self.BUTTON_LB]
+
+    @property
+    def button_rb(self):
+        return self.buttons[self.BUTTON_RB]
+
+    @property
+    def button_back(self):
+        return self.buttons[self.BUTTON_BACK]
+
+    @property
+    def button_start(self):
+        return self.buttons[self.BUTTON_START]
+
+    @property
+    def button_logitech(self):
+        return self.buttons[self.BUTTON_LOGITECH]
+
+    @property
+    def button_l3(self):
+        return self.buttons[self.BUTTON_L3]
+
+    @property
+    def button_r3(self):
+        return self.buttons[self.BUTTON_R3]

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import rospy
 import numpy as np
+from numpy import array
 from math import pi
 import xml.etree.ElementTree as eltree
 import ros_helper.msgs.visualization as vis

@@ -132,7 +132,6 @@ class SimpleSubscriber(object):
         if callback_handle is None:
             self.__user_callback = self.__pass_user_input
         else:
-            assert callable(callback_handle), "[ERROR] Given callback_handle must be callable"
             self.__user_callback = callback_handle
 
         # Init private msg parameter and counter
@@ -171,11 +170,9 @@ class SimpleMultiSubscriber(object):
 
         # Check input
         if not isinstance(msg_classes, (list, tuple)): msg_classes = [msg_classes]*len(topics)
-        assert len(topics) == len(msg_classes), "[ERROR] topics must be same length as msg_classes"
+
         if callback_handles is None:
             callback_handles = [None]*len(msg_classes)
-        else:
-            assert len(callback_handles) == len(topics), "[ERROR] callback_handles must be same length as topics and msg_classes"
 
         # Init dictionary of subs
         self.topics = topics
@@ -204,7 +201,6 @@ class SimpleSyncSubscriber(object):
         if callback_handle is None:
             self.__user_callback = self.__pass_user_callback
         else:
-            assert callable(callback_handle), "[ERROR] callback_handle must be callable"
             self.__user_callback = callback_handle
 
         # Setup approximate time sync sub (maybe allow user to ammend these in later vers)
