@@ -1,7 +1,7 @@
 from visualization_msgs.msg import *
 from .geometry import *
 from .std import ColorMsg
-from ..utils import get_object_class_hierarchy
+from ..utils import *
 
 #
 # Msg classes
@@ -385,6 +385,61 @@ class CubeMsg(_CubeMsg):
     def __init__(self, **kwargs):
         super(CubeMsg, self).__init__(Marker.CUBE)
         self.parse_kwargs(kwargs)
+
+    def __get_lim(self, i, d):
+        p = self.position[i]
+        half_t = getattr(self.scale, d)/2.0
+        return [p - half_t, p + half_t]
+
+    def __set_position_from_lim(self, d, ll):
+        setattr(self.pose.position, d, sum(ll)/2.0)
+
+    def __set_scale_from_lim(self, d, ll):
+        setattr(self.scale, d, abs(ll[0] - ll[1]))
+
+    @property
+    def length_lim(self):
+        return self.__get_lim(0, 'x')
+
+    @length_lim.setter
+    def length_lim(self, ll):
+        self.__set_position_from_lim('x', ll)
+        self.__set_scale_from_lim('x', ll)
+
+    @property
+    def width_lim(self):
+        return self.__get_lim(1, 'y')
+
+    @width_lim.setter
+    def width_lim(self, ll):
+        self.__set_position_from_lim('y', ll)
+        self.__set_scale_from_lim('y', ll)
+
+    @property
+    def height_lim(self):
+        return self.__get_lim(2, 'z')
+
+    @width_lim.setter
+    def height_lim(self, ll):
+        self.__set_position_from_lim('z', ll)
+        self.__set_scale_from_lim('z', ll)
+
+    @property
+    def box_lim(self):
+        ll = [0]*6
+        for i, d in enumerate(XYZ):
+            ll_ = self.__get_lim(i, d)
+            ll[i] = ll_[0]
+            ll[i+3] = ll_[1]
+        return ll
+
+    @box_lim.setter
+    def box_lim(self, ll):
+        """ll - list of 6 elements, [xlo, ylo, zlo, xhi, yhi, zhi]"""
+        for i, d in enumerate(XYZ):
+            ll_ = [ll[i], ll[i+3]]
+            self.__set_position_from_lim(d, ll_)
+            self.__set_scale_from_lim(d, ll_)
 
 # SPHERE = 2
 

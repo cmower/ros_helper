@@ -268,12 +268,12 @@ class JoyMsg(Joy):
         self.header.stamp = t
 
     @property
-    def nbuttons(self):
+    def NumberOfButtons(self):
         return len(self.buttons)
 
     @property
-    def naxes(self):
-        return len(self.naxes)
+    def NumberOfAxes(self):
+        return len(self.axes)
 
 class JoyFeedbackMsg(JoyFeedback):
 
@@ -432,10 +432,10 @@ class MultiJoyMsg(MultiJoy):
             self.njoys = len(joys)
             self.joys = joys
 
-class LogitechF710JoyMsg(JoyMsg):
+class LogitechF710Msg(JoyMsg):
 
     def __init__(self, axes=[], buttons=[], time=None, green_light_on=False):
-        super(LogitechF710JoyMsg, self).__init__(axes, buttons, time)
+        super(LogitechF710Msg, self).__init__(axes, buttons, time)
 
         # Setup button mappings
         if not green_light_on:
@@ -544,3 +544,81 @@ class LogitechF710JoyMsg(JoyMsg):
     @property
     def button_r3(self):
         return self.buttons[self.BUTTON_R3]
+
+class SpaceNavMsg(JoyMsg):
+
+    max_recorded_value = 0.68359375
+
+    def __init__(self, buttons=[], axes=[], time=None):
+        super(SpaceNavMsg, self).__init__(buttons=buttons, axes=axes, time=time)
+
+        self.BUTTON_L = 0
+        self.BUTTON_R = 1
+
+        self.AXIS_X = 0
+        self.AXIS_Y = 1
+        self.AXIS_Z = 2
+
+        self.AXIS_ROT_X = 3
+        self.AXIS_ROT_Y = 4
+        self.AXIS_ROT_Z = 5
+
+    # Raw values
+
+    @property
+    def button_l(self):
+        return self.buttons[self.BUTTON_L]
+
+    @property
+    def button_r(self):
+        return self.buttons[self.BUTTON_R]
+
+    @property
+    def axis_x(self):
+        return self.axes[self.AXIS_X]
+
+    @property
+    def axis_y(self):
+        return self.axes[self.AXIS_Y]
+
+    @property
+    def axis_z(self):
+        return self.axes[self.AXIS_Z]
+
+    @property
+    def axis_rot_x(self):
+        return self.axes[self.AXIS_ROT_X]
+
+    @property
+    def axis_rot_y(self):
+        return self.axes[self.AXIS_ROT_Z]
+
+    @property
+    def axis_rot_z(self):
+        return self.axes[self.AXIS_ROT_Z]
+
+    # pseduo-normalized
+
+    @property
+    def nr_axis_x(self):
+        return np.clip(self.axes[self.AXIS_X]/self.max_recorded_value, -1, 1)
+
+    @property
+    def nr_axis_y(self):
+        return np.clip(self.axes[self.AXIS_Y]/self.max_recorded_value, -1, 1)
+
+    @property
+    def nr_axis_z(self):
+        return np.clip(self.axes[self.AXIS_Z]/self.max_recorded_value, -1, 1)
+
+    @property
+    def nr_axis_rot_x(self):
+        return np.clip(self.axes[self.AXIS_ROT_X]/self.max_recorded_value, -1, 1)
+
+    @property
+    def nr_axis_rot_y(self):
+        return np.clip(self.axes[self.AXIS_ROT_Z]/self.max_recorded_value, -1, 1)
+
+    @property
+    def nr_axis_rot_z(self):
+        return np.clip(self.axes[self.AXIS_ROT_Z]/self.max_recorded_value, -1, 1)
