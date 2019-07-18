@@ -1,0 +1,12 @@
+<launch>
+
+  <arg name="jid" default="0"/>
+
+  <node pkg="joy" type="joy_node" name="joy_node">
+	<param name="dev" type="string" value="/dev/input/js$(arg jid)"/>
+	<param name="autorepeat_rate" type="double" value="100.0"/>
+  </node>
+
+  <node pkg="ros_helper" type="joy_map_extractor_node" name="joy_map_extractor" args="joy"/>
+
+</launch>

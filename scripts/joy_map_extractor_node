@@ -1,0 +1,86 @@
+#!/usr/bin/env python
+import rospy
+import os
+import sys
+import ros_helper.msgs.sensor as sens
+from ros_helper.simple_pub_sub import SimpleSubscriber
+
+# import without output
+with open(os.devnull, 'w') as f:
+    # disable stdout
+    oldstdout = sys.stdout
+    sys.stdout = f
+
+    import pygame
+
+    # enable stdout
+    sys.stdout = oldstdout
+
+pg_BLACK = pygame.Color('black')
+pg_WHITE = pygame.Color('white')
+
+class TextPrint(object):
+    def __init__(self):
+        self.reset()
+        self.font = pygame.font.Font(None, 55)
+
+    def tprint(self, screen, textString):
+        textBitmap = self.font.render(textString, True, pg_BLACK)
+        screen.blit(textBitmap, (self.x, self.y))
+        self.y += self.line_height
+
+    def reset(self):
+        self.x = 10
+        self.y = 10
+        self.line_height = 40
+
+    def indent(self):
+        self.x += 10
+
+    def unindent(self):
+        self.x -= 10
+
+def callback(msg):
+
+    global pygame_quit
+
+    for event in pygame.event.get():
+        if event.type==pygame.QUIT:
+            pygame_quit = True
+
+    screen.fill(pg_WHITE)
+    textPrint.reset()
+    textPrint.tprint(screen, "Joystick topic: %s" % topic)
+    textPrint.indent()
+    textPrint.tprint(screen, "Number of axes: %d" % msg.NumberOfAxes)
+    textPrint.indent()
+    for i in xrange(msg.NumberOfAxes):
+        textPrint.tprint(screen, "Axis %d value: %.3f" % (i, msg.Axes[i]))
+    textPrint.unindent()
+    for i in xrange(msg.NumberOfButtons):
+        textPrint.tprint(screen, "Button %d value: %d" % (i, msg.Buttons[i]))
+    textPrint.unindent()
+    pygame.display.flip()
+
+if __name__=='__main__':
+
+    if len(sys.argv) != 2:
+        print "The topic to subscribe to needs to be given as a command line argument."
+        sys.exit(0)
+
+    rospy.init_node('joy_map_extractor_node')
+    pygame.init()
+    print "Starting joy_map_extractor_node"
+    screen = pygame.display.set_mode((550, 700))
+    pygame.display.set_caption("Joy map extractor")
+    textPrint = TextPrint()
+    topic = sys.argv[1]
+    sub = SimpleSubscriber(rospy, topic, sens.JoyMsg, callback_handle=callback)
+    rate = rospy.Rate(100)
+    pygame_quit = False
+    while not pygame_quit:
+        rate.sleep()
+    print "Quitting"
+    sub.stop()
+    pygame.quit()
+    sys.exit(0)
