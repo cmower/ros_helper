@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<RosMsgGroup name="tf2_msgs">
+  <RosMsg name="LookupTransformAction">
+    <RosMsgAttribute default="" group="tf2_msgs" list_length="-1" name="action_goal" type="LookupTransformActionGoal"/>
+    <RosMsgAttribute default="" group="tf2_msgs" list_length="-1" name="action_result" type="LookupTransformActionResult"/>
+    <RosMsgAttribute default="" group="tf2_msgs" list_length="-1" name="action_feedback" type="LookupTransformActionFeedback"/>
+  </RosMsg>
+  <RosMsg name="LookupTransformActionFeedback">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="tf2_msgs" list_length="-1" name="feedback" type="LookupTransformFeedback"/>
+  </RosMsg>
+  <RosMsg name="LookupTransformActionGoal">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="goal_id" type="GoalID"/>
+    <RosMsgAttribute default="" group="tf2_msgs" list_length="-1" name="goal" type="LookupTransformGoal"/>
+  </RosMsg>
+  <RosMsg name="LookupTransformActionResult">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="tf2_msgs" list_length="-1" name="result" type="LookupTransformResult"/>
+  </RosMsg>
+  <RosMsg name="LookupTransformFeedback"/>
+  <RosMsg name="LookupTransformGoal">
+    <RosMsgAttribute default="" group="" list_length="-1" name="target_frame" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="source_frame" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="source_time" type="rospy.Time"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="timeout" type="rospy.Duration"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="target_time" type="rospy.Time"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="fixed_frame" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="advanced" type="bool"/>
+  </RosMsg>
+  <RosMsg name="LookupTransformResult">
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="transform" type="TransformStamped"/>
+    <RosMsgAttribute default="" group="tf2_msgs" list_length="-1" name="error" type="TF2Error"/>
+  </RosMsg>
+  <RosMsg name="TF2Error">
+    <RosMsgAttribute default="" group="" list_length="-1" name="error" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="error_string" type="str"/>
+  </RosMsg>
+  <RosMsg name="TFMessage">
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="transforms" type="TransformStamped"/>
+  </RosMsg>
+</RosMsgGroup>

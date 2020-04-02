@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+<RosMsgGroup name="actionlib">
+  <RosMsg name="TestAction">
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="action_goal" type="TestActionGoal"/>
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="action_result" type="TestActionResult"/>
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="action_feedback" type="TestActionFeedback"/>
+  </RosMsg>
+  <RosMsg name="TestActionFeedback">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="feedback" type="TestFeedback"/>
+  </RosMsg>
+  <RosMsg name="TestActionGoal">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="goal_id" type="GoalID"/>
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="goal" type="TestGoal"/>
+  </RosMsg>
+  <RosMsg name="TestActionResult">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="result" type="TestResult"/>
+  </RosMsg>
+  <RosMsg name="TestFeedback">
+    <RosMsgAttribute default="" group="" list_length="-1" name="feedback" type="int"/>
+  </RosMsg>
+  <RosMsg name="TestGoal">
+    <RosMsgAttribute default="" group="" list_length="-1" name="goal" type="int"/>
+  </RosMsg>
+  <RosMsg name="TestRequestAction">
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="action_goal" type="TestRequestActionGoal"/>
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="action_result" type="TestRequestActionResult"/>
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="action_feedback" type="TestRequestActionFeedback"/>
+  </RosMsg>
+  <RosMsg name="TestRequestActionFeedback">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="feedback" type="TestRequestFeedback"/>
+  </RosMsg>
+  <RosMsg name="TestRequestActionGoal">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="goal_id" type="GoalID"/>
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="goal" type="TestRequestGoal"/>
+  </RosMsg>
+  <RosMsg name="TestRequestActionResult">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="result" type="TestRequestResult"/>
+  </RosMsg>
+  <RosMsg name="TestRequestFeedback"/>
+  <RosMsg name="TestRequestGoal">
+    <RosMsgAttribute default="" group="" list_length="-1" name="terminate_status" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="ignore_cancel" type="bool"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="result_text" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="the_result" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="is_simple_client" type="bool"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="delay_accept" type="rospy.Duration"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="delay_terminate" type="rospy.Duration"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="pause_status" type="rospy.Duration"/>
+  </RosMsg>
+  <RosMsg name="TestRequestResult">
+    <RosMsgAttribute default="" group="" list_length="-1" name="the_result" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="is_simple_server" type="bool"/>
+  </RosMsg>
+  <RosMsg name="TestResult">
+    <RosMsgAttribute default="" group="" list_length="-1" name="result" type="int"/>
+  </RosMsg>
+  <RosMsg name="TwoIntsAction">
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="action_goal" type="TwoIntsActionGoal"/>
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="action_result" type="TwoIntsActionResult"/>
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="action_feedback" type="TwoIntsActionFeedback"/>
+  </RosMsg>
+  <RosMsg name="TwoIntsActionFeedback">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="feedback" type="TwoIntsFeedback"/>
+  </RosMsg>
+  <RosMsg name="TwoIntsActionGoal">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="goal_id" type="GoalID"/>
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="goal" type="TwoIntsGoal"/>
+  </RosMsg>
+  <RosMsg name="TwoIntsActionResult">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="actionlib" list_length="-1" name="result" type="TwoIntsResult"/>
+  </RosMsg>
+  <RosMsg name="TwoIntsFeedback"/>
+  <RosMsg name="TwoIntsGoal">
+    <RosMsgAttribute default="" group="" list_length="-1" name="a" type="long"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="b" type="long"/>
+  </RosMsg>
+  <RosMsg name="TwoIntsResult">
+    <RosMsgAttribute default="" group="" list_length="-1" name="sum" type="long"/>
+  </RosMsg>
+</RosMsgGroup>

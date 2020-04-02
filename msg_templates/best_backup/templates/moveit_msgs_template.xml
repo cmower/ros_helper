@@ -1,0 +1,413 @@
+<?xml version="1.0" ?>
+<RosMsgGroup name="moveit_msgs">
+  <RosMsg name="AllowedCollisionEntry">
+    <RosMsgAttribute default="" group="" list_length="0" name="enabled" type="bool"/>
+  </RosMsg>
+  <RosMsg name="AllowedCollisionMatrix">
+    <RosMsgAttribute default="" group="" list_length="0" name="entry_names" type="str"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="entry_values" type="AllowedCollisionEntry"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="default_entry_names" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="default_entry_values" type="bool"/>
+  </RosMsg>
+  <RosMsg name="AttachedCollisionObject">
+    <RosMsgAttribute default="" group="" list_length="-1" name="link_name" type="str"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="object" type="CollisionObject"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="touch_links" type="str"/>
+    <RosMsgAttribute default="" group="trajectory_msgs" list_length="-1" name="detach_posture" type="JointTrajectory"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="weight" type="float"/>
+  </RosMsg>
+  <RosMsg name="BoundingVolume">
+    <RosMsgAttribute default="" group="shape_msgs" list_length="0" name="primitives" type="SolidPrimitive"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="primitive_poses" type="Pose"/>
+    <RosMsgAttribute default="" group="shape_msgs" list_length="0" name="meshes" type="Mesh"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="mesh_poses" type="Pose"/>
+  </RosMsg>
+  <RosMsg name="CollisionObject">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="id" type="str"/>
+    <RosMsgAttribute default="" group="object_recognition_msgs" list_length="-1" name="type" type="ObjectType"/>
+    <RosMsgAttribute default="" group="shape_msgs" list_length="0" name="primitives" type="SolidPrimitive"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="primitive_poses" type="Pose"/>
+    <RosMsgAttribute default="" group="shape_msgs" list_length="0" name="meshes" type="Mesh"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="mesh_poses" type="Pose"/>
+    <RosMsgAttribute default="" group="shape_msgs" list_length="0" name="planes" type="Plane"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="plane_poses" type="Pose"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="operation" type="int"/>
+  </RosMsg>
+  <RosMsg name="ConstraintEvalResult">
+    <RosMsgAttribute default="" group="" list_length="-1" name="result" type="bool"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="distance" type="float"/>
+  </RosMsg>
+  <RosMsg name="Constraints">
+    <RosMsgAttribute default="" group="" list_length="-1" name="name" type="str"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="joint_constraints" type="JointConstraint"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="position_constraints" type="PositionConstraint"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="orientation_constraints" type="OrientationConstraint"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="visibility_constraints" type="VisibilityConstraint"/>
+  </RosMsg>
+  <RosMsg name="ContactInformation">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="position" type="Point"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="normal" type="Vector3"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="depth" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="contact_body_1" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="body_type_1" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="contact_body_2" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="body_type_2" type="int"/>
+  </RosMsg>
+  <RosMsg name="CostSource">
+    <RosMsgAttribute default="" group="" list_length="-1" name="cost_density" type="float"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="aabb_min" type="Vector3"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="aabb_max" type="Vector3"/>
+  </RosMsg>
+  <RosMsg name="DisplayRobotState">
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="state" type="RobotState"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="highlight_links" type="ObjectColor"/>
+  </RosMsg>
+  <RosMsg name="DisplayTrajectory">
+    <RosMsgAttribute default="" group="" list_length="-1" name="model_id" type="str"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="trajectory" type="RobotTrajectory"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="trajectory_start" type="RobotState"/>
+  </RosMsg>
+  <RosMsg name="ExecuteTrajectoryAction">
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="action_goal" type="ExecuteTrajectoryActionGoal"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="action_result" type="ExecuteTrajectoryActionResult"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="action_feedback" type="ExecuteTrajectoryActionFeedback"/>
+  </RosMsg>
+  <RosMsg name="ExecuteTrajectoryActionFeedback">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="feedback" type="ExecuteTrajectoryFeedback"/>
+  </RosMsg>
+  <RosMsg name="ExecuteTrajectoryActionGoal">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="goal_id" type="GoalID"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="goal" type="ExecuteTrajectoryGoal"/>
+  </RosMsg>
+  <RosMsg name="ExecuteTrajectoryActionResult">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="result" type="ExecuteTrajectoryResult"/>
+  </RosMsg>
+  <RosMsg name="ExecuteTrajectoryFeedback">
+    <RosMsgAttribute default="" group="" list_length="-1" name="state" type="str"/>
+  </RosMsg>
+  <RosMsg name="ExecuteTrajectoryGoal">
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="trajectory" type="RobotTrajectory"/>
+  </RosMsg>
+  <RosMsg name="ExecuteTrajectoryResult">
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="error_code" type="MoveItErrorCodes"/>
+  </RosMsg>
+  <RosMsg name="Grasp">
+    <RosMsgAttribute default="" group="" list_length="-1" name="id" type="str"/>
+    <RosMsgAttribute default="" group="trajectory_msgs" list_length="-1" name="pre_grasp_posture" type="JointTrajectory"/>
+    <RosMsgAttribute default="" group="trajectory_msgs" list_length="-1" name="grasp_posture" type="JointTrajectory"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="grasp_pose" type="PoseStamped"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="grasp_quality" type="float"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="pre_grasp_approach" type="GripperTranslation"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="post_grasp_retreat" type="GripperTranslation"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="post_place_retreat" type="GripperTranslation"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="max_contact_force" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="allowed_touch_objects" type="str"/>
+  </RosMsg>
+  <RosMsg name="GripperTranslation">
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="direction" type="Vector3Stamped"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="desired_distance" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="min_distance" type="float"/>
+  </RosMsg>
+  <RosMsg name="JointConstraint">
+    <RosMsgAttribute default="" group="" list_length="-1" name="joint_name" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="position" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="tolerance_above" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="tolerance_below" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="weight" type="float"/>
+  </RosMsg>
+  <RosMsg name="JointLimits">
+    <RosMsgAttribute default="" group="" list_length="-1" name="joint_name" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="has_position_limits" type="bool"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="min_position" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="max_position" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="has_velocity_limits" type="bool"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="max_velocity" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="has_acceleration_limits" type="bool"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="max_acceleration" type="float"/>
+  </RosMsg>
+  <RosMsg name="KinematicSolverInfo">
+    <RosMsgAttribute default="" group="" list_length="0" name="joint_names" type="str"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="limits" type="JointLimits"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="link_names" type="str"/>
+  </RosMsg>
+  <RosMsg name="LinkPadding">
+    <RosMsgAttribute default="" group="" list_length="-1" name="link_name" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="padding" type="float"/>
+  </RosMsg>
+  <RosMsg name="LinkScale">
+    <RosMsgAttribute default="" group="" list_length="-1" name="link_name" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="scale" type="float"/>
+  </RosMsg>
+  <RosMsg name="MotionPlanDetailedResponse">
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="trajectory_start" type="RobotState"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="group_name" type="str"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="trajectory" type="RobotTrajectory"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="description" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="processing_time" type="float"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="error_code" type="MoveItErrorCodes"/>
+  </RosMsg>
+  <RosMsg name="MotionPlanRequest">
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="workspace_parameters" type="WorkspaceParameters"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="start_state" type="RobotState"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="goal_constraints" type="Constraints"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="path_constraints" type="Constraints"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="trajectory_constraints" type="TrajectoryConstraints"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="planner_id" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="group_name" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="num_planning_attempts" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="allowed_planning_time" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="max_velocity_scaling_factor" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="max_acceleration_scaling_factor" type="float"/>
+  </RosMsg>
+  <RosMsg name="MotionPlanResponse">
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="trajectory_start" type="RobotState"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="group_name" type="str"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="trajectory" type="RobotTrajectory"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="planning_time" type="float"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="error_code" type="MoveItErrorCodes"/>
+  </RosMsg>
+  <RosMsg name="MoveGroupAction">
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="action_goal" type="MoveGroupActionGoal"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="action_result" type="MoveGroupActionResult"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="action_feedback" type="MoveGroupActionFeedback"/>
+  </RosMsg>
+  <RosMsg name="MoveGroupActionFeedback">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="feedback" type="MoveGroupFeedback"/>
+  </RosMsg>
+  <RosMsg name="MoveGroupActionGoal">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="goal_id" type="GoalID"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="goal" type="MoveGroupGoal"/>
+  </RosMsg>
+  <RosMsg name="MoveGroupActionResult">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="result" type="MoveGroupResult"/>
+  </RosMsg>
+  <RosMsg name="MoveGroupFeedback">
+    <RosMsgAttribute default="" group="" list_length="-1" name="state" type="str"/>
+  </RosMsg>
+  <RosMsg name="MoveGroupGoal">
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="request" type="MotionPlanRequest"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="planning_options" type="PlanningOptions"/>
+  </RosMsg>
+  <RosMsg name="MoveGroupResult">
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="error_code" type="MoveItErrorCodes"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="trajectory_start" type="RobotState"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="planned_trajectory" type="RobotTrajectory"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="executed_trajectory" type="RobotTrajectory"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="planning_time" type="float"/>
+  </RosMsg>
+  <RosMsg name="MoveItErrorCodes">
+    <RosMsgAttribute default="" group="" list_length="-1" name="val" type="int"/>
+  </RosMsg>
+  <RosMsg name="ObjectColor">
+    <RosMsgAttribute default="" group="" list_length="-1" name="id" type="str"/>
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="color" type="ColorRGBA"/>
+  </RosMsg>
+  <RosMsg name="OrientationConstraint">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="orientation" type="Quaternion"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="link_name" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="absolute_x_axis_tolerance" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="absolute_y_axis_tolerance" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="absolute_z_axis_tolerance" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="weight" type="float"/>
+  </RosMsg>
+  <RosMsg name="OrientedBoundingBox">
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="pose" type="Pose"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="extents" type="Point32"/>
+  </RosMsg>
+  <RosMsg name="PickupAction">
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="action_goal" type="PickupActionGoal"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="action_result" type="PickupActionResult"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="action_feedback" type="PickupActionFeedback"/>
+  </RosMsg>
+  <RosMsg name="PickupActionFeedback">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="feedback" type="PickupFeedback"/>
+  </RosMsg>
+  <RosMsg name="PickupActionGoal">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="goal_id" type="GoalID"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="goal" type="PickupGoal"/>
+  </RosMsg>
+  <RosMsg name="PickupActionResult">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="result" type="PickupResult"/>
+  </RosMsg>
+  <RosMsg name="PickupFeedback">
+    <RosMsgAttribute default="" group="" list_length="-1" name="state" type="str"/>
+  </RosMsg>
+  <RosMsg name="PickupGoal">
+    <RosMsgAttribute default="" group="" list_length="-1" name="target_name" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="group_name" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="end_effector" type="str"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="possible_grasps" type="Grasp"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="support_surface_name" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="allow_gripper_support_collision" type="bool"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="attached_object_touch_links" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="minimize_object_distance" type="bool"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="path_constraints" type="Constraints"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="planner_id" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="allowed_touch_objects" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="allowed_planning_time" type="float"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="planning_options" type="PlanningOptions"/>
+  </RosMsg>
+  <RosMsg name="PickupResult">
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="error_code" type="MoveItErrorCodes"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="trajectory_start" type="RobotState"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="trajectory_stages" type="RobotTrajectory"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="trajectory_descriptions" type="str"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="grasp" type="Grasp"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="planning_time" type="float"/>
+  </RosMsg>
+  <RosMsg name="PlaceAction">
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="action_goal" type="PlaceActionGoal"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="action_result" type="PlaceActionResult"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="action_feedback" type="PlaceActionFeedback"/>
+  </RosMsg>
+  <RosMsg name="PlaceActionFeedback">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="feedback" type="PlaceFeedback"/>
+  </RosMsg>
+  <RosMsg name="PlaceActionGoal">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="goal_id" type="GoalID"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="goal" type="PlaceGoal"/>
+  </RosMsg>
+  <RosMsg name="PlaceActionResult">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="result" type="PlaceResult"/>
+  </RosMsg>
+  <RosMsg name="PlaceFeedback">
+    <RosMsgAttribute default="" group="" list_length="-1" name="state" type="str"/>
+  </RosMsg>
+  <RosMsg name="PlaceGoal">
+    <RosMsgAttribute default="" group="" list_length="-1" name="group_name" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="attached_object_name" type="str"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="place_locations" type="PlaceLocation"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="place_eef" type="bool"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="support_surface_name" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="allow_gripper_support_collision" type="bool"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="path_constraints" type="Constraints"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="planner_id" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="allowed_touch_objects" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="allowed_planning_time" type="float"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="planning_options" type="PlanningOptions"/>
+  </RosMsg>
+  <RosMsg name="PlaceLocation">
+    <RosMsgAttribute default="" group="" list_length="-1" name="id" type="str"/>
+    <RosMsgAttribute default="" group="trajectory_msgs" list_length="-1" name="post_place_posture" type="JointTrajectory"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="place_pose" type="PoseStamped"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="pre_place_approach" type="GripperTranslation"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="post_place_retreat" type="GripperTranslation"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="allowed_touch_objects" type="str"/>
+  </RosMsg>
+  <RosMsg name="PlaceResult">
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="error_code" type="MoveItErrorCodes"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="trajectory_start" type="RobotState"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="trajectory_stages" type="RobotTrajectory"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="trajectory_descriptions" type="str"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="place_location" type="PlaceLocation"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="planning_time" type="float"/>
+  </RosMsg>
+  <RosMsg name="PlannerInterfaceDescription">
+    <RosMsgAttribute default="" group="" list_length="-1" name="name" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="planner_ids" type="str"/>
+  </RosMsg>
+  <RosMsg name="PlannerParams">
+    <RosMsgAttribute default="" group="" list_length="0" name="keys" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="values" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="descriptions" type="str"/>
+  </RosMsg>
+  <RosMsg name="PlanningOptions">
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="planning_scene_diff" type="PlanningScene"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="plan_only" type="bool"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="look_around" type="bool"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="look_around_attempts" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="max_safe_execution_cost" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="replan" type="bool"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="replan_attempts" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="replan_delay" type="float"/>
+  </RosMsg>
+  <RosMsg name="PlanningScene">
+    <RosMsgAttribute default="" group="" list_length="-1" name="name" type="str"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="robot_state" type="RobotState"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="robot_model_name" type="str"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="fixed_frame_transforms" type="TransformStamped"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="allowed_collision_matrix" type="AllowedCollisionMatrix"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="link_padding" type="LinkPadding"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="link_scale" type="LinkScale"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="object_colors" type="ObjectColor"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="world" type="PlanningSceneWorld"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="is_diff" type="bool"/>
+  </RosMsg>
+  <RosMsg name="PlanningSceneComponents">
+    <RosMsgAttribute default="" group="" list_length="-1" name="components" type="int"/>
+  </RosMsg>
+  <RosMsg name="PlanningSceneWorld">
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="collision_objects" type="CollisionObject"/>
+    <RosMsgAttribute default="" group="octomap_msgs" list_length="-1" name="octomap" type="OctomapWithPose"/>
+  </RosMsg>
+  <RosMsg name="PositionConstraint">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="link_name" type="str"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="target_point_offset" type="Vector3"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="constraint_region" type="BoundingVolume"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="weight" type="float"/>
+  </RosMsg>
+  <RosMsg name="PositionIKRequest">
+    <RosMsgAttribute default="" group="" list_length="-1" name="group_name" type="str"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="robot_state" type="RobotState"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="-1" name="constraints" type="Constraints"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="avoid_collisions" type="bool"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="ik_link_name" type="str"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="pose_stamped" type="PoseStamped"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="ik_link_names" type="str"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="pose_stamped_vector" type="PoseStamped"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="timeout" type="rospy.Duration"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="attempts" type="int"/>
+  </RosMsg>
+  <RosMsg name="RobotState">
+    <RosMsgAttribute default="" group="sensor_msgs" list_length="-1" name="joint_state" type="JointState"/>
+    <RosMsgAttribute default="" group="sensor_msgs" list_length="-1" name="multi_dof_joint_state" type="MultiDOFJointState"/>
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="attached_collision_objects" type="AttachedCollisionObject"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="is_diff" type="bool"/>
+  </RosMsg>
+  <RosMsg name="RobotTrajectory">
+    <RosMsgAttribute default="" group="trajectory_msgs" list_length="-1" name="joint_trajectory" type="JointTrajectory"/>
+    <RosMsgAttribute default="" group="trajectory_msgs" list_length="-1" name="multi_dof_joint_trajectory" type="MultiDOFJointTrajectory"/>
+  </RosMsg>
+  <RosMsg name="TrajectoryConstraints">
+    <RosMsgAttribute default="" group="moveit_msgs" list_length="0" name="constraints" type="Constraints"/>
+  </RosMsg>
+  <RosMsg name="VisibilityConstraint">
+    <RosMsgAttribute default="" group="" list_length="-1" name="target_radius" type="float"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="target_pose" type="PoseStamped"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="cone_sides" type="int"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="sensor_pose" type="PoseStamped"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="max_view_angle" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="max_range_angle" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="sensor_view_direction" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="weight" type="float"/>
+  </RosMsg>
+  <RosMsg name="WorkspaceParameters">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="min_corner" type="Vector3"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="max_corner" type="Vector3"/>
+  </RosMsg>
+</RosMsgGroup>

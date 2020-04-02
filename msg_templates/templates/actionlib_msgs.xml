@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<Package name="actionlib_msgs">
+  <Message name="GoalID">
+    <Attribute list="-1" name="stamp" package="basic" type="time"/>
+    <Attribute list="-1" name="id" package="basic" type="string"/>
+  </Message>
+  <Message name="GoalStatus">
+    <Attribute list="-1" name="goal_id" package="actionlib_msgs" type="GoalID"/>
+    <Attribute list="-1" name="status" package="basic" type="uint8"/>
+    <Attribute list="-1" name="text" package="basic" type="string"/>
+  </Message>
+  <Message name="GoalStatusArray">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="0" name="status_list" package="actionlib_msgs" type="GoalStatus"/>
+  </Message>
+</Package>

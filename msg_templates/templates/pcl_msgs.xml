@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<Package name="pcl_msgs">
+  <Message name="ModelCoefficients">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="0" name="values" package="basic" type="float32"/>
+  </Message>
+  <Message name="PointIndices">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="0" name="indices" package="basic" type="int32"/>
+  </Message>
+  <Message name="PolygonMesh">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="cloud" package="sensor_msgs" type="PointCloud2"/>
+    <Attribute list="0" name="polygons" package="pcl_msgs" type="Vertices"/>
+  </Message>
+  <Message name="Vertices">
+    <Attribute list="0" name="vertices" package="basic" type="uint32"/>
+  </Message>
+</Package>

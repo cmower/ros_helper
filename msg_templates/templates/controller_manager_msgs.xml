@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<Package name="controller_manager_msgs">
+  <Message name="ControllerState">
+    <Attribute list="-1" name="name" package="basic" type="string"/>
+    <Attribute list="-1" name="state" package="basic" type="string"/>
+    <Attribute list="-1" name="type" package="basic" type="string"/>
+    <Attribute list="0" name="claimed_resources" package="controller_manager_msgs" type="HardwareInterfaceResources"/>
+  </Message>
+  <Message name="ControllerStatistics">
+    <Attribute list="-1" name="name" package="basic" type="string"/>
+    <Attribute list="-1" name="type" package="basic" type="string"/>
+    <Attribute list="-1" name="timestamp" package="basic" type="time"/>
+    <Attribute list="-1" name="running" package="basic" type="bool"/>
+    <Attribute list="-1" name="max_time" package="basic" type="duration"/>
+    <Attribute list="-1" name="mean_time" package="basic" type="duration"/>
+    <Attribute list="-1" name="variance_time" package="basic" type="duration"/>
+    <Attribute list="-1" name="num_control_loop_overruns" package="basic" type="int32"/>
+    <Attribute list="-1" name="time_last_control_loop_overrun" package="basic" type="time"/>
+  </Message>
+  <Message name="ControllersStatistics">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="0" name="controller" package="controller_manager_msgs" type="ControllerStatistics"/>
+  </Message>
+  <Message name="HardwareInterfaceResources">
+    <Attribute list="-1" name="hardware_interface" package="basic" type="string"/>
+    <Attribute list="0" name="resources" package="basic" type="string"/>
+  </Message>
+</Package>

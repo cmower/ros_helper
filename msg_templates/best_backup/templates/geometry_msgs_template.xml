@@ -1,0 +1,131 @@
+<?xml version="1.0" ?>
+<RosMsgGroup name="geometry_msgs">
+  <RosMsg name="Accel">
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="linear" type="Vector3"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="angular" type="Vector3"/>
+  </RosMsg>
+  <RosMsg name="AccelStamped">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="accel" type="Accel"/>
+  </RosMsg>
+  <RosMsg name="AccelWithCovariance">
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="accel" type="Accel"/>
+    <RosMsgAttribute default="" group="" list_length="36" name="covariance" type="float"/>
+  </RosMsg>
+  <RosMsg name="AccelWithCovarianceStamped">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="accel" type="AccelWithCovariance"/>
+  </RosMsg>
+  <RosMsg name="Inertia">
+    <RosMsgAttribute default="" group="" list_length="-1" name="m" type="float"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="com" type="Vector3"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="ixx" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="ixy" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="ixz" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="iyy" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="iyz" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="izz" type="float"/>
+  </RosMsg>
+  <RosMsg name="InertiaStamped">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="inertia" type="Inertia"/>
+  </RosMsg>
+  <RosMsg name="Point">
+    <RosMsgAttribute default="" group="" list_length="-1" name="x" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="y" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="z" type="float"/>
+  </RosMsg>
+  <RosMsg name="Point32">
+    <RosMsgAttribute default="" group="" list_length="-1" name="x" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="y" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="z" type="float"/>
+  </RosMsg>
+  <RosMsg name="PointStamped">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="point" type="Point"/>
+  </RosMsg>
+  <RosMsg name="Polygon">
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="points" type="Point32"/>
+  </RosMsg>
+  <RosMsg name="PolygonStamped">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="polygon" type="Polygon"/>
+  </RosMsg>
+  <RosMsg name="Pose">
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="position" type="Point"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="orientation" type="Quaternion"/>
+  </RosMsg>
+  <RosMsg name="Pose2D">
+    <RosMsgAttribute default="" group="" list_length="-1" name="x" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="y" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="theta" type="float"/>
+  </RosMsg>
+  <RosMsg name="PoseArray">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="poses" type="Pose"/>
+  </RosMsg>
+  <RosMsg name="PoseStamped">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="pose" type="Pose"/>
+  </RosMsg>
+  <RosMsg name="PoseWithCovariance">
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="pose" type="Pose"/>
+    <RosMsgAttribute default="" group="" list_length="36" name="covariance" type="float"/>
+  </RosMsg>
+  <RosMsg name="PoseWithCovarianceStamped">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="pose" type="PoseWithCovariance"/>
+  </RosMsg>
+  <RosMsg name="Quaternion">
+    <RosMsgAttribute default="" group="" list_length="-1" name="x" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="y" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="z" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="w" type="float"/>
+  </RosMsg>
+  <RosMsg name="QuaternionStamped">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="quaternion" type="Quaternion"/>
+  </RosMsg>
+  <RosMsg name="Transform">
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="translation" type="Vector3"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="rotation" type="Quaternion"/>
+  </RosMsg>
+  <RosMsg name="TransformStamped">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="child_frame_id" type="str"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="transform" type="Transform"/>
+  </RosMsg>
+  <RosMsg name="Twist">
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="linear" type="Vector3"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="angular" type="Vector3"/>
+  </RosMsg>
+  <RosMsg name="TwistStamped">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="twist" type="Twist"/>
+  </RosMsg>
+  <RosMsg name="TwistWithCovariance">
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="twist" type="Twist"/>
+    <RosMsgAttribute default="" group="" list_length="36" name="covariance" type="float"/>
+  </RosMsg>
+  <RosMsg name="TwistWithCovarianceStamped">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="twist" type="TwistWithCovariance"/>
+  </RosMsg>
+  <RosMsg name="Vector3">
+    <RosMsgAttribute default="" group="" list_length="-1" name="x" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="y" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="z" type="float"/>
+  </RosMsg>
+  <RosMsg name="Vector3Stamped">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="vector" type="Vector3"/>
+  </RosMsg>
+  <RosMsg name="Wrench">
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="force" type="Vector3"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="torque" type="Vector3"/>
+  </RosMsg>
+  <RosMsg name="WrenchStamped">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="wrench" type="Wrench"/>
+  </RosMsg>
+</RosMsgGroup>

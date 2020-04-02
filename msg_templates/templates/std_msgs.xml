@@ -1,0 +1,116 @@
+<?xml version="1.0" ?>
+<Package name="std_msgs">
+  <Message name="Bool">
+    <Attribute list="-1" name="data" package="basic" type="bool"/>
+  </Message>
+  <Message name="Byte">
+    <Attribute list="-1" name="data" package="basic" type="byte"/>
+  </Message>
+  <Message name="ByteMultiArray">
+    <Attribute list="-1" name="layout" package="std_msgs" type="MultiArrayLayout"/>
+    <Attribute list="0" name="data" package="basic" type="byte"/>
+  </Message>
+  <Message name="Char">
+    <Attribute list="-1" name="data" package="basic" type="char"/>
+  </Message>
+  <Message name="ColorRGBA">
+    <Attribute list="-1" name="r" package="basic" type="float32"/>
+    <Attribute list="-1" name="g" package="basic" type="float32"/>
+    <Attribute list="-1" name="b" package="basic" type="float32"/>
+    <Attribute list="-1" name="a" package="basic" type="float32"/>
+  </Message>
+  <Message name="Duration">
+    <Attribute list="-1" name="data" package="basic" type="duration"/>
+  </Message>
+  <Message name="Empty"/>
+  <Message name="Float32">
+    <Attribute list="-1" name="data" package="basic" type="float32"/>
+  </Message>
+  <Message name="Float32MultiArray">
+    <Attribute list="-1" name="layout" package="std_msgs" type="MultiArrayLayout"/>
+    <Attribute list="0" name="data" package="basic" type="float32"/>
+  </Message>
+  <Message name="Float64">
+    <Attribute list="-1" name="data" package="basic" type="float64"/>
+  </Message>
+  <Message name="Float64MultiArray">
+    <Attribute list="-1" name="layout" package="std_msgs" type="MultiArrayLayout"/>
+    <Attribute list="0" name="data" package="basic" type="float64"/>
+  </Message>
+  <Message name="Header">
+    <Attribute list="-1" name="seq" package="basic" type="uint32"/>
+    <Attribute list="-1" name="stamp" package="basic" type="time"/>
+    <Attribute list="-1" name="frame_id" package="basic" type="string"/>
+  </Message>
+  <Message name="Int16">
+    <Attribute list="-1" name="data" package="basic" type="int16"/>
+  </Message>
+  <Message name="Int16MultiArray">
+    <Attribute list="-1" name="layout" package="std_msgs" type="MultiArrayLayout"/>
+    <Attribute list="0" name="data" package="basic" type="int16"/>
+  </Message>
+  <Message name="Int32">
+    <Attribute list="-1" name="data" package="basic" type="int32"/>
+  </Message>
+  <Message name="Int32MultiArray">
+    <Attribute list="-1" name="layout" package="std_msgs" type="MultiArrayLayout"/>
+    <Attribute list="0" name="data" package="basic" type="int32"/>
+  </Message>
+  <Message name="Int64">
+    <Attribute list="-1" name="data" package="basic" type="int64"/>
+  </Message>
+  <Message name="Int64MultiArray">
+    <Attribute list="-1" name="layout" package="std_msgs" type="MultiArrayLayout"/>
+    <Attribute list="0" name="data" package="basic" type="int64"/>
+  </Message>
+  <Message name="Int8">
+    <Attribute list="-1" name="data" package="basic" type="int8"/>
+  </Message>
+  <Message name="Int8MultiArray">
+    <Attribute list="-1" name="layout" package="std_msgs" type="MultiArrayLayout"/>
+    <Attribute list="0" name="data" package="basic" type="int8"/>
+  </Message>
+  <Message name="MultiArrayDimension">
+    <Attribute list="-1" name="label" package="basic" type="string"/>
+    <Attribute list="-1" name="size" package="basic" type="uint32"/>
+    <Attribute list="-1" name="stride" package="basic" type="uint32"/>
+  </Message>
+  <Message name="MultiArrayLayout">
+    <Attribute list="0" name="dim" package="std_msgs" type="MultiArrayDimension"/>
+    <Attribute list="-1" name="data_offset" package="basic" type="uint32"/>
+  </Message>
+  <Message name="String">
+    <Attribute list="-1" name="data" package="basic" type="string"/>
+  </Message>
+  <Message name="Time">
+    <Attribute list="-1" name="data" package="basic" type="time"/>
+  </Message>
+  <Message name="UInt16">
+    <Attribute list="-1" name="data" package="basic" type="uint16"/>
+  </Message>
+  <Message name="UInt16MultiArray">
+    <Attribute list="-1" name="layout" package="std_msgs" type="MultiArrayLayout"/>
+    <Attribute list="0" name="data" package="basic" type="uint16"/>
+  </Message>
+  <Message name="UInt32">
+    <Attribute list="-1" name="data" package="basic" type="uint32"/>
+  </Message>
+  <Message name="UInt32MultiArray">
+    <Attribute list="-1" name="layout" package="std_msgs" type="MultiArrayLayout"/>
+    <Attribute list="0" name="data" package="basic" type="uint32"/>
+  </Message>
+  <Message name="UInt64">
+    <Attribute list="-1" name="data" package="basic" type="uint64"/>
+  </Message>
+  <Message name="UInt64MultiArray">
+    <Attribute list="-1" name="layout" package="std_msgs" type="MultiArrayLayout"/>
+    <Attribute list="0" name="data" package="basic" type="uint64"/>
+  </Message>
+  <Message name="UInt8">
+    <Attribute list="-1" name="data" package="basic" type="uint8"/>
+  </Message>
+  <Message name="UInt8MultiArray">
+    <Attribute list="-1" name="layout" package="std_msgs" type="MultiArrayLayout"/>
+    <Attribute list="0" name="data" package="basic" type="uint8"/>
+  </Message>
+</Package>

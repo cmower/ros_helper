@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<RosMsgGroup name="actionlib_tutorials">
+  <RosMsg name="AveragingAction">
+    <RosMsgAttribute default="" group="actionlib_tutorials" list_length="-1" name="action_goal" type="AveragingActionGoal"/>
+    <RosMsgAttribute default="" group="actionlib_tutorials" list_length="-1" name="action_result" type="AveragingActionResult"/>
+    <RosMsgAttribute default="" group="actionlib_tutorials" list_length="-1" name="action_feedback" type="AveragingActionFeedback"/>
+  </RosMsg>
+  <RosMsg name="AveragingActionFeedback">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="actionlib_tutorials" list_length="-1" name="feedback" type="AveragingFeedback"/>
+  </RosMsg>
+  <RosMsg name="AveragingActionGoal">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="goal_id" type="GoalID"/>
+    <RosMsgAttribute default="" group="actionlib_tutorials" list_length="-1" name="goal" type="AveragingGoal"/>
+  </RosMsg>
+  <RosMsg name="AveragingActionResult">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="actionlib_tutorials" list_length="-1" name="result" type="AveragingResult"/>
+  </RosMsg>
+  <RosMsg name="AveragingFeedback">
+    <RosMsgAttribute default="" group="" list_length="-1" name="sample" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="data" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="mean" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="std_dev" type="float"/>
+  </RosMsg>
+  <RosMsg name="AveragingGoal">
+    <RosMsgAttribute default="" group="" list_length="-1" name="samples" type="int"/>
+  </RosMsg>
+  <RosMsg name="AveragingResult">
+    <RosMsgAttribute default="" group="" list_length="-1" name="mean" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="std_dev" type="float"/>
+  </RosMsg>
+  <RosMsg name="FibonacciAction">
+    <RosMsgAttribute default="" group="actionlib_tutorials" list_length="-1" name="action_goal" type="FibonacciActionGoal"/>
+    <RosMsgAttribute default="" group="actionlib_tutorials" list_length="-1" name="action_result" type="FibonacciActionResult"/>
+    <RosMsgAttribute default="" group="actionlib_tutorials" list_length="-1" name="action_feedback" type="FibonacciActionFeedback"/>
+  </RosMsg>
+  <RosMsg name="FibonacciActionFeedback">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="actionlib_tutorials" list_length="-1" name="feedback" type="FibonacciFeedback"/>
+  </RosMsg>
+  <RosMsg name="FibonacciActionGoal">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="goal_id" type="GoalID"/>
+    <RosMsgAttribute default="" group="actionlib_tutorials" list_length="-1" name="goal" type="FibonacciGoal"/>
+  </RosMsg>
+  <RosMsg name="FibonacciActionResult">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="actionlib_tutorials" list_length="-1" name="result" type="FibonacciResult"/>
+  </RosMsg>
+  <RosMsg name="FibonacciFeedback">
+    <RosMsgAttribute default="" group="" list_length="0" name="sequence" type="int"/>
+  </RosMsg>
+  <RosMsg name="FibonacciGoal">
+    <RosMsgAttribute default="" group="" list_length="-1" name="order" type="int"/>
+  </RosMsg>
+  <RosMsg name="FibonacciResult">
+    <RosMsgAttribute default="" group="" list_length="0" name="sequence" type="int"/>
+  </RosMsg>
+</RosMsgGroup>

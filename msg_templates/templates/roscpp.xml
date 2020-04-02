@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<Package name="roscpp">
+  <Message name="Logger">
+    <Attribute list="-1" name="name" package="basic" type="string"/>
+    <Attribute list="-1" name="level" package="basic" type="string"/>
+  </Message>
+</Package>

@@ -3,6 +3,8 @@ import numpy as np
 from geometry_msgs.msg import *
 from ..utils import *
 
+_msg_group = 'geometry_msgs'
+
 #
 # Geometry helper functions
 #
@@ -63,6 +65,10 @@ class PointMsg(Point):
     def to_np(self):
         return _trans_to_np(self)
 
+    @classmethod
+    def open_doc(cls):
+        open_msg_doc_in_browser(_msg_group, cls.__name__)
+
 class Point32Msg(Point32):
 
     def __init__(self, trans=[0,0,0]):
@@ -95,6 +101,10 @@ class PointStampedMsg(PointStamped):
 
     def to_np(self):
         return _trans_to_np(self.point)
+
+    @classmethod
+    def open_doc(cls):
+        open_msg_doc_in_browser(_msg_group, cls.__name__)
 
 class PolygonMsg(Polygon):
 
@@ -132,6 +142,10 @@ class PoseMsg(Pose):
         T = tf.transformations.quaternion_matrix(self.orientation.to_np())
         T[:3,3] = self.position.to_np()
         return T
+
+    @classmethod
+    def open_doc(cls):
+        open_msg_doc_in_browser(_msg_group, cls.__name__)
 
 class Pose2DMsg(Pose2D):
 
@@ -195,6 +209,10 @@ class QuaternionMsg(Quaternion):
     def to_np(self):
         return np.asarray(mgetattr(self, XYZW))
 
+    @classmethod
+    def open_doc(cls):
+        open_msg_doc_in_browser(_msg_group, cls.__name__)
+
 class QuaternionStampedMsg(QuaternionStamped):
 
     def __init__(self):
@@ -220,6 +238,10 @@ class TransformMsg(Transform):
         T = self.rotation.to_matrix()
         T[:3,3] = self.translation.to_np()
         return T
+
+    @classmethod
+    def open_doc(cls):
+        open_msg_doc_in_browser(_msg_group, cls.__name__)
 
 class TransformStampedMsg(TransformStamped):
 
@@ -254,6 +276,10 @@ class TransformStampedMsg(TransformStamped):
     def to_np(self):
         return self.transform.to_np()
 
+    @classmethod
+    def open_doc(cls):
+        open_msg_doc_in_browser(_msg_group, cls.__name__)
+
 class TwistMsg(Twist):
 
     def __init__(self):
@@ -286,6 +312,10 @@ class Vector3Msg(Vector3):
 
     def to_np(self):
         return _trans_to_np(self)
+
+    @classmethod
+    def open_doc(cls):
+        open_msg_doc_in_browser(_msg_group, cls.__name__)
 
 class Vector3StampedMsg(Vector3Stamped):
 

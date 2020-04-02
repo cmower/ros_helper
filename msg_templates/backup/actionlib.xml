@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<actionlib>
+    <GoalID group="actionlib">
+        <id type="str" type_group="basic"/>
+        <stamp type="Time" type_group="std"/>
+    </GoalID>
+    <GoalStatus group="actionlib">
+        <goal_id type="GoalID" type_group="actionlib"/>
+        <status type="int" type_group="basic"/>
+        <text type="str" type_group="basic"/>
+    </GoalStatus>
+    <GoalStatusArray group="actionlib">
+        <header type="Header" type_group="std"/>
+        <status_list type="list" type_group="basic"/>
+    </GoalStatusArray>
+</actionlib>

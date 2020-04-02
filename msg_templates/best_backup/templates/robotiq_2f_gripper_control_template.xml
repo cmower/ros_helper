@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<RosMsgGroup name="robotiq_2f_gripper_control">
+  <RosMsg name="Robotiq2FGripper_robot_input">
+    <RosMsgAttribute default="" group="" list_length="-1" name="gACT" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="gGTO" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="gSTA" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="gOBJ" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="gFLT" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="gPR" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="gPO" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="gCU" type="int"/>
+  </RosMsg>
+  <RosMsg name="Robotiq2FGripper_robot_output">
+    <RosMsgAttribute default="" group="" list_length="-1" name="rACT" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="rGTO" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="rATR" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="rPR" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="rSP" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="rFR" type="int"/>
+  </RosMsg>
+</RosMsgGroup>

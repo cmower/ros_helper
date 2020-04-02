@@ -1,0 +1,93 @@
+<?xml version="1.0" ?>
+<RosMsgGroup name="visualization_msgs">
+  <RosMsg name="ImageMarker">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="ns" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="id" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="type" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="action" type="int"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="position" type="Point"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="scale" type="float"/>
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="outline_color" type="ColorRGBA"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="filled" type="int"/>
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="fill_color" type="ColorRGBA"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="lifetime" type="rospy.Duration"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="points" type="Point"/>
+    <RosMsgAttribute default="" group="std_msgs" list_length="0" name="outline_colors" type="ColorRGBA"/>
+  </RosMsg>
+  <RosMsg name="InteractiveMarker">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="pose" type="Pose"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="name" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="description" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="scale" type="float"/>
+    <RosMsgAttribute default="" group="visualization_msgs" list_length="0" name="menu_entries" type="MenuEntry"/>
+    <RosMsgAttribute default="" group="visualization_msgs" list_length="0" name="controls" type="InteractiveMarkerControl"/>
+  </RosMsg>
+  <RosMsg name="InteractiveMarkerControl">
+    <RosMsgAttribute default="" group="" list_length="-1" name="name" type="str"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="orientation" type="Quaternion"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="orientation_mode" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="interaction_mode" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="always_visible" type="bool"/>
+    <RosMsgAttribute default="" group="visualization_msgs" list_length="0" name="markers" type="Marker"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="independent_marker_orientation" type="bool"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="description" type="str"/>
+  </RosMsg>
+  <RosMsg name="InteractiveMarkerFeedback">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="client_id" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="marker_name" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="control_name" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="event_type" type="int"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="pose" type="Pose"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="menu_entry_id" type="int"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="mouse_point" type="Point"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="mouse_point_valid" type="bool"/>
+  </RosMsg>
+  <RosMsg name="InteractiveMarkerInit">
+    <RosMsgAttribute default="" group="" list_length="-1" name="server_id" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="seq_num" type="long"/>
+    <RosMsgAttribute default="" group="visualization_msgs" list_length="0" name="markers" type="InteractiveMarker"/>
+  </RosMsg>
+  <RosMsg name="InteractiveMarkerPose">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="pose" type="Pose"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="name" type="str"/>
+  </RosMsg>
+  <RosMsg name="InteractiveMarkerUpdate">
+    <RosMsgAttribute default="" group="" list_length="-1" name="server_id" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="seq_num" type="long"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="type" type="int"/>
+    <RosMsgAttribute default="" group="visualization_msgs" list_length="0" name="markers" type="InteractiveMarker"/>
+    <RosMsgAttribute default="" group="visualization_msgs" list_length="0" name="poses" type="InteractiveMarkerPose"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="erases" type="str"/>
+  </RosMsg>
+  <RosMsg name="Marker">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="ns" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="id" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="type" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="action" type="int"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="pose" type="Pose"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="scale" type="Vector3"/>
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="color" type="ColorRGBA"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="lifetime" type="rospy.Duration"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="frame_locked" type="bool"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="points" type="Point"/>
+    <RosMsgAttribute default="" group="std_msgs" list_length="0" name="colors" type="ColorRGBA"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="text" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="mesh_resource" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="mesh_use_embedded_materials" type="bool"/>
+  </RosMsg>
+  <RosMsg name="MarkerArray">
+    <RosMsgAttribute default="" group="visualization_msgs" list_length="0" name="markers" type="Marker"/>
+  </RosMsg>
+  <RosMsg name="MenuEntry">
+    <RosMsgAttribute default="" group="" list_length="-1" name="id" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="parent_id" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="title" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="command" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="command_type" type="int"/>
+  </RosMsg>
+</RosMsgGroup>

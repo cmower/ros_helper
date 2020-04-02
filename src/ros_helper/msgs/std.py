@@ -71,10 +71,25 @@ class Float64MultiArrayMsg(Float64MultiArray):
 
 class HeaderMsg(Header):
 
-    def __init__(self):
+    def __init__(self, time=None, seq=0, frame_id=''):
         super(HeaderMsg, self).__init__()
-        raise NotImplementedError("HeaderMsg is not yet implemented")
+        if Header in get_object_class_hierarchy(time):
+            h = time
+            self.time = h.stamp
+            self.seq = h.seq
+            self.frame_id = h.frame_id
+        else:
+            if time is not None: self.time = time
+            self.seq = seq
+            self.frame_id = frame_id
 
+    @property
+    def time(self):
+        return self.stamp
+
+    @time.setter
+    def time(self, t):
+        self.stamp = t
 
 class Int16Msg(Int16):
 

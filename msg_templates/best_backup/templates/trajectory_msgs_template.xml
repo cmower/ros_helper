@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<RosMsgGroup name="trajectory_msgs">
+  <RosMsg name="JointTrajectory">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="joint_names" type="str"/>
+    <RosMsgAttribute default="" group="trajectory_msgs" list_length="0" name="points" type="JointTrajectoryPoint"/>
+  </RosMsg>
+  <RosMsg name="JointTrajectoryPoint">
+    <RosMsgAttribute default="" group="" list_length="0" name="positions" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="velocities" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="accelerations" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="effort" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="time_from_start" type="rospy.Duration"/>
+  </RosMsg>
+  <RosMsg name="MultiDOFJointTrajectory">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="joint_names" type="str"/>
+    <RosMsgAttribute default="" group="trajectory_msgs" list_length="0" name="points" type="MultiDOFJointTrajectoryPoint"/>
+  </RosMsg>
+  <RosMsg name="MultiDOFJointTrajectoryPoint">
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="transforms" type="Transform"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="velocities" type="Twist"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="accelerations" type="Twist"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="time_from_start" type="rospy.Duration"/>
+  </RosMsg>
+</RosMsgGroup>

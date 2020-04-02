@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<Package name="octomap_msgs">
+  <Message name="Octomap">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="binary" package="basic" type="bool"/>
+    <Attribute list="-1" name="id" package="basic" type="string"/>
+    <Attribute list="-1" name="resolution" package="basic" type="float64"/>
+    <Attribute list="0" name="data" package="basic" type="int8"/>
+  </Message>
+  <Message name="OctomapWithPose">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="origin" package="geometry_msgs" type="Pose"/>
+    <Attribute list="-1" name="octomap" package="octomap_msgs" type="Octomap"/>
+  </Message>
+</Package>

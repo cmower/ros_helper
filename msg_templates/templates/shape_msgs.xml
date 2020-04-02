@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<Package name="shape_msgs">
+  <Message name="Mesh">
+    <Attribute list="0" name="triangles" package="shape_msgs" type="MeshTriangle"/>
+    <Attribute list="0" name="vertices" package="geometry_msgs" type="Point"/>
+  </Message>
+  <Message name="MeshTriangle">
+    <Attribute list="3" name="vertex_indices" package="basic" type="uint32[3]"/>
+  </Message>
+  <Message name="Plane">
+    <Attribute list="4" name="coef" package="basic" type="float64[4]"/>
+  </Message>
+  <Message name="SolidPrimitive">
+    <Attribute list="-1" name="type" package="basic" type="uint8"/>
+    <Attribute list="0" name="dimensions" package="basic" type="float64"/>
+  </Message>
+</Package>

@@ -473,6 +473,14 @@ class CylinderMsg(MarkerMsg):
     def height(self, h):
         self.scale.z = float(h)
 
+    @property
+    def radius(self):
+        return self.diameter/2.0
+
+    @radius.setter
+    def radius(self, r):
+        self.diameter = 2*float(r)
+
 # LINE_STRIP = 4
 
 class LineStripMsg(_LineMsg):

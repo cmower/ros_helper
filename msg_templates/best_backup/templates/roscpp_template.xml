@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<RosMsgGroup name="roscpp">
+  <RosMsg name="Logger">
+    <RosMsgAttribute default="" group="" list_length="-1" name="name" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="level" type="str"/>
+  </RosMsg>
+</RosMsgGroup>

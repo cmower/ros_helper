@@ -1,0 +1,149 @@
+#!/usr/bin/env python
+from copy import deepcopy
+from subprocess import check_output
+
+import actionlib_msgs.msg as actionlib_msgs
+import diagnostic_msgs.msg as diagnostic_msgs
+import geometry_msgs.msg as geometry_msgs
+import nav_msgs.msg as nav_msgs
+import sensor_msgs.msg as sensor_msgs
+import std_msgs.msg as std_msgs
+import visualization_msgs.msg as visualization_msgs
+
+all_msg_grps = ['actionlib_msgs', 'diagnostic_msgs', 'geometry_msgs', 'nav_msgs', 'sensor_msgs', 'std_msgs', 'visualization_msgs']
+
+"""
+# Preamble for each msg group looks like:
+
+from GRP import *
+from ..utils import *
+
+# Template for each class looks like:
+
+class CLSMsg(CLS):
+
+    def __init__(self, *args, **kwargs):
+        super(CLSMsg, self).__init__()
+
+        if len(args) is 1:
+            if CLS in get_object_class_hierarchy(args[0]):
+                self.attr1 = args[0].attr1
+                ...
+                self.attrn = args[0].attrn
+
+        for key, value in kwargs.items(): setattr(self, key, value)
+
+    @classmethod
+    def open_doc(cls):
+        open_msg_doc_in_browser(GRP, cls.__name__)
+
+
+# if header is in msg_class then this is added
+
+    @property
+    def time(self):
+        return self.header.stamp
+
+    @time.setter
+    def time(self, t):
+        self.header.stamp = t
+
+"""
+
+templates_directory = check_output(['pwd']).splitlines()[0] # because rh fails when editing this
+
+def gen_init():
+    filename = '%s/__init__.py' % templates_directory
+    fout = open(filename, 'w')
+    for grp in all_msg_grps: fout.write('import %s' % grp.replace('_msgs', ''))
+    fout.close()
+
+def is_msg_attr(cls_instance, attr):
+    """True if attr is a msg attr (non global)
+    cls_instance : instance of a msg_class
+    attr         : an attribute of cls_instance as a string
+    """
+    return not attr.startswith('_') and not attr.isupper() and not callable(getattr(cls_instance, attr))
+
+def is_msg_class(cls):
+    """True if cls is a ros msg class.
+    cls : class name, as string
+    """
+    return cls[0].isupper()
+
+def gen(mod, filename):
+    print "Generating message classes for %s ..." % (mod.__name__),
+    filename = '%s/%s' % (templates_directory, filename)
+    fout = open(filename, 'w')
+    grp = mod.__name__.replace('.msg', '')
+
+    # write preamble
+    fout.write('# generated using gen.py, DO NOT USE!\n\n')
+    fout.write('from %s import *\n' % grp)
+    fout.write('from ..utils import *\n\n')
+
+    all_msg_grps_ = deepcopy(all_msg_grps)
+    all_msg_grps_.remove(grp)
+    for g in all_msg_grps_:
+        fout.write('from .%s import *\n' % g.replace('_msgs', ''))
+    fout.write('\n')
+
+    # Implement msg classes
+    for cls in [d for d in dir(mod) if is_msg_class(d)]:
+
+        # Setup
+        cls_instance = eval('%s.%s()' % (grp, cls))
+        all_msg_attrs = [d for d in dir(cls_instance) if is_msg_attr(cls_instance, d)]
+        all_msg_attr_types = []
+        for a in all_msg_attrs:
+            attr_instance = getattr(cls_instance, a)
+            attr_type = type(attr_instance).__name__
+            if is_msg_class(attr_type): attr_type += 'Msg'
+            all_msg_attr_types.append(attr_type)
+
+        fout.write('class %sMsg(%s):\n\n' % (cls, cls))
+        fout.write('    MSG_ATTRS = {\\n')
+
+        print all_msg_attrs
+        print all_msg_attr_types
+        sys.exit(0)
+
+        for i, attr, attr_type in zip(range(len(all_msg_attrs)) , all_msg_attr_types):
+            if i+1 == len(all_msg_attrs):
+                fout.write('                 "%s" : %s\\ \n' % (attr, attr_type))
+            else:
+                fout.write('                 "%s" : %s,\\ \n' % (attr, attr_type))
+        fout.write('    }\n\n')
+        fout.write('    def __init__(self, *args, **kwargs):\n')
+        fout.write('        super(%sMsg, self).__init__()\n' % cls)
+        fout.write('        if len(args) is 1:\n')
+        fout.write('            if %s in get_object_class_hierarchy(args[0]):\n' % cls)
+        fout.write('                for attr, attr_type in self.MSG_ATTRS.items():\n')
+        fout.write('                    setattr(self, attr, attr_type(getattr(args[0], attr)))\n\n')
+        fout.write('        for key, value in kwargs.items():\n')
+        fout.write('            t = type(getattr(self, key)).__name__\n')
+        fout.write('            if t[0].isupper(): t += "Msg" # is ros msg, ensure to cast as ros_helper msg type\n')
+        fout.write('            setattr(self, key, eval(t)(value))\n')
+        fout.write('\n')
+        fout.write('    @classmethod\n')
+        fout.write('    def open_doc(cls):\n')
+        fout.write('        open_msg_doc_in_browser(_msg_group, cls.__name__)\n\n')
+
+        if 'header' in all_msg_attrs:
+            fout.write('    @property\n')
+            fout.write('    def time(self):\n')
+            fout.write('        return self.header.stamp\n\n')
+            fout.write('    @time.setter\n')
+            fout.write('    def time(self, t):\n')
+            fout.write('        self.header.stamp = t\n\n')
+    fout.close()
+    print "complete, saved to %s" % filename
+
+gen_init()
+gen(actionlib_msgs, 'actionlib.py')
+gen(diagnostic_msgs, 'diagnostics.py')
+gen(geometry_msgs, 'geometry.py')
+gen(nav_msgs, 'nav.py')
+gen(sensor_msgs, 'sensor.py')
+gen(std_msgs, 'std.py')
+gen(visualization_msgs, 'visualization.py')

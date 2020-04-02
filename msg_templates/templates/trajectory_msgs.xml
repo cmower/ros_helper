@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<Package name="trajectory_msgs">
+  <Message name="JointTrajectory">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="0" name="joint_names" package="basic" type="string"/>
+    <Attribute list="0" name="points" package="trajectory_msgs" type="JointTrajectoryPoint"/>
+  </Message>
+  <Message name="JointTrajectoryPoint">
+    <Attribute list="0" name="positions" package="basic" type="float64"/>
+    <Attribute list="0" name="velocities" package="basic" type="float64"/>
+    <Attribute list="0" name="accelerations" package="basic" type="float64"/>
+    <Attribute list="0" name="effort" package="basic" type="float64"/>
+    <Attribute list="-1" name="time_from_start" package="basic" type="duration"/>
+  </Message>
+  <Message name="MultiDOFJointTrajectory">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="0" name="joint_names" package="basic" type="string"/>
+    <Attribute list="0" name="points" package="trajectory_msgs" type="MultiDOFJointTrajectoryPoint"/>
+  </Message>
+  <Message name="MultiDOFJointTrajectoryPoint">
+    <Attribute list="0" name="transforms" package="geometry_msgs" type="Transform"/>
+    <Attribute list="0" name="velocities" package="geometry_msgs" type="Twist"/>
+    <Attribute list="0" name="accelerations" package="geometry_msgs" type="Twist"/>
+    <Attribute list="-1" name="time_from_start" package="basic" type="duration"/>
+  </Message>
+</Package>

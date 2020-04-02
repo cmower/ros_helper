@@ -1,0 +1,63 @@
+<?xml version="1.0" ?>
+<Package name="object_recognition_msgs">
+  <Message name="ObjectInformation">
+    <Attribute list="-1" name="name" package="basic" type="string"/>
+    <Attribute list="-1" name="ground_truth_mesh" package="shape_msgs" type="Mesh"/>
+    <Attribute list="-1" name="ground_truth_point_cloud" package="sensor_msgs" type="PointCloud2"/>
+  </Message>
+  <Message name="ObjectRecognitionAction">
+    <Attribute list="-1" name="action_goal" package="object_recognition_msgs" type="ObjectRecognitionActionGoal"/>
+    <Attribute list="-1" name="action_result" package="object_recognition_msgs" type="ObjectRecognitionActionResult"/>
+    <Attribute list="-1" name="action_feedback" package="object_recognition_msgs" type="ObjectRecognitionActionFeedback"/>
+  </Message>
+  <Message name="ObjectRecognitionActionFeedback">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="feedback" package="object_recognition_msgs" type="ObjectRecognitionFeedback"/>
+  </Message>
+  <Message name="ObjectRecognitionActionGoal">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="goal_id" package="actionlib_msgs" type="GoalID"/>
+    <Attribute list="-1" name="goal" package="object_recognition_msgs" type="ObjectRecognitionGoal"/>
+  </Message>
+  <Message name="ObjectRecognitionActionResult">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="result" package="object_recognition_msgs" type="ObjectRecognitionResult"/>
+  </Message>
+  <Message name="ObjectRecognitionFeedback"/>
+  <Message name="ObjectRecognitionGoal">
+    <Attribute list="-1" name="use_roi" package="basic" type="bool"/>
+    <Attribute list="0" name="filter_limits" package="basic" type="float32"/>
+  </Message>
+  <Message name="ObjectRecognitionResult">
+    <Attribute list="-1" name="recognized_objects" package="object_recognition_msgs" type="RecognizedObjectArray"/>
+  </Message>
+  <Message name="ObjectType">
+    <Attribute list="-1" name="key" package="basic" type="string"/>
+    <Attribute list="-1" name="db" package="basic" type="string"/>
+  </Message>
+  <Message name="RecognizedObject">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="type" package="object_recognition_msgs" type="ObjectType"/>
+    <Attribute list="-1" name="confidence" package="basic" type="float32"/>
+    <Attribute list="0" name="point_clouds" package="sensor_msgs" type="PointCloud2"/>
+    <Attribute list="-1" name="bounding_mesh" package="shape_msgs" type="Mesh"/>
+    <Attribute list="0" name="bounding_contours" package="geometry_msgs" type="Point"/>
+    <Attribute list="-1" name="pose" package="geometry_msgs" type="PoseWithCovarianceStamped"/>
+  </Message>
+  <Message name="RecognizedObjectArray">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="0" name="objects" package="object_recognition_msgs" type="RecognizedObject"/>
+    <Attribute list="0" name="cooccurrence" package="basic" type="float32"/>
+  </Message>
+  <Message name="Table">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="pose" package="geometry_msgs" type="Pose"/>
+    <Attribute list="0" name="convex_hull" package="geometry_msgs" type="Point"/>
+  </Message>
+  <Message name="TableArray">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="0" name="tables" package="object_recognition_msgs" type="Table"/>
+  </Message>
+</Package>

@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<Package name="stereo_msgs">
+  <Message name="DisparityImage">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="image" package="sensor_msgs" type="Image"/>
+    <Attribute list="-1" name="f" package="basic" type="float32"/>
+    <Attribute list="-1" name="T" package="basic" type="float32"/>
+    <Attribute list="-1" name="valid_window" package="sensor_msgs" type="RegionOfInterest"/>
+    <Attribute list="-1" name="min_disparity" package="basic" type="float32"/>
+    <Attribute list="-1" name="max_disparity" package="basic" type="float32"/>
+    <Attribute list="-1" name="delta_d" package="basic" type="float32"/>
+  </Message>
+</Package>

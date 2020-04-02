@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+<Package name="actionlib">
+  <Message name="TestAction">
+    <Attribute list="-1" name="action_goal" package="actionlib" type="TestActionGoal"/>
+    <Attribute list="-1" name="action_result" package="actionlib" type="TestActionResult"/>
+    <Attribute list="-1" name="action_feedback" package="actionlib" type="TestActionFeedback"/>
+  </Message>
+  <Message name="TestActionFeedback">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="feedback" package="actionlib" type="TestFeedback"/>
+  </Message>
+  <Message name="TestActionGoal">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="goal_id" package="actionlib_msgs" type="GoalID"/>
+    <Attribute list="-1" name="goal" package="actionlib" type="TestGoal"/>
+  </Message>
+  <Message name="TestActionResult">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="result" package="actionlib" type="TestResult"/>
+  </Message>
+  <Message name="TestFeedback">
+    <Attribute list="-1" name="feedback" package="basic" type="int32"/>
+  </Message>
+  <Message name="TestGoal">
+    <Attribute list="-1" name="goal" package="basic" type="int32"/>
+  </Message>
+  <Message name="TestRequestAction">
+    <Attribute list="-1" name="action_goal" package="actionlib" type="TestRequestActionGoal"/>
+    <Attribute list="-1" name="action_result" package="actionlib" type="TestRequestActionResult"/>
+    <Attribute list="-1" name="action_feedback" package="actionlib" type="TestRequestActionFeedback"/>
+  </Message>
+  <Message name="TestRequestActionFeedback">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="feedback" package="actionlib" type="TestRequestFeedback"/>
+  </Message>
+  <Message name="TestRequestActionGoal">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="goal_id" package="actionlib_msgs" type="GoalID"/>
+    <Attribute list="-1" name="goal" package="actionlib" type="TestRequestGoal"/>
+  </Message>
+  <Message name="TestRequestActionResult">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="result" package="actionlib" type="TestRequestResult"/>
+  </Message>
+  <Message name="TestRequestFeedback"/>
+  <Message name="TestRequestGoal">
+    <Attribute list="-1" name="terminate_status" package="basic" type="int32"/>
+    <Attribute list="-1" name="ignore_cancel" package="basic" type="bool"/>
+    <Attribute list="-1" name="result_text" package="basic" type="string"/>
+    <Attribute list="-1" name="the_result" package="basic" type="int32"/>
+    <Attribute list="-1" name="is_simple_client" package="basic" type="bool"/>
+    <Attribute list="-1" name="delay_accept" package="basic" type="duration"/>
+    <Attribute list="-1" name="delay_terminate" package="basic" type="duration"/>
+    <Attribute list="-1" name="pause_status" package="basic" type="duration"/>
+  </Message>
+  <Message name="TestRequestResult">
+    <Attribute list="-1" name="the_result" package="basic" type="int32"/>
+    <Attribute list="-1" name="is_simple_server" package="basic" type="bool"/>
+  </Message>
+  <Message name="TestResult">
+    <Attribute list="-1" name="result" package="basic" type="int32"/>
+  </Message>
+  <Message name="TwoIntsAction">
+    <Attribute list="-1" name="action_goal" package="actionlib" type="TwoIntsActionGoal"/>
+    <Attribute list="-1" name="action_result" package="actionlib" type="TwoIntsActionResult"/>
+    <Attribute list="-1" name="action_feedback" package="actionlib" type="TwoIntsActionFeedback"/>
+  </Message>
+  <Message name="TwoIntsActionFeedback">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="feedback" package="actionlib" type="TwoIntsFeedback"/>
+  </Message>
+  <Message name="TwoIntsActionGoal">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="goal_id" package="actionlib_msgs" type="GoalID"/>
+    <Attribute list="-1" name="goal" package="actionlib" type="TwoIntsGoal"/>
+  </Message>
+  <Message name="TwoIntsActionResult">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="result" package="actionlib" type="TwoIntsResult"/>
+  </Message>
+  <Message name="TwoIntsFeedback"/>
+  <Message name="TwoIntsGoal">
+    <Attribute list="-1" name="a" package="basic" type="int64"/>
+    <Attribute list="-1" name="b" package="basic" type="int64"/>
+  </Message>
+  <Message name="TwoIntsResult">
+    <Attribute list="-1" name="sum" package="basic" type="int64"/>
+  </Message>
+</Package>

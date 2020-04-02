@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<RosMsgGroup name="robotiq_ft_sensor">
+  <RosMsg name="ft_sensor">
+    <RosMsgAttribute default="" group="" list_length="-1" name="Fx" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="Fy" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="Fz" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="Mx" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="My" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="Mz" type="float"/>
+  </RosMsg>
+</RosMsgGroup>

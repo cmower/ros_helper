@@ -58,11 +58,11 @@ rospy.spin()
 
 ## Publish an environment and static frames
 
-The goal here is to publish multiple markers and static frames. `ros_helper` provides an easy way to create a configuration and publish. For example, see the image for the goal we want to achieve. 
+The goal here is to publish multiple markers and static frames. `ros_helper` provides an easy way to create a configuration and publish. For example, see the image for the goal we want to achieve.
 
 ![](https://raw.githubusercontent.com/cmower/ros_helper/master/doc/images/publish_environment_node_example.png?token=AB6K7QDORNIETPE6GKAS5KS5HV7LG)
 
-Normally we would have to setup all the static frames in the launch file and create a script to publish the markers we want. This can be avoided using the `publish_environment_node` provided by `ros_helper`. All that is required is a configuration `.xml` file. For the above example, use the following. 
+Normally we would have to setup all the static frames in the launch file and create a script to publish the markers we want. This can be avoided using the `publish_environment_node` provided by `ros_helper`. All that is required is a configuration `.xml` file. For the above example, use the following.
 
 ```xml
 <?xml version="1.0"?>
@@ -126,6 +126,7 @@ See `example_environment.xml` for updates to functionality of `publish_environme
   * Consider using pep8ify, see [here](https://github.com/spulec/pep8ify).
 * Un-hackify `publish_environment_node`. Further functionality?
 * Clean interfaces in `simple_pub_sub`.
+  * Make less hacky version of `ros_distro` function in `utils.py`.
 
 ### Long term
 

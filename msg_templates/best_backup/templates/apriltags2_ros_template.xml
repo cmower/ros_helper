@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<RosMsgGroup name="apriltags2_ros">
+  <RosMsg name="AprilTagDetection">
+    <RosMsgAttribute default="" group="" list_length="0" name="id" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="size" type="float"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="pose" type="PoseWithCovarianceStamped"/>
+  </RosMsg>
+  <RosMsg name="AprilTagDetectionArray">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="apriltags2_ros" list_length="0" name="detections" type="AprilTagDetection"/>
+  </RosMsg>
+</RosMsgGroup>

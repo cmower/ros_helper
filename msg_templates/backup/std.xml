@@ -1,0 +1,116 @@
+<?xml version="1.0" ?>
+<std>
+    <Bool group="std">
+        <data type="bool" type_group="basic"/>
+    </Bool>
+    <Byte group="std">
+        <data type="int" type_group="basic"/>
+    </Byte>
+    <ByteMultiArray group="std">
+        <data type="list" type_group="basic"/>
+        <layout type="MultiArrayLayout" type_group="std"/>
+    </ByteMultiArray>
+    <Char group="std">
+        <data type="int" type_group="basic"/>
+    </Char>
+    <ColorRGBA group="std">
+        <a type="float" type_group="basic"/>
+        <b type="float" type_group="basic"/>
+        <g type="float" type_group="basic"/>
+        <r type="float" type_group="basic"/>
+    </ColorRGBA>
+    <Duration group="std">
+        <data type="Duration" type_group="std"/>
+    </Duration>
+    <Empty group="std"/>
+    <Float32 group="std">
+        <data type="float" type_group="basic"/>
+    </Float32>
+    <Float32MultiArray group="std">
+        <data type="list" type_group="basic"/>
+        <layout type="MultiArrayLayout" type_group="std"/>
+    </Float32MultiArray>
+    <Float64 group="std">
+        <data type="float" type_group="basic"/>
+    </Float64>
+    <Float64MultiArray group="std">
+        <data type="list" type_group="basic"/>
+        <layout type="MultiArrayLayout" type_group="std"/>
+    </Float64MultiArray>
+    <Header group="std">
+        <frame_id type="str" type_group="basic"/>
+        <seq type="int" type_group="basic"/>
+        <stamp type="Time" type_group="std"/>
+    </Header>
+    <Int16 group="std">
+        <data type="int" type_group="basic"/>
+    </Int16>
+    <Int16MultiArray group="std">
+        <data type="list" type_group="basic"/>
+        <layout type="MultiArrayLayout" type_group="std"/>
+    </Int16MultiArray>
+    <Int32 group="std">
+        <data type="int" type_group="basic"/>
+    </Int32>
+    <Int32MultiArray group="std">
+        <data type="list" type_group="basic"/>
+        <layout type="MultiArrayLayout" type_group="std"/>
+    </Int32MultiArray>
+    <Int64 group="std">
+        <data type="int" type_group="basic"/>
+    </Int64>
+    <Int64MultiArray group="std">
+        <data type="list" type_group="basic"/>
+        <layout type="MultiArrayLayout" type_group="std"/>
+    </Int64MultiArray>
+    <Int8 group="std">
+        <data type="int" type_group="basic"/>
+    </Int8>
+    <Int8MultiArray group="std">
+        <data type="list" type_group="basic"/>
+        <layout type="MultiArrayLayout" type_group="std"/>
+    </Int8MultiArray>
+    <MultiArrayDimension group="std">
+        <label type="str" type_group="basic"/>
+        <size type="int" type_group="basic"/>
+        <stride type="int" type_group="basic"/>
+    </MultiArrayDimension>
+    <MultiArrayLayout group="std">
+        <data_offset type="int" type_group="basic"/>
+        <dim type="list" type_group="basic"/>
+    </MultiArrayLayout>
+    <String group="std">
+        <data type="str" type_group="basic"/>
+    </String>
+    <Time group="std">
+        <data type="Time" type_group="std"/>
+    </Time>
+    <UInt16 group="std">
+        <data type="int" type_group="basic"/>
+    </UInt16>
+    <UInt16MultiArray group="std">
+        <data type="list" type_group="basic"/>
+        <layout type="MultiArrayLayout" type_group="std"/>
+    </UInt16MultiArray>
+    <UInt32 group="std">
+        <data type="int" type_group="basic"/>
+    </UInt32>
+    <UInt32MultiArray group="std">
+        <data type="list" type_group="basic"/>
+        <layout type="MultiArrayLayout" type_group="std"/>
+    </UInt32MultiArray>
+    <UInt64 group="std">
+        <data type="int" type_group="basic"/>
+    </UInt64>
+    <UInt64MultiArray group="std">
+        <data type="list" type_group="basic"/>
+        <layout type="MultiArrayLayout" type_group="std"/>
+    </UInt64MultiArray>
+    <UInt8 group="std">
+        <data type="int" type_group="basic"/>
+    </UInt8>
+    <UInt8MultiArray group="std">
+        <data type="str" type_group="basic"/>
+        <layout type="MultiArrayLayout" type_group="std"/>
+    </UInt8MultiArray>
+</std>

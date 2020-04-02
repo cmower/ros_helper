@@ -1,0 +1,93 @@
+<?xml version="1.0" ?>
+<visualization>
+    <ImageMarker group="visualization">
+        <action type="int" type_group="basic"/>
+        <fill_color type="ColorRGBA" type_group="std"/>
+        <filled type="int" type_group="basic"/>
+        <header type="Header" type_group="std"/>
+        <id type="int" type_group="basic"/>
+        <lifetime type="Duration" type_group="std"/>
+        <ns type="str" type_group="basic"/>
+        <outline_color type="ColorRGBA" type_group="std"/>
+        <outline_colors type="list" type_group="basic"/>
+        <points type="list" type_group="basic"/>
+        <position type="Point" type_group="geometry"/>
+        <scale type="float" type_group="basic"/>
+        <type type="int" type_group="basic"/>
+    </ImageMarker>
+    <InteractiveMarker group="visualization">
+        <controls type="list" type_group="basic"/>
+        <description type="str" type_group="basic"/>
+        <header type="Header" type_group="std"/>
+        <menu_entries type="list" type_group="basic"/>
+        <name type="str" type_group="basic"/>
+        <pose type="Pose" type_group="geometry"/>
+        <scale type="float" type_group="basic"/>
+    </InteractiveMarker>
+    <InteractiveMarkerControl group="visualization">
+        <always_visible type="bool" type_group="basic"/>
+        <description type="str" type_group="basic"/>
+        <independent_marker_orientation type="bool" type_group="basic"/>
+        <interaction_mode type="int" type_group="basic"/>
+        <markers type="list" type_group="basic"/>
+        <name type="str" type_group="basic"/>
+        <orientation type="Quaternion" type_group="geometry"/>
+        <orientation_mode type="int" type_group="basic"/>
+    </InteractiveMarkerControl>
+    <InteractiveMarkerFeedback group="visualization">
+        <client_id type="str" type_group="basic"/>
+        <control_name type="str" type_group="basic"/>
+        <event_type type="int" type_group="basic"/>
+        <header type="Header" type_group="std"/>
+        <marker_name type="str" type_group="basic"/>
+        <menu_entry_id type="int" type_group="basic"/>
+        <mouse_point type="Point" type_group="geometry"/>
+        <mouse_point_valid type="bool" type_group="basic"/>
+        <pose type="Pose" type_group="geometry"/>
+    </InteractiveMarkerFeedback>
+    <InteractiveMarkerInit group="visualization">
+        <markers type="list" type_group="basic"/>
+        <seq_num type="int" type_group="basic"/>
+        <server_id type="str" type_group="basic"/>
+    </InteractiveMarkerInit>
+    <InteractiveMarkerPose group="visualization">
+        <header type="Header" type_group="std"/>
+        <name type="str" type_group="basic"/>
+        <pose type="Pose" type_group="geometry"/>
+    </InteractiveMarkerPose>
+    <InteractiveMarkerUpdate group="visualization">
+        <erases type="list" type_group="basic"/>
+        <markers type="list" type_group="basic"/>
+        <poses type="list" type_group="basic"/>
+        <seq_num type="int" type_group="basic"/>
+        <server_id type="str" type_group="basic"/>
+        <type type="int" type_group="basic"/>
+    </InteractiveMarkerUpdate>
+    <Marker group="visualization">
+        <action type="int" type_group="basic"/>
+        <color type="ColorRGBA" type_group="std"/>
+        <colors type="list" type_group="basic"/>
+        <frame_locked type="bool" type_group="basic"/>
+        <header type="Header" type_group="std"/>
+        <id type="int" type_group="basic"/>
+        <lifetime type="Duration" type_group="std"/>
+        <mesh_resource type="str" type_group="basic"/>
+        <mesh_use_embedded_materials type="bool" type_group="basic"/>
+        <ns type="str" type_group="basic"/>
+        <points type="list" type_group="basic"/>
+        <pose type="Pose" type_group="geometry"/>
+        <scale type="Vector3" type_group="geometry"/>
+        <text type="str" type_group="basic"/>
+        <type type="int" type_group="basic"/>
+    </Marker>
+    <MarkerArray group="visualization">
+        <markers type="list" type_group="basic"/>
+    </MarkerArray>
+    <MenuEntry group="visualization">
+        <command type="str" type_group="basic"/>
+        <command_type type="int" type_group="basic"/>
+        <id type="int" type_group="basic"/>
+        <parent_id type="int" type_group="basic"/>
+        <title type="str" type_group="basic"/>
+    </MenuEntry>
+</visualization>

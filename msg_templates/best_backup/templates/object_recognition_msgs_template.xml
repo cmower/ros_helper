@@ -1,0 +1,63 @@
+<?xml version="1.0" ?>
+<RosMsgGroup name="object_recognition_msgs">
+  <RosMsg name="ObjectInformation">
+    <RosMsgAttribute default="" group="" list_length="-1" name="name" type="str"/>
+    <RosMsgAttribute default="" group="shape_msgs" list_length="-1" name="ground_truth_mesh" type="Mesh"/>
+    <RosMsgAttribute default="" group="sensor_msgs" list_length="-1" name="ground_truth_point_cloud" type="PointCloud2"/>
+  </RosMsg>
+  <RosMsg name="ObjectRecognitionAction">
+    <RosMsgAttribute default="" group="object_recognition_msgs" list_length="-1" name="action_goal" type="ObjectRecognitionActionGoal"/>
+    <RosMsgAttribute default="" group="object_recognition_msgs" list_length="-1" name="action_result" type="ObjectRecognitionActionResult"/>
+    <RosMsgAttribute default="" group="object_recognition_msgs" list_length="-1" name="action_feedback" type="ObjectRecognitionActionFeedback"/>
+  </RosMsg>
+  <RosMsg name="ObjectRecognitionActionFeedback">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="object_recognition_msgs" list_length="-1" name="feedback" type="ObjectRecognitionFeedback"/>
+  </RosMsg>
+  <RosMsg name="ObjectRecognitionActionGoal">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="goal_id" type="GoalID"/>
+    <RosMsgAttribute default="" group="object_recognition_msgs" list_length="-1" name="goal" type="ObjectRecognitionGoal"/>
+  </RosMsg>
+  <RosMsg name="ObjectRecognitionActionResult">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="actionlib_msgs" list_length="-1" name="status" type="GoalStatus"/>
+    <RosMsgAttribute default="" group="object_recognition_msgs" list_length="-1" name="result" type="ObjectRecognitionResult"/>
+  </RosMsg>
+  <RosMsg name="ObjectRecognitionFeedback"/>
+  <RosMsg name="ObjectRecognitionGoal">
+    <RosMsgAttribute default="" group="" list_length="-1" name="use_roi" type="bool"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="filter_limits" type="float"/>
+  </RosMsg>
+  <RosMsg name="ObjectRecognitionResult">
+    <RosMsgAttribute default="" group="object_recognition_msgs" list_length="-1" name="recognized_objects" type="RecognizedObjectArray"/>
+  </RosMsg>
+  <RosMsg name="ObjectType">
+    <RosMsgAttribute default="" group="" list_length="-1" name="key" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="db" type="str"/>
+  </RosMsg>
+  <RosMsg name="RecognizedObject">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="object_recognition_msgs" list_length="-1" name="type" type="ObjectType"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="confidence" type="float"/>
+    <RosMsgAttribute default="" group="sensor_msgs" list_length="0" name="point_clouds" type="PointCloud2"/>
+    <RosMsgAttribute default="" group="shape_msgs" list_length="-1" name="bounding_mesh" type="Mesh"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="bounding_contours" type="Point"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="pose" type="PoseWithCovarianceStamped"/>
+  </RosMsg>
+  <RosMsg name="RecognizedObjectArray">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="object_recognition_msgs" list_length="0" name="objects" type="RecognizedObject"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="cooccurrence" type="float"/>
+  </RosMsg>
+  <RosMsg name="Table">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="-1" name="pose" type="Pose"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="convex_hull" type="Point"/>
+  </RosMsg>
+  <RosMsg name="TableArray">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="object_recognition_msgs" list_length="0" name="tables" type="Table"/>
+  </RosMsg>
+</RosMsgGroup>

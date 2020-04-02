@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<RosMsgGroup name="bond">
+  <RosMsg name="Constants"/>
+  <RosMsg name="Status">
+    <RosMsgAttribute default="" group="std_msgs" list_length="-1" name="header" type="Header"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="id" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="instance_id" type="str"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="active" type="bool"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="heartbeat_timeout" type="float"/>
+    <RosMsgAttribute default="" group="" list_length="-1" name="heartbeat_period" type="float"/>
+  </RosMsg>
+</RosMsgGroup>

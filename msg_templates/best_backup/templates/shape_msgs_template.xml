@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<RosMsgGroup name="shape_msgs">
+  <RosMsg name="Mesh">
+    <RosMsgAttribute default="" group="shape_msgs" list_length="0" name="triangles" type="MeshTriangle"/>
+    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="vertices" type="Point"/>
+  </RosMsg>
+  <RosMsg name="MeshTriangle">
+    <RosMsgAttribute default="" group="" list_length="3" name="vertex_indices" type="int"/>
+  </RosMsg>
+  <RosMsg name="Plane">
+    <RosMsgAttribute default="" group="" list_length="4" name="coef" type="float"/>
+  </RosMsg>
+  <RosMsg name="SolidPrimitive">
+    <RosMsgAttribute default="" group="" list_length="-1" name="type" type="int"/>
+    <RosMsgAttribute default="" group="" list_length="0" name="dimensions" type="float"/>
+  </RosMsg>
+</RosMsgGroup>

@@ -1,0 +1,131 @@
+<?xml version="1.0" ?>
+<Package name="geometry_msgs">
+  <Message name="Accel">
+    <Attribute list="-1" name="linear" package="geometry_msgs" type="Vector3"/>
+    <Attribute list="-1" name="angular" package="geometry_msgs" type="Vector3"/>
+  </Message>
+  <Message name="AccelStamped">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="accel" package="geometry_msgs" type="Accel"/>
+  </Message>
+  <Message name="AccelWithCovariance">
+    <Attribute list="-1" name="accel" package="geometry_msgs" type="Accel"/>
+    <Attribute list="36" name="covariance" package="basic" type="float64[36]"/>
+  </Message>
+  <Message name="AccelWithCovarianceStamped">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="accel" package="geometry_msgs" type="AccelWithCovariance"/>
+  </Message>
+  <Message name="Inertia">
+    <Attribute list="-1" name="m" package="basic" type="float64"/>
+    <Attribute list="-1" name="com" package="geometry_msgs" type="Vector3"/>
+    <Attribute list="-1" name="ixx" package="basic" type="float64"/>
+    <Attribute list="-1" name="ixy" package="basic" type="float64"/>
+    <Attribute list="-1" name="ixz" package="basic" type="float64"/>
+    <Attribute list="-1" name="iyy" package="basic" type="float64"/>
+    <Attribute list="-1" name="iyz" package="basic" type="float64"/>
+    <Attribute list="-1" name="izz" package="basic" type="float64"/>
+  </Message>
+  <Message name="InertiaStamped">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="inertia" package="geometry_msgs" type="Inertia"/>
+  </Message>
+  <Message name="Point">
+    <Attribute list="-1" name="x" package="basic" type="float64"/>
+    <Attribute list="-1" name="y" package="basic" type="float64"/>
+    <Attribute list="-1" name="z" package="basic" type="float64"/>
+  </Message>
+  <Message name="Point32">
+    <Attribute list="-1" name="x" package="basic" type="float32"/>
+    <Attribute list="-1" name="y" package="basic" type="float32"/>
+    <Attribute list="-1" name="z" package="basic" type="float32"/>
+  </Message>
+  <Message name="PointStamped">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="point" package="geometry_msgs" type="Point"/>
+  </Message>
+  <Message name="Polygon">
+    <Attribute list="0" name="points" package="geometry_msgs" type="Point32"/>
+  </Message>
+  <Message name="PolygonStamped">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="polygon" package="geometry_msgs" type="Polygon"/>
+  </Message>
+  <Message name="Pose">
+    <Attribute list="-1" name="position" package="geometry_msgs" type="Point"/>
+    <Attribute list="-1" name="orientation" package="geometry_msgs" type="Quaternion"/>
+  </Message>
+  <Message name="Pose2D">
+    <Attribute list="-1" name="x" package="basic" type="float64"/>
+    <Attribute list="-1" name="y" package="basic" type="float64"/>
+    <Attribute list="-1" name="theta" package="basic" type="float64"/>
+  </Message>
+  <Message name="PoseArray">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="0" name="poses" package="geometry_msgs" type="Pose"/>
+  </Message>
+  <Message name="PoseStamped">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="pose" package="geometry_msgs" type="Pose"/>
+  </Message>
+  <Message name="PoseWithCovariance">
+    <Attribute list="-1" name="pose" package="geometry_msgs" type="Pose"/>
+    <Attribute list="36" name="covariance" package="basic" type="float64[36]"/>
+  </Message>
+  <Message name="PoseWithCovarianceStamped">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="pose" package="geometry_msgs" type="PoseWithCovariance"/>
+  </Message>
+  <Message name="Quaternion">
+    <Attribute list="-1" name="x" package="basic" type="float64"/>
+    <Attribute list="-1" name="y" package="basic" type="float64"/>
+    <Attribute list="-1" name="z" package="basic" type="float64"/>
+    <Attribute list="-1" name="w" package="basic" type="float64"/>
+  </Message>
+  <Message name="QuaternionStamped">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="quaternion" package="geometry_msgs" type="Quaternion"/>
+  </Message>
+  <Message name="Transform">
+    <Attribute list="-1" name="translation" package="geometry_msgs" type="Vector3"/>
+    <Attribute list="-1" name="rotation" package="geometry_msgs" type="Quaternion"/>
+  </Message>
+  <Message name="TransformStamped">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="child_frame_id" package="basic" type="string"/>
+    <Attribute list="-1" name="transform" package="geometry_msgs" type="Transform"/>
+  </Message>
+  <Message name="Twist">
+    <Attribute list="-1" name="linear" package="geometry_msgs" type="Vector3"/>
+    <Attribute list="-1" name="angular" package="geometry_msgs" type="Vector3"/>
+  </Message>
+  <Message name="TwistStamped">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="twist" package="geometry_msgs" type="Twist"/>
+  </Message>
+  <Message name="TwistWithCovariance">
+    <Attribute list="-1" name="twist" package="geometry_msgs" type="Twist"/>
+    <Attribute list="36" name="covariance" package="basic" type="float64[36]"/>
+  </Message>
+  <Message name="TwistWithCovarianceStamped">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="twist" package="geometry_msgs" type="TwistWithCovariance"/>
+  </Message>
+  <Message name="Vector3">
+    <Attribute list="-1" name="x" package="basic" type="float64"/>
+    <Attribute list="-1" name="y" package="basic" type="float64"/>
+    <Attribute list="-1" name="z" package="basic" type="float64"/>
+  </Message>
+  <Message name="Vector3Stamped">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="vector" package="geometry_msgs" type="Vector3"/>
+  </Message>
+  <Message name="Wrench">
+    <Attribute list="-1" name="force" package="geometry_msgs" type="Vector3"/>
+    <Attribute list="-1" name="torque" package="geometry_msgs" type="Vector3"/>
+  </Message>
+  <Message name="WrenchStamped">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="wrench" package="geometry_msgs" type="Wrench"/>
+  </Message>
+</Package>

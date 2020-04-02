@@ -1,0 +1,216 @@
+<?xml version="1.0" ?>
+<Package name="control_msgs">
+  <Message name="FollowJointTrajectoryAction">
+    <Attribute list="-1" name="action_goal" package="control_msgs" type="FollowJointTrajectoryActionGoal"/>
+    <Attribute list="-1" name="action_result" package="control_msgs" type="FollowJointTrajectoryActionResult"/>
+    <Attribute list="-1" name="action_feedback" package="control_msgs" type="FollowJointTrajectoryActionFeedback"/>
+  </Message>
+  <Message name="FollowJointTrajectoryActionFeedback">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="feedback" package="control_msgs" type="FollowJointTrajectoryFeedback"/>
+  </Message>
+  <Message name="FollowJointTrajectoryActionGoal">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="goal_id" package="actionlib_msgs" type="GoalID"/>
+    <Attribute list="-1" name="goal" package="control_msgs" type="FollowJointTrajectoryGoal"/>
+  </Message>
+  <Message name="FollowJointTrajectoryActionResult">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="result" package="control_msgs" type="FollowJointTrajectoryResult"/>
+  </Message>
+  <Message name="FollowJointTrajectoryFeedback">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="0" name="joint_names" package="basic" type="string"/>
+    <Attribute list="-1" name="desired" package="trajectory_msgs" type="JointTrajectoryPoint"/>
+    <Attribute list="-1" name="actual" package="trajectory_msgs" type="JointTrajectoryPoint"/>
+    <Attribute list="-1" name="error" package="trajectory_msgs" type="JointTrajectoryPoint"/>
+  </Message>
+  <Message name="FollowJointTrajectoryGoal">
+    <Attribute list="-1" name="trajectory" package="trajectory_msgs" type="JointTrajectory"/>
+    <Attribute list="0" name="path_tolerance" package="control_msgs" type="JointTolerance"/>
+    <Attribute list="0" name="goal_tolerance" package="control_msgs" type="JointTolerance"/>
+    <Attribute list="-1" name="goal_time_tolerance" package="basic" type="duration"/>
+  </Message>
+  <Message name="FollowJointTrajectoryResult">
+    <Attribute list="-1" name="error_code" package="basic" type="int32"/>
+    <Attribute list="-1" name="error_string" package="basic" type="string"/>
+  </Message>
+  <Message name="GripperCommand">
+    <Attribute list="-1" name="position" package="basic" type="float64"/>
+    <Attribute list="-1" name="max_effort" package="basic" type="float64"/>
+  </Message>
+  <Message name="GripperCommandAction">
+    <Attribute list="-1" name="action_goal" package="control_msgs" type="GripperCommandActionGoal"/>
+    <Attribute list="-1" name="action_result" package="control_msgs" type="GripperCommandActionResult"/>
+    <Attribute list="-1" name="action_feedback" package="control_msgs" type="GripperCommandActionFeedback"/>
+  </Message>
+  <Message name="GripperCommandActionFeedback">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="feedback" package="control_msgs" type="GripperCommandFeedback"/>
+  </Message>
+  <Message name="GripperCommandActionGoal">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="goal_id" package="actionlib_msgs" type="GoalID"/>
+    <Attribute list="-1" name="goal" package="control_msgs" type="GripperCommandGoal"/>
+  </Message>
+  <Message name="GripperCommandActionResult">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="result" package="control_msgs" type="GripperCommandResult"/>
+  </Message>
+  <Message name="GripperCommandFeedback">
+    <Attribute list="-1" name="position" package="basic" type="float64"/>
+    <Attribute list="-1" name="effort" package="basic" type="float64"/>
+    <Attribute list="-1" name="stalled" package="basic" type="bool"/>
+    <Attribute list="-1" name="reached_goal" package="basic" type="bool"/>
+  </Message>
+  <Message name="GripperCommandGoal">
+    <Attribute list="-1" name="command" package="control_msgs" type="GripperCommand"/>
+  </Message>
+  <Message name="GripperCommandResult">
+    <Attribute list="-1" name="position" package="basic" type="float64"/>
+    <Attribute list="-1" name="effort" package="basic" type="float64"/>
+    <Attribute list="-1" name="stalled" package="basic" type="bool"/>
+    <Attribute list="-1" name="reached_goal" package="basic" type="bool"/>
+  </Message>
+  <Message name="JointControllerState">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="set_point" package="basic" type="float64"/>
+    <Attribute list="-1" name="process_value" package="basic" type="float64"/>
+    <Attribute list="-1" name="process_value_dot" package="basic" type="float64"/>
+    <Attribute list="-1" name="error" package="basic" type="float64"/>
+    <Attribute list="-1" name="time_step" package="basic" type="float64"/>
+    <Attribute list="-1" name="command" package="basic" type="float64"/>
+    <Attribute list="-1" name="p" package="basic" type="float64"/>
+    <Attribute list="-1" name="i" package="basic" type="float64"/>
+    <Attribute list="-1" name="d" package="basic" type="float64"/>
+    <Attribute list="-1" name="i_clamp" package="basic" type="float64"/>
+    <Attribute list="-1" name="antiwindup" package="basic" type="bool"/>
+  </Message>
+  <Message name="JointJog">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="0" name="joint_names" package="basic" type="string"/>
+    <Attribute list="0" name="displacements" package="basic" type="float64"/>
+    <Attribute list="0" name="velocities" package="basic" type="float64"/>
+    <Attribute list="-1" name="duration" package="basic" type="float64"/>
+  </Message>
+  <Message name="JointTolerance">
+    <Attribute list="-1" name="name" package="basic" type="string"/>
+    <Attribute list="-1" name="position" package="basic" type="float64"/>
+    <Attribute list="-1" name="velocity" package="basic" type="float64"/>
+    <Attribute list="-1" name="acceleration" package="basic" type="float64"/>
+  </Message>
+  <Message name="JointTrajectoryAction">
+    <Attribute list="-1" name="action_goal" package="control_msgs" type="JointTrajectoryActionGoal"/>
+    <Attribute list="-1" name="action_result" package="control_msgs" type="JointTrajectoryActionResult"/>
+    <Attribute list="-1" name="action_feedback" package="control_msgs" type="JointTrajectoryActionFeedback"/>
+  </Message>
+  <Message name="JointTrajectoryActionFeedback">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="feedback" package="control_msgs" type="JointTrajectoryFeedback"/>
+  </Message>
+  <Message name="JointTrajectoryActionGoal">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="goal_id" package="actionlib_msgs" type="GoalID"/>
+    <Attribute list="-1" name="goal" package="control_msgs" type="JointTrajectoryGoal"/>
+  </Message>
+  <Message name="JointTrajectoryActionResult">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="result" package="control_msgs" type="JointTrajectoryResult"/>
+  </Message>
+  <Message name="JointTrajectoryControllerState">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="0" name="joint_names" package="basic" type="string"/>
+    <Attribute list="-1" name="desired" package="trajectory_msgs" type="JointTrajectoryPoint"/>
+    <Attribute list="-1" name="actual" package="trajectory_msgs" type="JointTrajectoryPoint"/>
+    <Attribute list="-1" name="error" package="trajectory_msgs" type="JointTrajectoryPoint"/>
+  </Message>
+  <Message name="JointTrajectoryFeedback"/>
+  <Message name="JointTrajectoryGoal">
+    <Attribute list="-1" name="trajectory" package="trajectory_msgs" type="JointTrajectory"/>
+  </Message>
+  <Message name="JointTrajectoryResult"/>
+  <Message name="PidState">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="timestep" package="basic" type="duration"/>
+    <Attribute list="-1" name="error" package="basic" type="float64"/>
+    <Attribute list="-1" name="error_dot" package="basic" type="float64"/>
+    <Attribute list="-1" name="p_error" package="basic" type="float64"/>
+    <Attribute list="-1" name="i_error" package="basic" type="float64"/>
+    <Attribute list="-1" name="d_error" package="basic" type="float64"/>
+    <Attribute list="-1" name="p_term" package="basic" type="float64"/>
+    <Attribute list="-1" name="i_term" package="basic" type="float64"/>
+    <Attribute list="-1" name="d_term" package="basic" type="float64"/>
+    <Attribute list="-1" name="i_max" package="basic" type="float64"/>
+    <Attribute list="-1" name="i_min" package="basic" type="float64"/>
+    <Attribute list="-1" name="output" package="basic" type="float64"/>
+  </Message>
+  <Message name="PointHeadAction">
+    <Attribute list="-1" name="action_goal" package="control_msgs" type="PointHeadActionGoal"/>
+    <Attribute list="-1" name="action_result" package="control_msgs" type="PointHeadActionResult"/>
+    <Attribute list="-1" name="action_feedback" package="control_msgs" type="PointHeadActionFeedback"/>
+  </Message>
+  <Message name="PointHeadActionFeedback">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="feedback" package="control_msgs" type="PointHeadFeedback"/>
+  </Message>
+  <Message name="PointHeadActionGoal">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="goal_id" package="actionlib_msgs" type="GoalID"/>
+    <Attribute list="-1" name="goal" package="control_msgs" type="PointHeadGoal"/>
+  </Message>
+  <Message name="PointHeadActionResult">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="result" package="control_msgs" type="PointHeadResult"/>
+  </Message>
+  <Message name="PointHeadFeedback">
+    <Attribute list="-1" name="pointing_angle_error" package="basic" type="float64"/>
+  </Message>
+  <Message name="PointHeadGoal">
+    <Attribute list="-1" name="target" package="geometry_msgs" type="PointStamped"/>
+    <Attribute list="-1" name="pointing_axis" package="geometry_msgs" type="Vector3"/>
+    <Attribute list="-1" name="pointing_frame" package="basic" type="string"/>
+    <Attribute list="-1" name="min_duration" package="basic" type="duration"/>
+    <Attribute list="-1" name="max_velocity" package="basic" type="float64"/>
+  </Message>
+  <Message name="PointHeadResult"/>
+  <Message name="SingleJointPositionAction">
+    <Attribute list="-1" name="action_goal" package="control_msgs" type="SingleJointPositionActionGoal"/>
+    <Attribute list="-1" name="action_result" package="control_msgs" type="SingleJointPositionActionResult"/>
+    <Attribute list="-1" name="action_feedback" package="control_msgs" type="SingleJointPositionActionFeedback"/>
+  </Message>
+  <Message name="SingleJointPositionActionFeedback">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="feedback" package="control_msgs" type="SingleJointPositionFeedback"/>
+  </Message>
+  <Message name="SingleJointPositionActionGoal">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="goal_id" package="actionlib_msgs" type="GoalID"/>
+    <Attribute list="-1" name="goal" package="control_msgs" type="SingleJointPositionGoal"/>
+  </Message>
+  <Message name="SingleJointPositionActionResult">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="result" package="control_msgs" type="SingleJointPositionResult"/>
+  </Message>
+  <Message name="SingleJointPositionFeedback">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="position" package="basic" type="float64"/>
+    <Attribute list="-1" name="velocity" package="basic" type="float64"/>
+    <Attribute list="-1" name="error" package="basic" type="float64"/>
+  </Message>
+  <Message name="SingleJointPositionGoal">
+    <Attribute list="-1" name="position" package="basic" type="float64"/>
+    <Attribute list="-1" name="min_duration" package="basic" type="duration"/>
+    <Attribute list="-1" name="max_velocity" package="basic" type="float64"/>
+  </Message>
+  <Message name="SingleJointPositionResult"/>
+</Package>

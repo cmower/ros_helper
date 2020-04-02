@@ -1,0 +1,70 @@
+<?xml version="1.0" ?>
+<Package name="gazebo_msgs">
+  <Message name="ContactState">
+    <Attribute list="-1" name="info" package="basic" type="string"/>
+    <Attribute list="-1" name="collision1_name" package="basic" type="string"/>
+    <Attribute list="-1" name="collision2_name" package="basic" type="string"/>
+    <Attribute list="0" name="wrenches" package="geometry_msgs" type="Wrench"/>
+    <Attribute list="-1" name="total_wrench" package="geometry_msgs" type="Wrench"/>
+    <Attribute list="0" name="contact_positions" package="geometry_msgs" type="Vector3"/>
+    <Attribute list="0" name="contact_normals" package="geometry_msgs" type="Vector3"/>
+    <Attribute list="0" name="depths" package="basic" type="float64"/>
+  </Message>
+  <Message name="ContactsState">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="0" name="states" package="gazebo_msgs" type="ContactState"/>
+  </Message>
+  <Message name="LinkState">
+    <Attribute list="-1" name="link_name" package="basic" type="string"/>
+    <Attribute list="-1" name="pose" package="geometry_msgs" type="Pose"/>
+    <Attribute list="-1" name="twist" package="geometry_msgs" type="Twist"/>
+    <Attribute list="-1" name="reference_frame" package="basic" type="string"/>
+  </Message>
+  <Message name="LinkStates">
+    <Attribute list="0" name="name" package="basic" type="string"/>
+    <Attribute list="0" name="pose" package="geometry_msgs" type="Pose"/>
+    <Attribute list="0" name="twist" package="geometry_msgs" type="Twist"/>
+  </Message>
+  <Message name="ModelState">
+    <Attribute list="-1" name="model_name" package="basic" type="string"/>
+    <Attribute list="-1" name="pose" package="geometry_msgs" type="Pose"/>
+    <Attribute list="-1" name="twist" package="geometry_msgs" type="Twist"/>
+    <Attribute list="-1" name="reference_frame" package="basic" type="string"/>
+  </Message>
+  <Message name="ModelStates">
+    <Attribute list="0" name="name" package="basic" type="string"/>
+    <Attribute list="0" name="pose" package="geometry_msgs" type="Pose"/>
+    <Attribute list="0" name="twist" package="geometry_msgs" type="Twist"/>
+  </Message>
+  <Message name="ODEJointProperties">
+    <Attribute list="0" name="damping" package="basic" type="float64"/>
+    <Attribute list="0" name="hiStop" package="basic" type="float64"/>
+    <Attribute list="0" name="loStop" package="basic" type="float64"/>
+    <Attribute list="0" name="erp" package="basic" type="float64"/>
+    <Attribute list="0" name="cfm" package="basic" type="float64"/>
+    <Attribute list="0" name="stop_erp" package="basic" type="float64"/>
+    <Attribute list="0" name="stop_cfm" package="basic" type="float64"/>
+    <Attribute list="0" name="fudge_factor" package="basic" type="float64"/>
+    <Attribute list="0" name="fmax" package="basic" type="float64"/>
+    <Attribute list="0" name="vel" package="basic" type="float64"/>
+  </Message>
+  <Message name="ODEPhysics">
+    <Attribute list="-1" name="auto_disable_bodies" package="basic" type="bool"/>
+    <Attribute list="-1" name="sor_pgs_precon_iters" package="basic" type="uint32"/>
+    <Attribute list="-1" name="sor_pgs_iters" package="basic" type="uint32"/>
+    <Attribute list="-1" name="sor_pgs_w" package="basic" type="float64"/>
+    <Attribute list="-1" name="sor_pgs_rms_error_tol" package="basic" type="float64"/>
+    <Attribute list="-1" name="contact_surface_layer" package="basic" type="float64"/>
+    <Attribute list="-1" name="contact_max_correcting_vel" package="basic" type="float64"/>
+    <Attribute list="-1" name="cfm" package="basic" type="float64"/>
+    <Attribute list="-1" name="erp" package="basic" type="float64"/>
+    <Attribute list="-1" name="max_contacts" package="basic" type="uint32"/>
+  </Message>
+  <Message name="WorldState">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="0" name="name" package="basic" type="string"/>
+    <Attribute list="0" name="pose" package="geometry_msgs" type="Pose"/>
+    <Attribute list="0" name="twist" package="geometry_msgs" type="Twist"/>
+    <Attribute list="0" name="wrench" package="geometry_msgs" type="Wrench"/>
+  </Message>
+</Package>

@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<Package name="actionlib_tutorials">
+  <Message name="AveragingAction">
+    <Attribute list="-1" name="action_goal" package="actionlib_tutorials" type="AveragingActionGoal"/>
+    <Attribute list="-1" name="action_result" package="actionlib_tutorials" type="AveragingActionResult"/>
+    <Attribute list="-1" name="action_feedback" package="actionlib_tutorials" type="AveragingActionFeedback"/>
+  </Message>
+  <Message name="AveragingActionFeedback">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="feedback" package="actionlib_tutorials" type="AveragingFeedback"/>
+  </Message>
+  <Message name="AveragingActionGoal">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="goal_id" package="actionlib_msgs" type="GoalID"/>
+    <Attribute list="-1" name="goal" package="actionlib_tutorials" type="AveragingGoal"/>
+  </Message>
+  <Message name="AveragingActionResult">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="result" package="actionlib_tutorials" type="AveragingResult"/>
+  </Message>
+  <Message name="AveragingFeedback">
+    <Attribute list="-1" name="sample" package="basic" type="int32"/>
+    <Attribute list="-1" name="data" package="basic" type="float32"/>
+    <Attribute list="-1" name="mean" package="basic" type="float32"/>
+    <Attribute list="-1" name="std_dev" package="basic" type="float32"/>
+  </Message>
+  <Message name="AveragingGoal">
+    <Attribute list="-1" name="samples" package="basic" type="int32"/>
+  </Message>
+  <Message name="AveragingResult">
+    <Attribute list="-1" name="mean" package="basic" type="float32"/>
+    <Attribute list="-1" name="std_dev" package="basic" type="float32"/>
+  </Message>
+  <Message name="FibonacciAction">
+    <Attribute list="-1" name="action_goal" package="actionlib_tutorials" type="FibonacciActionGoal"/>
+    <Attribute list="-1" name="action_result" package="actionlib_tutorials" type="FibonacciActionResult"/>
+    <Attribute list="-1" name="action_feedback" package="actionlib_tutorials" type="FibonacciActionFeedback"/>
+  </Message>
+  <Message name="FibonacciActionFeedback">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="feedback" package="actionlib_tutorials" type="FibonacciFeedback"/>
+  </Message>
+  <Message name="FibonacciActionGoal">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="goal_id" package="actionlib_msgs" type="GoalID"/>
+    <Attribute list="-1" name="goal" package="actionlib_tutorials" type="FibonacciGoal"/>
+  </Message>
+  <Message name="FibonacciActionResult">
+    <Attribute list="-1" name="header" package="std_msgs" type="Header"/>
+    <Attribute list="-1" name="status" package="actionlib_msgs" type="GoalStatus"/>
+    <Attribute list="-1" name="result" package="actionlib_tutorials" type="FibonacciResult"/>
+  </Message>
+  <Message name="FibonacciFeedback">
+    <Attribute list="0" name="sequence" package="basic" type="int32"/>
+  </Message>
+  <Message name="FibonacciGoal">
+    <Attribute list="-1" name="order" package="basic" type="int32"/>
+  </Message>
+  <Message name="FibonacciResult">
+    <Attribute list="0" name="sequence" package="basic" type="int32"/>
+  </Message>
+</Package>
