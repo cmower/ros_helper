@@ -30,7 +30,7 @@ filter_ = None
 if len(sys.argv) > 1:
     arg = sys.argv[1]
     if arg == '-h' or arg == '--help':
-        print("Usage: $ rosrun ros_helper process_ros_bags.py [PATH] [FILTER]")
+        print("Usage: $ rosrun ros_helper rosbags_to_csv.py [PATH] [FILTER]")
         print("  PATH:   directory containing ROS bags, default is $HOME/Data.")
         print("  FILTER: If given only filenames containing FILTER will be processed.")
         sys.exit(0)
