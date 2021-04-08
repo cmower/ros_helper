@@ -96,7 +96,7 @@ class RosNode:
         return msg
 
     def spin(self):
-        """Simple wraper for rospy.spin."""
+        """Simple wrapper for rospy.spin."""
         self.__rp.spin()
 
     def base_shutdown(self):
