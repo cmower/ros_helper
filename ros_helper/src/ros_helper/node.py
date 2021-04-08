@@ -34,7 +34,6 @@ class RosNode:
         self.__tf_broadcaster.sendTransform(tf)
 
     def startService(self, name, type, handle):
-        self.srv_names.add(name)
         self.srvs[name] = self.__rp.Service(name, type, handle)
 
     def startTimer(self, name, frequency, handle):
