@@ -17,6 +17,7 @@ class RosNode:
         self.msgs = {} # Messages
 
     def getTf(self, base_frame_id, child_frame_id):
+        """Returns a transform from tf2 as a geometry_msgs/TransformStamped."""
         tf = None
         try:
             tf = self.__tf_buffer.lookup_transform(base_frame_id, child_frame_id, self.rp.Time())
