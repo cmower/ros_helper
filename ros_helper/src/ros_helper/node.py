@@ -63,9 +63,7 @@ class RosNode:
         self.srvs[name] = self.__rp.Service(name, type, handle)
 
     def startTimer(self, name, frequency, handle):
-        dt = 1.0/float(frequency)
-        duration = self.__rp.Duration(dt)
-        self.timers[name] = self.__rp.Timer(duration, handle)
+        self.timers[name] = self.__rp.Timer(self.__rp.Duration(1.0/float(frequency)), handle)
 
     def startSubscriber(self, name, topic, type, wait=False):
         if wait:
