@@ -28,15 +28,19 @@ class RosNode:
         return tf
 
     def positionFromTf2Msg(self, tf):
+        """Extract position from geomety_msg/TransformStamed message."""
         return numpy.array([getattr(tf.transform.translation, d) for d in 'xyz'])
 
     def quaternionFromTf2Msg(self, tf):
+        """Extract quaternion from geomety_msg/TransformStamed message."""
         return numpy.array([getattr(tf.transform.rotation, d) for d in 'xyzw'])
 
     def eulerFromTf2Msg(self, tf):
+        """Extract Euler angles from geomety_msg/TransformStamed message."""
         return tf_conversions.transformations.euler_from_quaternion(self.quaternionFromTf2Msg(tf))
 
     def transformFromTf2Msg(self, tf):
+        """Extract transformation matrix from geomety_msg/TransformStamed message."""
         T = tf_conversions.transformations.quaternion_matrix(self.quaternionFromTf2Msg(tf))
         T[:3,-1] = self.positionFromTf2Msg(tf)
         return T
@@ -57,27 +61,34 @@ class RosNode:
         self.pubs[name] = self.__rp.Publisher(topic, Int64, queue_size=queue_size)
 
     def sendMark(self, name, flag=0):
+        """Publish marker, user can make what they want of the flags."""
         self.pubs[name].publish(Int64(data=flag))
 
     def startService(self, name, type, handle):
+        """Start a service."""
         self.srvs[name] = self.__rp.Service(name, type, handle)
 
     def startTimer(self, name, frequency, handle):
+        """Start a timer."""
         self.timers[name] = self.__rp.Timer(self.__rp.Duration(1.0/float(frequency)), handle)
 
     def startSubscriber(self, name, topic, type, wait=False):
+        """Start a subscriber, optionally pause and wait for the first message."""
         if wait:
             msg = self.__rp.wait_for_message(topic, type)
             self.__callback(msg, name)
         self.subs[name] = self.__rp.Subscriber(topic, type, self.__callback, callback_args=name)
 
     def __callback(self, msg, name):
+        """Internal callback method."""
         self.msgs[name] = msg
 
     def msgsRecieved(self, name):
+        """True when at least one named message has been received, False otherwise. """
         return name in self.msgs.keys()
 
     def getMsg(self, name, default=None):
+        """Returns named message, optional default when no messages have been received yet."""
         try:
             msg = self.msgs[name]
         except KeyError:
@@ -85,9 +96,11 @@ class RosNode:
         return msg
 
     def spin(self):
+        """Simple wraper for rospy.spin."""
         self.__rp.spin()
 
     def base_shutdown(self):
+        """First kills all timers, then unregisters all subscribers."""
         for timer in self.timers.values():
             timer.shutdown()
         for sub in self.subs.values():
