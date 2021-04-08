@@ -35,6 +35,7 @@ class RosNode:
         self.__tf_broadcaster.sendTransform(tf)
 
     def setupStateMarkerPublisher(self, name, topic, queue_size=10):
+        """When running experiments, it is useful to make markers to determine when certain events occurred."""
         self.pubs[name] = self.__rp.Publisher(topic, Int64, queue_size=queue_size)
 
     def sendMark(self, name, flag=0):
