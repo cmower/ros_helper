@@ -10,6 +10,14 @@ import time
 import datetime
 import rosbag_pandas
 
+def includeFilename(filename, filter_):
+    is_rosbag = filename.endswith('.bag')
+    if filter_ is not None:
+        is_in_filter = filter_ in filename
+    else:
+        is_in_filter = True
+    return is_rosbag and is_in_filter
+
 def goodbye():
     print("Goodbye.")
     sys.exit(0)
@@ -18,15 +26,19 @@ def goodbye():
 #
 # Get path to data
 # -----------------------------------------------------------------------------------
+filter_ = None
 if len(sys.argv) > 1:
     arg = sys.argv[1]
     if arg == '-h' or arg == '--help':
-        print("Usage: $ rosrun ros_helper process_ros_bags.py [PATH]")
-        print("  PATH: directory containing ROS bags, default is $HOME/Data")
+        print("Usage: $ rosrun ros_helper process_ros_bags.py [PATH] [FILTER]")
+        print("  PATH:   directory containing ROS bags, default is $HOME/Data.")
+        print("  FILTER: If given only filenames containing FILTER will be processed.")
         sys.exit(0)
     data_in_path = sys.argv[1]
 else:
     data_in_path = os.path.join(os.environ['HOME'], 'Data')
+if len(sys.argv) > 2:
+    filter_ = sys.argv[2]
 assert os.path.exists(data_in_path), f"The path {data_in_path} does not exist!"
 # -----------------------------------------------------------------------------------
 #
@@ -36,7 +48,7 @@ assert os.path.exists(data_in_path), f"The path {data_in_path} does not exist!"
 files = []
 max_abs_filename_length = 0
 for filename in os.listdir(data_in_path):
-    if filename.endswith('.bag'):
+    if includeFilename(filename, filter_):
         files.append(filename)
         full_filename = os.path.join(data_in_path, filename)
         print(full_filename)
@@ -70,6 +82,8 @@ print("-"*(max_abs_filename_length+1))
 # -----------------------------------------------------------------------------------
 stamp = time.time_ns()
 data_out_path = os.path.join(data_in_path, f'csv_data_out_{stamp}')
+if filter_ is not None:
+    data_out_path += '_' + filter_
 os.mkdir(data_out_path)
 print(f"Created {data_out_path}")
 # -----------------------------------------------------------------------------------
