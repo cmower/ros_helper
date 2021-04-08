@@ -25,6 +25,7 @@ class RosNode:
         return tf
 
     def setTf(self, position, quaternion, base_frame_id, child_frame_id):
+        """Sets a transform using tf2."""
         tf = TransformStamped()
         tf.header.stamp = self.__rp.Time.now()
         tf.header.frame_id = base_frame_id
