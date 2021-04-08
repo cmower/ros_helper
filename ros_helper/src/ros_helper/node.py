@@ -54,11 +54,11 @@ class RosNode:
     def msgsRecieved(self, name):
         return name in self.msgs.keys()
 
-    def getMsg(self, name):
+    def getMsg(self, name, default=None):
         try:
             msg = self.msgs[name]
         except KeyError:
-            msg = None
+            msg = default
         return msg
 
     def spin(self):
