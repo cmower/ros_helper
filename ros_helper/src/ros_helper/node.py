@@ -119,7 +119,7 @@ class RosNode:
         """Simple wrapper for rospy.spin."""
         self.__rp.spin()
 
-    def base_shutdown(self):
+    def baseShutdown(self):
         """First kills all timers, then unregisters all subscribers."""
         for timer in self.timers.values():
             timer.shutdown()
