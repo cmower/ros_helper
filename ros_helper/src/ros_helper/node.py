@@ -39,9 +39,17 @@ class RosNode:
         """Extract quaternion from geomety_msg/TransformStamed message."""
         return numpy.array([getattr(tf.transform.rotation, d) for d in 'xyzw'])
 
+    def eulerFromQuaternion(self, q):
+        """Euler angles from quaternion."""
+        return tf_conversions.transformations.euler_from_quaternion(q)
+
+    def quaternionFromEuler(self, eul):
+        """Quaternion from Euler angles."""
+        return tf_conversions.transformations.quaternion_from_euler(eul[0], eul[1], eul[2])
+
     def eulerFromTf2Msg(self, tf):
         """Extract Euler angles from geomety_msg/TransformStamed message."""
-        return tf_conversions.transformations.euler_from_quaternion(self.quaternionFromTf2Msg(tf))
+        return self.eulerFromQuaternion(self.quaternionFromTf2Msg(tf))
 
     def transformFromTf2Msg(self, tf):
         """Extract transformation matrix from geomety_msg/TransformStamed message."""
