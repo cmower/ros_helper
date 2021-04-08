@@ -12,6 +12,7 @@ class RosNode:
         self.subs = {} # Subscribers
         self.pubs = {} # Publishers
         self.srvs = {} # Services
+        self.srv_names = set()
         self.timers = {} # Timers
         self.timer_names = set()
         self.msgs = {} # Messages
@@ -35,6 +36,11 @@ class RosNode:
         tf.transform.rotation.w = quaternion[3]
         self.__tf_broadcaster.sendTransform(tf)
 
+    def startService(self, name, type, handle):
+        assert name not in self.srv_names, f"Service name ({name}) must be unique!"
+        self.srv_names.add(name)
+        self.srvs[name] = self.__rp.Service(name, type, handle)
+
     def startTimer(self, name, frequency, handle):
 
         # Handle name
@@ -44,13 +50,7 @@ class RosNode:
         # Setup/start timer
         dt = 1.0/float(frequency)
         duration = self.__rp.Duration(dt)
-        self.timers[name] = {
-            'dt': dt,
-            'hz': frequency,
-            'handle': handle,
-            'duration': duration,
-            'timer': self.__rp.Timer(duration, handle),
-        }
+        self.timers[name] = self.__rp.Timer(duration, handle)
 
     def startSubscriber(self, name, topic, type, wait=False):
 
@@ -64,14 +64,7 @@ class RosNode:
             self.__callback(msg, name)
 
         # Setup subscriber
-        self.subs[name] = {
-            'name': name,
-            'topic': topic,
-            'type': type,
-            'callback': self.__callback,
-            'callback_args': name,
-            'subscriber': self.__rp.Subscriber(topic, type, self.__callback, callback_args=name)
-        }
+        self.subs[name] = self.__rp.Subscriber(topic, type, self.__callback, callback_args=name)
 
     def __callback(self, msg, name):
         self.msgs[name] = msg
@@ -84,6 +77,6 @@ class RosNode:
 
     def base_shutdown(self):
         for timer in self.timers.values():
-            timer['timer'].shutdown()
+            timer.shutdown()
         for sub in self.subs.values():
-            sub['subscriber'].unregister()
+            sub.unregister()
