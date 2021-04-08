@@ -1,4 +1,6 @@
+import numpy
 import tf2_ros
+import tf_conversions
 from std_msgs.msg import Int64
 from geometry_msg.msg import TransformStamped
 
@@ -24,6 +26,21 @@ class RosNode:
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
             self.__rp.logwarn(f'Did not recover frame {child_frame_id} in the frame {base_frame_id}!')
         return tf
+
+    def positionFromTf2Msg(self, tf):
+        return numpy.array([getattr(tf.transform.translation, d) for d in 'xyz'])
+
+    def quaternionFromTf2Msg(self, tf):
+        return numpy.array([getattr(tf.transform.rotation, d) for d in 'xyzw'])
+
+    def eulerFromTf2Msg(self, tf):
+        q = self.quaternionFromTf2Msg(tf)
+        return tf_conversions.transformations.euler_from_quaternion(q)
+
+    def transformFromTf2Msg(self, tf):
+        T = tf_conversions.transformations.quaternion_matrix(self.quaternionFromTf2Msg(tf))
+        T[:3,-1] = self.positionFromTf2Msg(tf)
+        return T
 
     def setTf(self, position, quaternion, base_frame_id, child_frame_id):
         """Sets a transform using tf2."""
