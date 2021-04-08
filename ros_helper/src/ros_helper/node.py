@@ -34,8 +34,7 @@ class RosNode:
         return numpy.array([getattr(tf.transform.rotation, d) for d in 'xyzw'])
 
     def eulerFromTf2Msg(self, tf):
-        q = self.quaternionFromTf2Msg(tf)
-        return tf_conversions.transformations.euler_from_quaternion(q)
+        return tf_conversions.transformations.euler_from_quaternion(self.quaternionFromTf2Msg(tf))
 
     def transformFromTf2Msg(self, tf):
         T = tf_conversions.transformations.quaternion_matrix(self.quaternionFromTf2Msg(tf))
