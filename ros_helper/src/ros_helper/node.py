@@ -5,7 +5,7 @@ from geometry_msg.msg import TransformStamped
 class RosNode:
 
     def __init__(self, rospy):
-        """Child-classes need to make a call to super().__init__(rospy)"""
+        """Initialization. Note, child-classes need to make a call to super().__init__(rospy)."""
         self.__rp = rospy
         self.__tf_broadcaster = tf2_ros.TransformBroadcaster()
         self.__tf_buffer = tf2_ros.Buffer()
