@@ -51,6 +51,12 @@ class RosNode:
 
     def setTf(self, position, quaternion, base_frame_id, child_frame_id):
         """Sets a transform using tf2."""
+
+        # Ensure quaternion is normalized
+        quaternion = numpy.asarray(quaternion)
+        quaternion /= numpy.linalg.norm(quaternion)
+
+        # Pack tf message
         tf = TransformStamped()
         tf.header.stamp = self.__rp.Time.now()
         tf.header.frame_id = base_frame_id
@@ -58,6 +64,8 @@ class RosNode:
             setattr(tf.transform.translation, dim, position[i])
             setattr(tf.transform.rotation, dim, quaternion[i])
         tf.transform.rotation.w = quaternion[3]
+
+        # Send transform
         self.__tf_broadcaster.sendTransform(tf)
 
     def setupStateMarkerPublisher(self, name, topic, queue_size=10):
