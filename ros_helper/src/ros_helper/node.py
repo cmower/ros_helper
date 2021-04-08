@@ -1,4 +1,5 @@
 import tf2_ros
+from std_msgs.msg import Int64
 from geometry_msg.msg import TransformStamped
 
 class RosNode:
@@ -32,6 +33,12 @@ class RosNode:
             setattr(tf.transform.rotation, dim, quaternion[i])
         tf.transform.rotation.w = quaternion[3]
         self.__tf_broadcaster.sendTransform(tf)
+
+    def setupStateMarkerPublisher(self, name, topic, queue_size=10):
+        self.pubs[name] = self.__rp.Publisher(topic, Int64, queue_size=queue_size)
+
+    def sendMark(self, name, flag=0):
+        self.pubs[name].publish(Int64(data=flag))
 
     def startService(self, name, type, handle):
         self.srvs[name] = self.__rp.Service(name, type, handle)
