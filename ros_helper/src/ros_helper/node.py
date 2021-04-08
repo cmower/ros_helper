@@ -18,6 +18,10 @@ class RosNode:
         self.timers = {} # Timers
         self.msgs = {} # Messages
 
+    def initNode(self, name):
+        """Initializes a node, note that this assumes default options. Use rospy.init_node() when you need more flexibility."""
+        self.__rp.init_node(name)
+
     def getTf(self, base_frame_id, child_frame_id):
         """Returns a transform from tf2 as a geometry_msgs/TransformStamped."""
         tf = None
