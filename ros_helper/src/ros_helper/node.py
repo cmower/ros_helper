@@ -22,8 +22,8 @@ class RosNode:
         """Initializes a node, note that this assumes default options. Use rospy.init_node() when you need more flexibility."""
         self.__rp.init_node(name)
 
-    def onShutdownUseBaseSequence(self):
-        """Specify the shutdown sequence as baseShutdown."""
+    def onShutdownUseBaseMethod(self):
+        """Specify the shutdown method as baseShutdown."""
         self.__rp.on_shutdown(self.baseShutdown)
 
     def getTf(self, base_frame_id, child_frame_id):
