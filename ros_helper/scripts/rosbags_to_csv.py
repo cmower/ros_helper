@@ -2,14 +2,18 @@
 # -----------------------------------------------------------------------------------
 #
 #
-# Import modules and set useful functions
+# Import modules
 # -----------------------------------------------------------------------------------
 import os
 import sys
 import time
 import datetime
 import rosbag_pandas
-
+# -----------------------------------------------------------------------------------
+#
+#
+# Useful functions
+# -----------------------------------------------------------------------------------
 def includeFilename(filename, filter_):
     is_rosbag = filename.endswith('.bag')
     if filter_ is not None:
