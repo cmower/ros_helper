@@ -61,24 +61,22 @@ class RosNode:
         T[:3,-1] = self.positionFromTf2Msg(tf)
         return T
 
-    def setTf(self, base_frame_id, child_frame_id, position, quaternion=[0, 0, 0, 1]):
-        """Sets a transform using tf2."""
-
-        # Ensure quaternion is normalized
-        quaternion = numpy.asarray(quaternion)
-        quaternion /= numpy.linalg.norm(quaternion)
-
-        # Pack tf message
+    def packTransformStampedMsg(self, base_frame_id, child_frame_id, position, quaternion=[0, 0, 0, 1]):
         tf = TransformStamped()
         tf.header.stamp = self.__rp.Time.now()
+        tf.child_frame_id = child_frame_id
         tf.header.frame_id = base_frame_id
         for i, dim in enumerate('xyz'):
             setattr(tf.transform.translation, dim, position[i])
             setattr(tf.transform.rotation, dim, quaternion[i])
         tf.transform.rotation.w = quaternion[3]
+        return tf
 
-        # Send transform
-        self.__tf_broadcaster.sendTransform(tf)
+    def setTf(self, base_frame_id, child_frame_id, position, quaternion=[0, 0, 0, 1]):
+        """Sets a transform using tf2."""
+        self.__tf_broadcaster.sendTransform(
+            self.packTransformStampedMsg(base_frame_id, child_frame_id, position, quaternion)
+        )
 
     def setupStateMarkerPublisher(self, name, topic, queue_size=10):
         """When running experiments, it is useful to make markers to determine when certain events occurred."""
