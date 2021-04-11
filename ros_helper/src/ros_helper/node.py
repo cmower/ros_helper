@@ -28,13 +28,11 @@ class RosNode:
         """Specify the shutdown method as baseShutdown."""
         self.__rp.on_shutdown(self.baseShutdown)
 
-    def getParams(self, names):
-        for n in names:
-            self.params[n] = self.__rp.get_param(n)
-
-    def getParamsWithDefault(self, names, defaults):
-        for n, d in zip(names, defaults):
-            self.params[n] = self.__rp.get_param(n, d)
+    def getParams(self, params):
+        """Gets parameters, params must be a list of tuples. Each tuple must have length 1 or 2. The first element is required, it must be the parameter name. The second element is optional, if set it will be the default value."""
+        for args in params:
+            name = args[0]
+            self.params[name] = self.__rp.get_param(*args)
 
     def getTf(self, base_frame_id, child_frame_id):
         """Returns a transform from tf2 as a geometry_msgs/TransformStamped."""
