@@ -61,7 +61,7 @@ class RosNode:
         T[:3,-1] = self.positionFromTf2Msg(tf)
         return T
 
-    def setTf(self, position, quaternion, base_frame_id, child_frame_id):
+    def setTf(self, base_frame_id, child_frame_id, position, quaternion=[0, 0, 0, 1]):
         """Sets a transform using tf2."""
 
         # Ensure quaternion is normalized
