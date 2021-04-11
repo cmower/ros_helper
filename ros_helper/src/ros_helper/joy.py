@@ -1,19 +1,26 @@
 
 class Joystick:
 
+    """Base joystick class."""
+
     def __init__(self, msg):
+        """Initialization."""
         self._msg = msg
 
     def getAxisLabels(self):
+        """Get all axis labels."""
         return self.axis_map.keys()
 
     def getButtonLabels(self):
+        """Get all button labels."""
         return self.button_map.keys()
 
     def getAxes(self, labels):
+        """Extract axis values using labels."""
         return [self._msg.axes[self.axis_map[l]] for l in labels]
 
     def getButtons(self, labels):
+        """Extract button values using labels."""
         return [self._msg.buttons[self.button_map[l]] for l in labels]
 
 class ThrustmasterUSBJoystick(Joystick):
