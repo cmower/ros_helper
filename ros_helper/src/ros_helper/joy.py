@@ -78,3 +78,20 @@ class LogitechF710(_Joystick):
         'R3': 10,
     }
 
+class SpaceNav(_Joystick):
+
+    """https://3dconnexion.com/uk/product/spacemouse-compact/"""
+
+    axis_map = {
+        'LINX': 0,
+        'LINY': 1,
+        'LINZ': 2,
+        'ROTX': 3,
+        'ROTY': 4,
+        'ROTZ': 5,
+    }
+
+    button_map = {
+        'L': 0,
+        'R': 1,
+    }
