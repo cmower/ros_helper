@@ -30,7 +30,7 @@ class RosNode:
 
     def getParams(self, names):
         for n in names:
-            self.params[n] = self.__.get_param(n)
+            self.params[n] = self.__rp.get_param(n)
 
     def getParamsWithDefault(self, names, defaults):
         for n, d in zip(names, defaults):
