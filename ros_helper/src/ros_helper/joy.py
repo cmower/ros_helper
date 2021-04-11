@@ -18,7 +18,7 @@ class Joystick:
 
 class ThrustmasterUSBJoystick(Joystick):
 
-    # http://www.thrustmaster.com/products/usb-joystick
+    """http://www.thrustmaster.com/products/usb-joystick"""
 
     axis_map = {
         'HORI': 0,
@@ -37,7 +37,7 @@ class ThrustmasterUSBJoystick(Joystick):
 
 class LogitechF710(Joystick):
 
-    # https://www.logitech.com/en-gb/product/f710-wireless-gamepad
+    """https://www.logitech.com/en-gb/product/f710-wireless-gamepad"""
 
     # NOTE: this assumes that the mode setting is off (green light off, toggle
     # using mode button).
