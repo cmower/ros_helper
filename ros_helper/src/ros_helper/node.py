@@ -3,6 +3,7 @@ import tf2_ros
 import tf_conversions
 from std_msgs.msg import Int64
 from geometry_msg.msg import TransformStamped
+from sensor_msgs.msg import Joy
 
 class RosNode:
 
@@ -104,6 +105,14 @@ class RosNode:
     def __callback(self, msg, name):
         """Internal callback method."""
         self.msgs[name] = msg
+
+    def startJoySubscriber(self, name, topic, joystick_cls):
+        """Starts a joystick subscriber that automatically parses sensor_msgs/Joy messages to joystick class from a class in joy.py script."""
+        self.subs[name] = self.__rp.Subscriber(topic, Joy, self.__joy_callback, callback_args=(name, joystick_cls))
+
+    def __joy_callback(self, msg, args):
+        """Converts joy message to given joystick class and logs to the msgs class attribute. The args parameter is given by callback_args in the startJoySubscriber method."""
+        self.__callback(args[1](msg), args[0])
 
     def msgsRecieved(self, name):
         """True when at least one named message has been received, False otherwise. """
