@@ -9,6 +9,9 @@ class _Joystick:
         """Initialization."""
         self._msg = msg
 
+    def getMsg(self):
+        return self._msg
+
     def getAxisLabels(self):
         """Get all axis labels."""
         return self.axis_map.keys()
