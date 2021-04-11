@@ -3,6 +3,8 @@ class Joystick:
 
     """Base joystick class."""
 
+    # NOTE: Child classes must implement an axis_map and button_map.
+
     def __init__(self, msg):
         """Initialization."""
         self._msg = msg
