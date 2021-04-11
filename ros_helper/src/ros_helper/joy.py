@@ -1,5 +1,5 @@
 
-class Joystick:
+class _Joystick:
 
     """Base joystick class."""
 
@@ -25,7 +25,7 @@ class Joystick:
         """Extract button values using labels."""
         return [self._msg.buttons[self.button_map[l]] for l in labels]
 
-class ThrustmasterUSBJoystick(Joystick):
+class ThrustmasterUSBJoystick(_Joystick):
 
     """http://www.thrustmaster.com/products/usb-joystick"""
 
@@ -44,7 +44,7 @@ class ThrustmasterUSBJoystick(Joystick):
         'RIGHT': 3,
     }
 
-class LogitechF710(Joystick):
+class LogitechF710(_Joystick):
 
     """https://www.logitech.com/en-gb/product/f710-wireless-gamepad"""
 
