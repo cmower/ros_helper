@@ -18,6 +18,7 @@ class RosNode:
         self.srvs = {} # Services
         self.timers = {} # Timers
         self.msgs = {} # Messages
+        self.params = {} # parameters
 
     def initNode(self, name):
         """Initializes a node, note that this assumes default options. Use rospy.init_node() when you need more flexibility."""
@@ -26,6 +27,14 @@ class RosNode:
     def onShutdownUseBaseShutdownMethod(self):
         """Specify the shutdown method as baseShutdown."""
         self.__rp.on_shutdown(self.baseShutdown)
+
+    def getParams(self, names):
+        for n in names:
+            self.params[n] = self.__.get_param(n)
+
+    def getParamsWithDefault(self, names, defaults):
+        for n, d in zip(names, defaults):
+            self.params[n] = self.__rp.get_param(n, d)
 
     def getTf(self, base_frame_id, child_frame_id):
         """Returns a transform from tf2 as a geometry_msgs/TransformStamped."""
