@@ -106,12 +106,16 @@ class RosNode:
         """Internal callback method."""
         self.msgs[name] = msg
 
-    def startJoySubscriber(self, name, topic, joystick_cls):
+    def startJoySubscriber(self, name, topic, joystick_cls, wait=False):
         """Starts a joystick subscriber that automatically parses sensor_msgs/Joy messages to joystick class from a class in joy.py script."""
-        self.subs[name] = self.__rp.Subscriber(topic, Joy, self.__joy_callback, callback_args=(name, joystick_cls))
+        args = (name, joystick_cls)
+        if wait:
+            msg = self.__rp.wait_for_message(topic, Joy)
+            self.__joy_callback(msg, args)
+        self.subs[name] = self.__rp.Subscriber(topic, Joy, self.__joy_callback, callback_args=args)
 
     def __joy_callback(self, msg, args):
-        """Converts joy message to given joystick class and logs to the msgs class attribute. The args parameter is given by callback_args in the startJoySubscriber method."""
+        """Converts joy message to given joystick class and logs to the msgs class attribute."""
         self.__callback(args[1](msg), args[0])
 
     def msgsRecieved(self, name):
