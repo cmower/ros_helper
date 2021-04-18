@@ -14,13 +14,10 @@ import rosbag_pandas
 #
 # Useful functions
 # -----------------------------------------------------------------------------------
-def includeFilename(filename, filter_):
-    is_rosbag = filename.endswith('.bag')
-    if filter_ is not None:
-        is_in_filter = filter_ in filename
-    else:
-        is_in_filter = True
-    return is_rosbag and is_in_filter
+def print_help():
+    print("Usage: $ rosrun ros_helper rosbags_to_csv.py PATH")
+    print("  PATH:   directory containing ROS bags.")
+    sys.exit(0)
 
 def goodbye():
     print("Goodbye.")
@@ -30,42 +27,31 @@ def goodbye():
 #
 # Get path to data
 # -----------------------------------------------------------------------------------
-filter_ = None
-if len(sys.argv) > 1:
-    arg = sys.argv[1]
-    if arg == '-h' or arg == '--help':
-        print("Usage: $ rosrun ros_helper rosbags_to_csv.py [PATH] [FILTER]")
-        print("  PATH:   directory containing ROS bags, default is $HOME/Data.")
-        print("  FILTER: If given only filenames containing FILTER will be processed.")
-        sys.exit(0)
-    data_in_path = sys.argv[1]
+if len(sys.argv) < 2:
+    print_help()
+elif sys.argv[1] == '-h' or sys.argv[1] == '--help':
+    print_help()
 else:
-    data_in_path = os.path.join(os.environ['HOME'], 'Data')
-if len(sys.argv) > 2:
-    filter_ = sys.argv[2]
-assert os.path.exists(data_in_path), f"The path {data_in_path} does not exist!"
+    path = sys.argv[1]
 # -----------------------------------------------------------------------------------
 #
 #
 # Collect rosbag filenames
 # -----------------------------------------------------------------------------------
-files = []
-max_abs_filename_length = 0
-for filename in os.listdir(data_in_path):
-    if includeFilename(filename, filter_):
-        files.append(filename)
-        full_filename = os.path.join(data_in_path, filename)
-        print(full_filename)
-        full_filename_length = len(full_filename)
-        if full_filename_length > max_abs_filename_length:
-            max_abs_filename_length = full_filename_length
-number_files = len(files)
+# Collect and print each filename, only collect ros bags.
+filenames = []
+for filename in os.listdir(path):
+    if filename.endswith('.bag'):
+        print(filename)
+        filenames.append(filename)
+
+# Print N+1 "-" to terminal (N is the maximum number of characters of all the filenames)
+print("-"*(max(filenames, key=lambda x: len(x))+1))
 # -----------------------------------------------------------------------------------
 #
 #
 # Is the user sure?
 # -----------------------------------------------------------------------------------
-print("-"*(max_abs_filename_length+1))
 print("These files will be converted to .csv")
 print("Continue? [y/N]")
 user_input = input('>> ')
@@ -78,16 +64,14 @@ if not user_input.lower().startswith('y'):
     print(f'I heard "{user_input}"')
     print('I expect either "y" (yes), or "n" (no).')
     goodbye()
-print("-"*(max_abs_filename_length+1))
+print("-"*(max(filenames, key=lambda x: len(x))+1))
 # -----------------------------------------------------------------------------------
 #
 #
 # Create data out directory
 # -----------------------------------------------------------------------------------
 stamp = time.time_ns()
-data_out_path = os.path.join(data_in_path, f'csv_data_out_{stamp}')
-if filter_ is not None:
-    data_out_path += '_' + filter_
+data_out_path = os.path.join(path, f'csv_data_out_{stamp}')
 os.mkdir(data_out_path)
 print(f"Created {data_out_path}")
 # -----------------------------------------------------------------------------------
@@ -96,13 +80,14 @@ print(f"Created {data_out_path}")
 # Convert files
 # -----------------------------------------------------------------------------------
 start_time = time.time()
-for idx, filename in enumerate(files):
+nfilenames = len(filenames)
+for idx, filename in enumerate(filenames):
     try:
-        abs_filename_in = os.path.join(data_in_path, filename)
+        abs_filename_in = os.path.join(path, filename)
         abs_filename_out = os.path.join(data_out_path, filename+'.csv')
         df = rosbag_pandas.bag_to_dataframe(abs_filename_in)
         df.to_csv(abs_filename_out)
-        print(f"[{idx+1}/{number_files}] Saved {abs_filename_out}")
+        print(f"[{idx+1}/{nfilenames}] Saved {abs_filename_out}")
     except KeyboardInterrupt:
         print("\nUser quit.")
         goodbye()
