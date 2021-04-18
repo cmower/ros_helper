@@ -70,8 +70,7 @@ class RosNode:
         return T
 
     def packTransformStampedMsg(self, base_frame_id, child_frame_id, position, quaternion=[0, 0, 0, 1]):
-        tf = TransformStamped()
-        tf.header.stamp = self.__rp.Time.now()
+        tf = self.__addStamp(TransformStamped())
         tf.child_frame_id = child_frame_id
         tf.header.frame_id = base_frame_id
         for i, dim in enumerate('xyz'):
