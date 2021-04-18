@@ -70,6 +70,7 @@ class RosNode:
         return T
 
     def packTransformStampedMsg(self, base_frame_id, child_frame_id, position, quaternion=[0, 0, 0, 1]):
+        """Pack a transform stamped message"""
         tf = self.__addStamp(TransformStamped())
         tf.child_frame_id = child_frame_id
         tf.header.frame_id = base_frame_id
@@ -86,16 +87,20 @@ class RosNode:
         )
 
     def setupPublisher(self, name, topic, msg_type, queue_size=10):
+        """Setup a publisher."""
         self.pubs[name] = self.__rp.Publisher(topic, msg_type, queue_size=queue_size)
 
     def __addStamp(self, msg):
+        """Add time stamp to a ROS message."""
         msg.header.stamp = self.__rp.Time.now()
         return msg
 
     def setupJointStatePublisher(self, name, topic, queue_size=10):
+        """Setup joint state message publisher."""
         self.setupPublisher(name, topic, JointState, queue_size=queue_size)
 
     def publishJointState(self, name, joint_names=[], joint_positions=[], joint_velocity=[], joint_effort=[]):
+        """Publish a joint state message."""
         msg = self.__addStamp(JointState())
         msg.name = joint_names
         msg.position = joint_positions
@@ -104,27 +109,33 @@ class RosNode:
         self.pubs[name].publish(msg)
 
     def setupPointPublisher(self, name, topic, queue_size=10):
+        """Setup a point message publisher."""
         self.setupPublisher(name, topic, Point, queue_size=queue_size)
 
     def publishPoint(self, name, position):
+        """Publish a point message."""
         msg = Point()
         for idx, dim in enumerate('xyz'):
             setattr(msg, dim, position[idx])
         self.pubs[name].publish(msg)
 
     def setupPointStampedPublisher(self, name, topic, queue_size=10):
+        """Setup a point stamped message publisher."""
         self.setupPublisher(name, topic, PointStamped, queue_size=queue_size)
 
     def publishPointStamped(self, name, position):
+        """Publish a point stamped message."""
         msg = self.__addStamp(PointStamped())
         for idx, dim in enumerate('xyz'):
             setattr(msg.point, position[idx])
         self.pubs[name].publish(msg)
 
     def setupFloat64MultiArrayPublisher(self, name, topic, queue_size):
+        """Setup a float64 multi array message publisher."""
         self.setupPublisher(name, topic, Float64MultiArray, queue_size=queue_size)
 
     def publishFloat64MultiArray(self, name, data):
+        """Publish a float64 multi array message."""
         self.pubs[name].publish(Float64MultiArray(data=data))
 
     def setupExperimentMarkerPublisher(self, name, topic, queue_size=10):
