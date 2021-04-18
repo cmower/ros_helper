@@ -1,8 +1,8 @@
 import numpy
 import tf2_ros
 import tf_conversions
-from std_msgs.msg import Int64
-from geometry_msg.msg import TransformStamped
+from std_msgs.msg import Int64, Float64MultiArray
+from geometry_msg.msg import TransformStamped, Point, PointStamped
 from sensor_msgs.msg import Joy, JointState
 
 class RosNode:
@@ -89,14 +89,44 @@ class RosNode:
     def setupPublisher(self, name, topic, msg_type, queue_size=10):
         self.pubs[name] = self.__rp.Publisher(topic, msg_type, queue_size=queue_size)
 
-    def publishJointState(self, name, joint_names=[], joint_positions=[], joint_velocity=[], joint_effort=[]):
-        msg = JointState()
+    def __addStamp(self, msg):
         msg.header.stamp = self.__rp.Time.now()
+        return msg
+
+    def setupJointStatePublisher(self, name, topic, queue_size=10):
+        self.setupPublisher(name, topic, JointState, queue_size=queue_size)
+
+    def publishJointState(self, name, joint_names=[], joint_positions=[], joint_velocity=[], joint_effort=[]):
+        msg = self.__addStamp(JointState())
         msg.name = joint_names
         msg.position = joint_positions
         msg.velocity = joint_velocity
         msg.effort = joint_effort
         self.pubs[name].publish(msg)
+
+    def setupPointPublisher(self, name, topic, queue_size=10):
+        self.setupPublisher(name, topic, Point, queue_size=queue_size)
+
+    def publishPoint(self, name, position):
+        msg = Point()
+        for idx, dim in enumerate('xyz'):
+            setattr(msg, dim, position[idx])
+        self.pubs[name].publish(msg)
+
+    def setupPointStampedPublisher(self, name, topic, queue_size=10):
+        self.setupPublisher(name, topic, PointStamped, queue_size=queue_size)
+
+    def publishPointStamped(self, name, position):
+        msg = self.__addStamp(PointStamped())
+        for idx, dim in enumerate('xyz'):
+            setattr(msg.point, position[idx])
+        self.pubs[name].publish(msg)
+
+    def setupFloat64MultiArrayPublisher(self, name, topic, queue_size):
+        self.setupPublisher(name, topic, Float64MultiArray, queue_size=queue_size)
+
+    def publishFloat64MultiArray(self, name, data):
+        self.pubs[name].publish(Float64MultiArray(data=data))
 
     def setupExperimentMarkerPublisher(self, name, topic, queue_size=10):
         """When running experiments, it is useful to make markers to determine when certain events occurred."""
