@@ -108,16 +108,19 @@ class RosNode:
         msg.effort = joint_effort
         self.pubs[name].publish(msg)
 
+    def packPointMsg(self, position):
+        msg = Point()
+        for idx, dim in enumerate('xyz'):
+            setattr(msg, dim, position[idx])
+        return msg
+
     def setupPointPublisher(self, name, topic, queue_size=10):
         """Setup a point message publisher."""
         self.setupPublisher(name, topic, Point, queue_size=queue_size)
 
     def publishPoint(self, name, position):
         """Publish a point message."""
-        msg = Point()
-        for idx, dim in enumerate('xyz'):
-            setattr(msg, dim, position[idx])
-        self.pubs[name].publish(msg)
+        self.pubs[name].publish(self.packPointMsg(position))
 
     def setupPointStampedPublisher(self, name, topic, queue_size=10):
         """Setup a point stamped message publisher."""
@@ -126,8 +129,7 @@ class RosNode:
     def publishPointStamped(self, name, position):
         """Publish a point stamped message."""
         msg = self.__addStamp(PointStamped())
-        for idx, dim in enumerate('xyz'):
-            setattr(msg.point, position[idx])
+        msg.point = self.packPointMsg(position)
         self.pubs[name].publish(msg)
 
     def setupFloat64MultiArrayPublisher(self, name, topic, queue_size):
