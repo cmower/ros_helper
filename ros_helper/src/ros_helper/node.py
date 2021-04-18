@@ -123,7 +123,8 @@ class RosNode:
 
     def __joy_callback(self, msg, args):
         """Converts joy message to given joystick class and logs to the msgs class attribute."""
-        self.__callback(args[1](msg), args[0])
+        name, joystick_cls = args
+        self.__callback(joystick_cls(msg), name)
 
     def msgsRecieved(self, name):
         """True when at least one named message has been received, False otherwise. """
