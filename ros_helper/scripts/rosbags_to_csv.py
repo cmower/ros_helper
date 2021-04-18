@@ -44,7 +44,7 @@ for filename in os.listdir(path):
     if filename.endswith('.bag'):
         print(filename)
         filenames.append(filename)
-Ndash = max(filenames, key=lambda x: len(x))+1
+Ndash = max(len(filename) for filename in filenames)+1
 print("-"*Ndash)
 # -----------------------------------------------------------------------------------
 #
