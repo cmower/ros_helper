@@ -86,6 +86,8 @@ class RosNode:
             self.packTransformStampedMsg(base_frame_id, child_frame_id, position, quaternion)
         )
 
+    def setupPublisher(self, name, topic, msg_type, queue_size=10):
+        self.pubs[name] = self.__rp.Publisher(topic, msg_type, queue_size=queue_size)
     def setupExperimentMarkerPublisher(self, name, topic, queue_size=10):
         """When running experiments, it is useful to make markers to determine when certain events occurred."""
         self.pubs[name] = self.__rp.Publisher(topic, Int64, queue_size=queue_size)
