@@ -71,7 +71,7 @@ class RosNode:
 
     def packTransformStampedMsg(self, base_frame_id, child_frame_id, position, quaternion=[0, 0, 0, 1]):
         """Pack a transform stamped message"""
-        tf = self.__addStamp(TransformStamped())
+        tf = self.addTimeStampToMsg(TransformStamped())
         tf.child_frame_id = child_frame_id
         tf.header.frame_id = base_frame_id
         for i, dim in enumerate('xyz'):
@@ -90,7 +90,7 @@ class RosNode:
         """Setup a publisher."""
         self.pubs[name] = self.__rp.Publisher(topic, msg_type, queue_size=queue_size)
 
-    def __addStamp(self, msg):
+    def addTimeStampToMsg(self, msg):
         """Add time stamp to a ROS message."""
         msg.header.stamp = self.__rp.Time.now()
         return msg
@@ -101,7 +101,7 @@ class RosNode:
 
     def publishJointState(self, name, joint_names=[], joint_positions=[], joint_velocity=[], joint_effort=[]):
         """Publish a joint state message."""
-        msg = self.__addStamp(JointState())
+        msg = self.addTimeStampToMsg(JointState())
         msg.name = joint_names
         msg.position = joint_positions
         msg.velocity = joint_velocity
@@ -128,7 +128,7 @@ class RosNode:
 
     def publishPointStamped(self, name, position):
         """Publish a point stamped message."""
-        msg = self.__addStamp(PointStamped())
+        msg = self.addTimeStampToMsg(PointStamped())
         msg.point = self.packPointMsg(position)
         self.pubs[name].publish(msg)
 
