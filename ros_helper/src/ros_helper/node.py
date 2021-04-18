@@ -3,7 +3,7 @@ import tf2_ros
 import tf_conversions
 from std_msgs.msg import Int64
 from geometry_msg.msg import TransformStamped
-from sensor_msgs.msg import Joy
+from sensor_msgs.msg import Joy, JointState
 
 class RosNode:
 
@@ -88,6 +88,16 @@ class RosNode:
 
     def setupPublisher(self, name, topic, msg_type, queue_size=10):
         self.pubs[name] = self.__rp.Publisher(topic, msg_type, queue_size=queue_size)
+
+    def publishJointState(self, name, joint_names=[], joint_positions=[], joint_velocity=[], joint_effort=[]):
+        msg = JointState()
+        msg.header.stamp = self.__rp.Time.now()
+        msg.name = joint_names
+        msg.position = joint_positions
+        msg.velocity = joint_velocity
+        msg.effort = joint_effort
+        self.pubs[name].publish(msg)
+
     def setupExperimentMarkerPublisher(self, name, topic, queue_size=10):
         """When running experiments, it is useful to make markers to determine when certain events occurred."""
         self.pubs[name] = self.__rp.Publisher(topic, Int64, queue_size=queue_size)
