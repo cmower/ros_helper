@@ -44,9 +44,8 @@ for filename in os.listdir(path):
     if filename.endswith('.bag'):
         print(filename)
         filenames.append(filename)
-
-# Print N+1 "-" to terminal (N is the maximum number of characters of all the filenames)
-print("-"*(max(filenames, key=lambda x: len(x))+1))
+Ndash = max(filenames, key=lambda x: len(x))+1
+print("-"*Ndash)
 # -----------------------------------------------------------------------------------
 #
 #
@@ -64,7 +63,7 @@ if not user_input.lower().startswith('y'):
     print(f'I heard "{user_input}"')
     print('I expect either "y" (yes), or "n" (no).')
     goodbye()
-print("-"*(max(filenames, key=lambda x: len(x))+1))
+print("-"*Ndash)
 # -----------------------------------------------------------------------------------
 #
 #
