@@ -128,9 +128,7 @@ class RosNode:
 
     def publishPointStamped(self, name, position):
         """Publish a point stamped message."""
-        msg = self.addTimeStampToMsg(PointStamped())
-        msg.point = self.packPointMsg(position)
-        self.pubs[name].publish(msg)
+        self.pubs[name].publish(self.addTimeStampToMsg(PointStamped(point=self.packPointMsg(position))))
 
     def setupFloat64MultiArrayPublisher(self, name, topic, queue_size):
         """Setup a float64 multi array message publisher."""
