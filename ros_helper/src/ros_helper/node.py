@@ -9,7 +9,7 @@ class RosNode:
 
     def __init__(self, rospy):
         """Initialization. Note, child-classes need to make a call to super().__init__(rospy)."""
-        self.__rp = rospy
+        self.__rospy = rospy
         self.__tf_broadcaster = tf2_ros.TransformBroadcaster()
         self.__tf_buffer = tf2_ros.Buffer()
         tf2_ros.TransformListener(self.__tf_buffer)
@@ -22,17 +22,17 @@ class RosNode:
 
     def initNode(self, name):
         """Initializes a node, note that this assumes default options. Use rospy.init_node() when you need more flexibility."""
-        self.__rp.init_node(name)
+        self.__rospy.init_node(name)
 
     def onShutdownUseBaseShutdownMethod(self):
         """Specify the shutdown method as baseShutdown."""
-        self.__rp.on_shutdown(self.baseShutdown)
+        self.__rospy.on_shutdown(self.baseShutdown)
 
     def getParams(self, params):
         """Gets parameters, params must be a list of tuples. Each tuple must have length 1 or 2. The first element is required, it must be the parameter name. The second element is optional, if set it will be the default value."""
         for args in params:
             name = args[0]
-            self.params[name] = self.__rp.get_param(*args)
+            self.params[name] = self.__rospy.get_param(*args)
 
     def getTf(self, base_frame_id, child_frame_id):
         """Returns a transform from tf2 as a geometry_msgs/TransformStamped."""
@@ -40,7 +40,7 @@ class RosNode:
         try:
             tf = self.__tf_buffer.lookup_transform(base_frame_id, child_frame_id, self.rp.Time())
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
-            self.__rp.logwarn(f'Did not recover frame {child_frame_id} in the frame {base_frame_id}!')
+            self.__rospy.logwarn(f'Did not recover frame {child_frame_id} in the frame {base_frame_id}!')
         return tf
 
     def positionFromTf2Msg(self, tf):
@@ -88,11 +88,11 @@ class RosNode:
 
     def setupPublisher(self, name, topic, msg_type, queue_size=10):
         """Setup a publisher."""
-        self.pubs[name] = self.__rp.Publisher(topic, msg_type, queue_size=queue_size)
+        self.pubs[name] = self.__rospy.Publisher(topic, msg_type, queue_size=queue_size)
 
     def addTimeStampToMsg(self, msg):
         """Add time stamp to a ROS message."""
-        msg.header.stamp = self.__rp.Time.now()
+        msg.header.stamp = self.__rospy.Time.now()
         return msg
 
     def setupJointStatePublisher(self, name, topic, queue_size=10):
@@ -140,7 +140,7 @@ class RosNode:
 
     def setupExperimentMarkerPublisher(self, name, topic, queue_size=10):
         """When running experiments, it is useful to make markers to determine when certain events occurred."""
-        self.pubs[name] = self.__rp.Publisher(topic, Int64, queue_size=queue_size)
+        self.pubs[name] = self.__rospy.Publisher(topic, Int64, queue_size=queue_size)
 
     def sendExperimentMarker(self, name, flag=0):
         """Publish marker, user can make what they want of the flags."""
@@ -148,18 +148,18 @@ class RosNode:
 
     def startService(self, name, type, handle):
         """Start a service."""
-        self.srvs[name] = self.__rp.Service(name, type, handle)
+        self.srvs[name] = self.__rospy.Service(name, type, handle)
 
     def startTimer(self, name, frequency, handle):
         """Start a timer."""
-        self.timers[name] = self.__rp.Timer(self.__rp.Duration(1.0/float(frequency)), handle)
+        self.timers[name] = self.__rospy.Timer(self.__rospy.Duration(1.0/float(frequency)), handle)
 
     def startSubscriber(self, name, topic, type, wait=False):
         """Start a subscriber, optionally pause and wait for the first message."""
         if wait:
-            msg = self.__rp.wait_for_message(topic, type)
+            msg = self.__rospy.wait_for_message(topic, type)
             self.__callback(msg, name)
-        self.subs[name] = self.__rp.Subscriber(topic, type, self.__callback, callback_args=name)
+        self.subs[name] = self.__rospy.Subscriber(topic, type, self.__callback, callback_args=name)
 
     def __callback(self, msg, name):
         """Internal callback method."""
@@ -169,9 +169,9 @@ class RosNode:
         """Starts a joystick subscriber that automatically parses sensor_msgs/Joy messages to joystick class from a class in joy.py script."""
         args = (name, joystick_cls)
         if wait:
-            msg = self.__rp.wait_for_message(topic, Joy)
+            msg = self.__rospy.wait_for_message(topic, Joy)
             self.__joy_callback(msg, args)
-        self.subs[name] = self.__rp.Subscriber(topic, Joy, self.__joy_callback, callback_args=args)
+        self.subs[name] = self.__rospy.Subscriber(topic, Joy, self.__joy_callback, callback_args=args)
 
     def __joy_callback(self, msg, args):
         """Converts joy message to given joystick class and logs to the msgs class attribute."""
@@ -192,7 +192,7 @@ class RosNode:
 
     def spin(self):
         """Simple wrapper for rospy.spin."""
-        self.__rp.spin()
+        self.__rospy.spin()
 
     def baseShutdown(self):
         """First kills all timers, then unregisters all subscribers."""
