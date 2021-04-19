@@ -23,15 +23,15 @@ class Node(RosNode):
         self.getParams([
             ('~joy_topics', ['joy']), # a list of sensor_msgs/Joy topics
         ])
-        self.n_joy = len(self.params['joy_topics'])
+        self.n_joy = len(self.params['~joy_topics'])
 
         # Setup publisher and subscriber
         self.setupPublisher('multi_joy', 'multijoy', MultiJoy)
 
         # Setup subscribers
         for j in range(self.n_joy):
-            topic = self.params['joy_topics'][j]
-            self.subs[f'joy_{j}'] = message_filters.Subscriber(topic, Joy)
+            topic = self.params['~joy_topics'][j]
+            self.subs[topic] = message_filters.Subscriber(topic, Joy)
 
         self.time_sync=message_filters.ApproximateTimeSynchronizer(self.subs.values(), 10, self.njoys*100)
         self.time_sync.registerCallback(self.callback)
