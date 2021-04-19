@@ -38,7 +38,7 @@ class RosNode:
         """Returns a transform from tf2 as a geometry_msgs/TransformStamped."""
         tf = None
         try:
-            tf = self.__tf_buffer.lookup_transform(base_frame_id, child_frame_id, self.rp.Time())
+            tf = self.__tf_buffer.lookup_transform(base_frame_id, child_frame_id, self.__rospy.Time())
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
             self.__rospy.logwarn(f'Did not recover frame {child_frame_id} in the frame {base_frame_id}!')
         return tf
