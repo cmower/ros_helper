@@ -1,9 +1,0 @@
-
-class *MESSAGENAME*Msg(*MESSAGENAME*):
-
-    def __init__(self, *args, **kwargs):
-
-        if len(args) == 1 and len(kwargs):
-            # Only
-        else:
-            raise ValueError('Erroreous input given.')

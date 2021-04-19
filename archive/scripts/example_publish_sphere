@@ -1,8 +1,0 @@
-#!/usr/bin/env python
-import rospy
-from ros_helper.simple_pub_sub import SimpleConstPublisher
-import ros_helper.msgs.visualization as vis
-
-rospy.init_node('example_node')
-SimpleConstPublisher(rospy, 'sphere', 20, vis.SphereMsg(frame_id="world", position=[1, 2, 3], radius=0.5, rgba=[1, 0, 0, 1]))
-rospy.spin()

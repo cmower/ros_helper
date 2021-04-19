@@ -1,6 +1,0 @@
-<?xml version="1.0" ?>
-<Package name="tf">
-  <Message name="tfMessage">
-    <Attribute list="0" name="transforms" package="geometry_msgs" type="TransformStamped"/>
-  </Message>
-</Package>

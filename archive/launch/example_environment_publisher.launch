@@ -1,9 +1,0 @@
-<launch>
-
-  <node pkg="ros_helper" type="publish_environment_node" name="publish_environment_node" output="screen">
-    <param name="filename" type="string" value="$(find ros_helper)/resources/example_environment.xml"/>
-  </node>
-
-  <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find ros_helper)/resources/rviz/example_publish_environment.rviz"/>
-
-</launch>

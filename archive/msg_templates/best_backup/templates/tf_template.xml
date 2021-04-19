@@ -1,6 +1,0 @@
-<?xml version="1.0" ?>
-<RosMsgGroup name="tf">
-  <RosMsg name="tfMessage">
-    <RosMsgAttribute default="" group="geometry_msgs" list_length="0" name="transforms" type="TransformStamped"/>
-  </RosMsg>
-</RosMsgGroup>
