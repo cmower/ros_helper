@@ -17,7 +17,7 @@ class Node(RosNode):
 
         # Initialization
         super().__init__(rospy)
-        self.initNode()
+        self.initNode('multijoy_node')
 
         # Get parameters
         self.getParams([
