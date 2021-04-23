@@ -174,7 +174,7 @@ class RosNode:
         """Setup a point stamped message publisher."""
         self.setupPublisher(name, topic, PointStamped, queue_size=queue_size)
 
-    def setupFloat64MultiArrayPublisher(self, name, topic, queue_size):
+    def setupFloat64MultiArrayPublisher(self, name, topic, queue_size=10):
         """Setup a float64 multi array message publisher."""
         self.setupPublisher(name, topic, Float64MultiArray, queue_size=queue_size)
 
