@@ -37,7 +37,7 @@ class RosNode:
         self.__rospy.on_shutdown(self.baseShutdown)
 
     def loadConfig(self, filename):
-        """Loads a config file. You can use $(find package-name)."""
+        """Loads a yaml config file. You can use $(find package-name)."""
 
         # Replace package path in filename
         if ('$(find' in filename) and (')' in filename):
