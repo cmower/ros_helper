@@ -1,5 +1,8 @@
 import numpy
+# import re
+import rospkg
 import tf2_ros
+import yaml
 import tf_conversions
 from std_msgs.msg import Int64, Float64MultiArray
 from geometry_msgs.msg import TransformStamped, Point, PointStamped
@@ -32,6 +35,25 @@ class RosNode:
     def onShutdownUseBaseShutdownMethod(self):
         """Specify the shutdown method as baseShutdown."""
         self.__rospy.on_shutdown(self.baseShutdown)
+
+    def loadConfig(self, filename):
+        """Loads a config file. You can use $(find package-name)."""
+
+        # Replace package path in filename
+        if ('$(find' in filename) and (')' in filename):
+            # pattern = '$(find \(.*?\))'
+            # matches = re.findall(pattern, filename)
+            filename = filename.replace('$(find ', '') # assume filename starts with '$(find '
+            idx_closing_bracket = filename.find(')')
+            package = filename[:idx_closing_bracket]
+            root = rospkg.RosPack().get_path(package)
+            filename = filename.replace(f'{package})', root)
+
+        # Load configuration
+        with open(filename, 'r') as configfile:
+            config = yaml.load(configfile, Loader=yaml.FullLoader)
+
+        return config
 
     # ----------------------------------------------------------------------------------
     #
