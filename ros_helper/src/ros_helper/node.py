@@ -233,7 +233,7 @@ class RosNode:
     # ----------------------------------------------------------------------------------
 
     def msgsRecieved(self, name):
-        """True when at least one named message has been received, False otherwise. """
+        """True when at least one named message has been received, False otherwise."""
         return name in self.msgs.keys()
 
     def getMsg(self, name, default=None):
