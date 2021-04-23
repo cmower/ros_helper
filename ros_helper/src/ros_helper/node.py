@@ -178,9 +178,9 @@ class RosNode:
         """Setup a float64 multi array message publisher."""
         self.setupPublisher(name, topic, Float64MultiArray, queue_size=queue_size)
 
-    def setupExperimentMarkerPublisher(self, name, topic, queue_size=10):
-        """When running experiments, it is useful to make markers to determine when certain events occurred."""
-        self.pubs[name] = self.__rospy.Publisher(topic, Int64, queue_size=queue_size)
+    def setupInt64Publisher(self, name, topic, queue_size=10):
+        """Setup a int64 message publisher."""
+        self.setupPublisher(name, topic, Int64, queue_size=queue_size)
 
     # ----------------------------------------------------------------------------------
     #
@@ -205,9 +205,9 @@ class RosNode:
         self.pubs[name].publish(Float64MultiArray(data=data))
 
 
-    def publishExperimentMarker(self, name, flag=0):
+    def publishInt64(self, name, data):
         """Publish marker, user can make what they want of the flags."""
-        self.pubs[name].publish(Int64(data=flag))
+        self.pubs[name].publish(Int64(data=data))
 
     # ----------------------------------------------------------------------------------
     #
