@@ -69,13 +69,13 @@ class RosNode:
     # Common transform conversion methods.
     # ----------------------------------------------------------------------------------
 
-    def positionFromTf2Msg(self, tf):
+    def positionFromTf2Msg(self, tf, fmt='xyz'):
         """Extract position from geomety_msg/TransformStamed message."""
-        return numpy.array([getattr(tf.transform.translation, d) for d in 'xyz'])
+        return numpy.array([getattr(tf.transform.translation, d) for d in fmt])
 
-    def quaternionFromTf2Msg(self, tf):
+    def quaternionFromTf2Msg(self, tf, fmt='xyzw'):
         """Extract quaternion from geomety_msg/TransformStamed message."""
-        return numpy.array([getattr(tf.transform.rotation, d) for d in 'xyzw'])
+        return numpy.array([getattr(tf.transform.rotation, d) for d in fmt])
 
     def eulerFromQuaternion(self, q):
         """Euler angles from quaternion."""
