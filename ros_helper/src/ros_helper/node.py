@@ -39,10 +39,8 @@ class RosNode:
         """Specify the shutdown method as baseShutdown."""
         self.__rospy.on_shutdown(self.baseShutdown)
 
-    def loadConfig(self, filename):
-        """Loads a yaml config file. You can use $(find package-name)."""
-
-        # Replace package path in filename
+    def parseFilename(self, filename):
+        """Parse the filename, i.e. replace $(find ..) with path to package."""
         if ('$(find' in filename) and (')' in filename):
             # pattern = '$(find \(.*?\))'
             # matches = re.findall(pattern, filename)
@@ -51,11 +49,12 @@ class RosNode:
             package = filename[:idx_closing_bracket]
             root = rospkg.RosPack().get_path(package)
             filename = filename.replace(f'{package})', root)
+        return filename
 
-        # Load configuration
-        with open(filename, 'r') as configfile:
+    def loadConfig(self, filename):
+        """Loads a yaml config file. You can use $(find package-name)."""
+        with open(self.parseFilename(filename), 'r') as configfile:
             config = yaml.load(configfile, Loader=yaml.FullLoader)
-
         return config
 
     # ----------------------------------------------------------------------------------
