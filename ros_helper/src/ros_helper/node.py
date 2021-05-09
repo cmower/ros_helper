@@ -41,6 +41,7 @@ class RosNode:
 
     def parseFilename(self, filename):
         """Parse the filename, i.e. replace $(find ..) with path to package."""
+        # TODO: ideally, use re
         if ('$(find' in filename) and (')' in filename):
             # pattern = '$(find \(.*?\))'
             # matches = re.findall(pattern, filename)
