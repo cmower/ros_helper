@@ -5,18 +5,12 @@ from ros_helper.msg import MultiJoy
 from sensor_msgs.msg import Joy
 from ros_helper.node import RosNode
 
-"""
-TODO:
-- investigate parameters for message_filters.ApproximateTimeSynchronizer method
-- how to unregister subscribers?
-"""
-
 class Node(RosNode):
 
     def __init__(self):
 
         # Initialization
-        super().__init__(rospy)
+        RosNode.__init__(self, rospy)
         self.initNode('multijoy_node')
 
         # Get parameters
@@ -29,15 +23,14 @@ class Node(RosNode):
         self.setupPublisher('multi_joy', 'multijoy', MultiJoy)
 
         # Setup subscribers
-        for j in range(self.n_joy):
-            topic = self.params['~joy_topics'][j]
+        for topic in self.params['~joy_topics']:
             self.subs[topic] = message_filters.Subscriber(topic, Joy)
 
         self.time_sync=message_filters.ApproximateTimeSynchronizer(self.subs.values(), 10, self.njoys*100)
         self.time_sync.registerCallback(self.callback)
 
     def callback(self, *args):
-        self.pubs['multi_joy'].publish(self.addTimeStampToMsg(MultiJoy(njoys=self.n_joys, joys=args)))
+        self.pubs['multi_joy'].publish(self.addTimeStampToMsg(MultiJoy(njoys=len(args), joys=args)))
 
 if __name__ == '__main__':
     Node().spin()
