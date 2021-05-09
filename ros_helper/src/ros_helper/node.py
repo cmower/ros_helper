@@ -16,7 +16,7 @@ class RosNode:
     # ----------------------------------------------------------------------------------
 
     def __init__(self, rospy):
-        """Initialization. Note, child-classes need to make a call to super().__init__(rospy)."""
+        """Initialization. Note, child-classes need to make a call to RosNode.__init__(self, rospy)."""
         self.__rospy = rospy
         self.subs = {} # Subscribers
         self.pubs = {} # Publishers
@@ -30,7 +30,7 @@ class RosNode:
         self.__rospy.init_node(name)
 
     def initTf2(self):
-        """Call if you want to interface with tf2."""
+        """Call if you want to interface with tf2 and use the getTf/setTf."""
         self.__tf_broadcaster = tf2_ros.TransformBroadcaster()
         self.__tf_buffer = tf2_ros.Buffer()
         tf2_ros.TransformListener(self.__tf_buffer)
