@@ -187,9 +187,9 @@ class RosNode:
     # Easy-publish methods
     # ----------------------------------------------------------------------------------
 
-    def publishJointState(self, name, joint_names=[], joint_positions=[], joint_velocity=[], joint_effort=[]):
+    def publishJointState(self, name, joint_name=[], joint_position=[], joint_velocity=[], joint_effort=[]):
         """Publish a joint state message."""
-        self.pubs[name].publish(self.addTimeStampToMsg(JointState(name=joint_names, position=joint_positions, velocity=joint_velocity, effort=joint_effort)))
+        self.pubs[name].publish(self.addTimeStampToMsg(JointState(name=joint_name, position=joint_position, velocity=joint_velocity, effort=joint_effort)))
 
     def publishPoint(self, name, position):
         """Publish a point message."""
