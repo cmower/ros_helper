@@ -288,8 +288,12 @@ class RosNode:
         self.__rospy.spin()
 
     def baseShutdown(self):
-        """First kills all timers, then unregisters all subscribers."""
+        """Kills all timers, subscribers, services, and publishers."""
         for timer in self.timers.values():
             timer.shutdown()
         for sub in self.subs.values():
             sub.unregister()
+        for srv in self.srvs.values():
+            srv.shutdown()
+        for pub in self.pubs.values():
+            pub.unregister()
