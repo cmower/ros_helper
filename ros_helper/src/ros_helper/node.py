@@ -16,7 +16,7 @@ class RosNode:
     # ----------------------------------------------------------------------------------
 
     def __init__(self, rospy):
-        """Initialization. Note, child-classes need to make a call to RosNode.__init__(self, rospy)."""
+        """Initialization. Note, child-classes need to make a call to RosNode.__init__(rospy)."""
         self.__rospy = rospy
         self.subs = {} # Subscribers
         self.pubs = {} # Publishers
