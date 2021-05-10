@@ -117,7 +117,7 @@ class RosNode:
 
     def quaternionFromEuler(self, eul):
         """Quaternion from Euler angles."""
-        return tf_conversions.transformations.quaternion_from_euler(eul[0], eul[1], eul[2])
+        return tf_conversions.transformations.quaternion_from_euler(*eul)
 
     def eulerFromTf2Msg(self, tf):
         """Extract Euler angles from geomety_msg/TransformStamed message."""
