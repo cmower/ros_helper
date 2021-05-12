@@ -24,6 +24,7 @@ class RosNode:
         self.timers = {} # Timers
         self.msgs = {} # Messages
         self.params = {} # parameters
+        self.tfs = {} # Transforms
 
     def initNode(self, name):
         """Initializes a node, note that this assumes default options. Use rospy.init_node() when you need more flexibility."""
@@ -97,6 +98,27 @@ class RosNode:
         self.__tf_broadcaster.sendTransform(
             self.packTransformStampedMsg(base_frame_id, child_frame_id, position, quaternion)
         )
+
+    def listenToTf(self, name, base_frame_id, child_frame_id, only_once=True, frequency=50):
+        """Keeps track of transforms using tf2. """
+
+        def __retrieveTfHandle(event):
+            tf = self.getTf(base_frame_id, child_frame_id)
+            if tf is None: return
+            self.tfs[name] = tf
+            if only_once:
+                __timer.shutdown()
+
+        __timer = self.__rospy.Timer(
+            self.__rospy.Duration(1.0/float(frequency)),
+            __retrieveTfHandle,
+        )
+
+    def tfRetrieved(self, name):
+        return name in self.tfs.keys()
+
+    def retrieveTf(self, name):
+        return self.tfs[name]
 
     # ----------------------------------------------------------------------------------
     #
