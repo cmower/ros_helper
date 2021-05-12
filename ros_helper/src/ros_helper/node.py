@@ -60,7 +60,7 @@ class RosNode:
         return config
 
     def __assertNameIsUnique(self, name, d_name):
-        d = getattr(self, d_name) # retrieves either subs/pubs/srvs/timers/msgs/params/tfs
+        d = getattr(self, d_name) # retrieves either subs/pubs/srvs/timers/params/tfs
         assert name not in d.keys(), f"Given name ({name}) is not unique in {d_name}!"
 
     # ----------------------------------------------------------------------------------
