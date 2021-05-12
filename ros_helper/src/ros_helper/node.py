@@ -59,6 +59,10 @@ class RosNode:
             config = yaml.load(configfile, Loader=yaml.FullLoader)
         return config
 
+    def __assertNameIsUnique(self, name, d_name):
+        d = getattr(self, d_name) # retrieves either subs/pubs/srvs/timers/msgs/params/tfs
+        assert name not in d.keys(), f"Given name ({name}) is not unique in {d_name}!"
+
     # ----------------------------------------------------------------------------------
     #
     # Helpful methods
@@ -77,6 +81,7 @@ class RosNode:
         """Gets parameters, params must be a list of tuples. Each tuple must have length 1 or 2. The first element is required, it must be the parameter name. The second element is optional, if set it will be the default value."""
         for args in params:
             name = args[0]
+            self.__assertNameIsUnique(name, 'params')
             self.params[name] = self.__rospy.get_param(*args)
 
     # ----------------------------------------------------------------------------------
@@ -101,6 +106,8 @@ class RosNode:
 
     def listenToTf(self, name, base_frame_id, child_frame_id, only_once=True, frequency=50):
         """Keeps track of transforms using tf2. """
+
+        self.__assertNameIsUnique(name, 'tfs')
 
         def __retrieveTfHandle(event):
             tf = self.getTf(base_frame_id, child_frame_id)
@@ -238,6 +245,7 @@ class RosNode:
 
     def startService(self, name, type, handle):
         """Start a service."""
+        self.__assertNameIsUnique(name, 'srvs')
         self.srvs[name] = self.__rospy.Service(name, type, handle)
 
     # ----------------------------------------------------------------------------------
@@ -247,6 +255,7 @@ class RosNode:
 
     def startTimer(self, name, frequency, handle):
         """Start a timer."""
+        self.__assertNameIsUnique(name, 'timers')
         self.timers[name] = self.__rospy.Timer(self.__rospy.Duration(1.0/float(frequency)), handle)
 
     # ----------------------------------------------------------------------------------
@@ -256,6 +265,7 @@ class RosNode:
 
     def startSubscriber(self, name, topic, type, wait=False):
         """Start a subscriber, optionally pause and wait for the first message."""
+        self.__assertNameIsUnique(name, 'subs')
         if wait:
             msg = self.__rospy.wait_for_message(topic, type)
             self.__callback(msg, name)
@@ -263,6 +273,7 @@ class RosNode:
 
     def startJoySubscriber(self, name, topic, joystick_cls, wait=False):
         """Starts a joystick subscriber that automatically parses sensor_msgs/Joy messages to joystick class from a class in joy.py script."""
+        self.__assertNameIsUnique(name, 'subs')
         args = (name, joystick_cls)
         if wait:
             msg = self.__rospy.wait_for_message(topic, Joy)
