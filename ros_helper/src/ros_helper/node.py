@@ -277,7 +277,7 @@ class RosNode:
             self.__callback(msg, name)
         self.subs[name] = self.__rospy.Subscriber(topic, type, self.__callback, callback_args=name)
 
-    def startUserSubscriber(self, topic, topic, type, callback, callback_args=None):
+    def startUserSubscriber(self, topic, type, callback, callback_args=None):
         name = f'sub/{self.uniqueTag()}'
         self.__assertNameIsUnique(name, 'subs')
         self.subs[name] = self.__rospy.Subscriber(topic, type, callback, callback_args=callback_args)
