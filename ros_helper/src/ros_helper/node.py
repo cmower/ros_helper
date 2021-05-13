@@ -112,7 +112,7 @@ class RosNode:
             self.packTransformStampedMsg(base_frame_id, child_frame_id, position, quaternion)
         )
 
-    def listenToTf(self, name, base_frame_id, child_frame_id, only_once=True, frequency=50):
+    def listenToTf(self, name, base_frame_id, child_frame_id, only_once=False, frequency=50):
         """Keeps track of transforms using tf2. """
 
         self.__assertNameIsUnique(name, 'tfs')
