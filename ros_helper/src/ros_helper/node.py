@@ -116,18 +116,16 @@ class RosNode:
         """Keeps track of transforms using tf2. """
 
         self.__assertNameIsUnique(name, 'tfs')
+        timer_name = f'listen_to_tf_{name}_{self.uniqueTag()}'
 
         def __retrieveTfHandle(event):
             tf = self.getTf(base_frame_id, child_frame_id)
             if tf is None: return
             self.tfs[name] = tf
             if only_once:
-                __timer.shutdown()
+                self.timers[timer_name].shutdown()
 
-        __timer = self.__rospy.Timer(
-            self.__rospy.Duration(1.0/float(frequency)),
-            __retrieveTfHandle,
-        )
+        self.startTimer(timer_name, frequency, __retrieveTfHandle)
 
     def tfRetrieved(self, name):
         return name in self.tfs.keys()
