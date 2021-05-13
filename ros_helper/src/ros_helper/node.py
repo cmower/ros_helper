@@ -1,3 +1,4 @@
+import time
 import numpy
 # import re
 import rospkg
@@ -71,6 +72,13 @@ class RosNode:
     def null(self, *args, **kwargs):
         """Method takes any input, and does nothing."""
         pass
+
+    def uniqueTag(self):
+        """Returns a random string that can be used to uniquify labels."""
+        time_now = time.time_ns()
+        random_numbers = "".join([str(n) for n in numpy.random.randint(0, 10, size=(4,))])
+        unique_stamp = f"{random_numbers}_{time_now}"
+        return unique_stamp
 
     # ----------------------------------------------------------------------------------
     #
