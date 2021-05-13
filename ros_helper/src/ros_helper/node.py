@@ -277,6 +277,11 @@ class RosNode:
             self.__callback(msg, name)
         self.subs[name] = self.__rospy.Subscriber(topic, type, self.__callback, callback_args=name)
 
+    def startUserSubscriber(self, topic, topic, type, callback, callback_args=None):
+        name = f'sub/{self.uniqueTag()}'
+        self.__assertNameIsUnique(name, 'subs')
+        self.subs[name] = self.__rospy.Subscriber(topic, type, callback, callback_args=callback_args)
+
     def startJoySubscriber(self, name, topic, joystick_cls, wait=False):
         """Starts a joystick subscriber that automatically parses sensor_msgs/Joy messages to joystick class from a class in joy.py script."""
         self.__assertNameIsUnique(name, 'subs')
