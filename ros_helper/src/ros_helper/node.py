@@ -136,6 +136,13 @@ class RosNode:
     def retrieveTf(self, name):
         return self.tfs[name]
 
+    def loadTfFromFile(self, filename):
+        """Loads a transform from a .npy file, assumes file has the same format as how the save_tf.py saves tfs"""
+        tf_data = numpy.load(self.parseFilename(filename))
+        p = tf_data[:3]
+        q = tf_data[3:]
+        return p, q
+
     # ----------------------------------------------------------------------------------
     #
     # Common transform conversion methods.
