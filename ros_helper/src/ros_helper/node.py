@@ -88,15 +88,29 @@ class RosNode:
     # Handling parameters
     # ----------------------------------------------------------------------------------
 
-    def getParams(self, params):
+    def setupParams(self, params):
         """Gets parameters, params must be a list of tuples. Each tuple must have length 1 or 2. The first element is required, it must be the parameter name. The second element is optional, if set it will be the default value."""
+        # Iterate over params
         for args in params:
+
+            # Extract name (NOTE: each item in list/tuple params MUST contain a
+            # name argument that is the parameter to be retrieved from ROS)
             name = args[0]
-            self.__assertNameIsUnique(name, 'params')
+            self.__assertNameIsUnique(name, '__params')
+
+            # Get param from ROS
+            #
+            # NOTE: for future dev, this will throw an error if default is not
+            # given and the name is not found (this is useful to keep, i.e.
+            # don't use self.getParam here).
             self.__params[name] = self.__rospy.get_param(*args)
 
-    def retrieveParam(self, name):
-        return self.__params[name]
+    def getParam(self, name, default=None):
+        """Retrieves parameter (if name doesn't exists in internal parameter dictionary then getParam attempts to retrieve parameter from ROS)."""
+        if name in self.__params.keys():
+            return self.__params[name]
+        else:
+            return self.__rospy.get_param(name, default)
 
     # ----------------------------------------------------------------------------------
     #
