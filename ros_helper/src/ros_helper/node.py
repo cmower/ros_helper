@@ -132,20 +132,25 @@ class RosNode:
             self.packTransformStampedMsg(base_frame_id, child_frame_id, position, quaternion)
         )
 
-    def listenToTf(self, name, base_frame_id, child_frame_id, only_once=False, frequency=50):
+    def listenToTf(self, name, base_frame_id, child_frame_id, only_one=False, attempt_frequency=50):
         """Keeps track of transforms using tf2. """
 
-        self.__assertNameIsUnique(name, 'tfs')
+        # Check name for tf is unique
+        self.__assertNameIsUnique(name, '__tfs')
+
+        # Make unique timer name
         timer_name = f'listen_to_tf_{name}_{self.uniqueTag()}'
 
-        def __retrieveTfHandle(event):
+        # Setup internal retrieval method
+        def __retrieveTf(event):
             tf = self.getTf(base_frame_id, child_frame_id)
             if tf is None: return
             self.__tfs[name] = tf
-            if only_once:
+            if only_one:
                 self.__timers[timer_name].shutdown()
 
-        self.setupTimer(timer_name, frequency, __retrieveTfHandle)
+        # Start tf timer
+        self.setupTimer(timer_name, attempt_frequency, __retrieveTf)
 
     def tfRetrieved(self, name):
         """True when at least one tf with given name has been received."""
