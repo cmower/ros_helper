@@ -21,13 +21,13 @@ class RosNode:
     def __init__(self, rospy):
         """Initialization. Note, child-classes need to make a call to RosNode.__init__(rospy)."""
         self.__rospy = rospy
-        self.__subs = {} # Subscribers
-        self.__pubs = {} # Publishers
-        self.__srvs = {} # Services
-        self.__timers = {} # Timers
-        self.__msgs = {} # Messages
-        self.__params = {} # Parameters
-        self.__tfs = {} # Transforms
+        self.__subs = {}    # Subscribers
+        self.__pubs = {}    # Publishers
+        self.__srvs = {}    # Services
+        self.__timers = {}  # Timers
+        self.__msgs = {}    # Messages
+        self.__params = {}  # Parameters
+        self.__tfs = {}     # Transforms
 
     def initNode(self, name):
         """Initializes a node, note that this assumes default options. Use rospy.init_node() when you need more flexibility."""
