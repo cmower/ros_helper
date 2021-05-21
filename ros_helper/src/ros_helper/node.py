@@ -269,13 +269,13 @@ class RosNode:
     # Setup subscribers
     # ----------------------------------------------------------------------------------
 
-    def startSubscriber(self, name, topic, type, wait=False):
+    def startSubscriber(self, name, topic, topic_type, wait=False, timeout=None):
         """Start a subscriber, optionally pause and wait for the first message."""
         self.__assertNameIsUnique(name, 'subs')
         if wait:
-            msg = self.__rospy.wait_for_message(topic, type)
+            msg = self.__rospy.wait_for_message(topic, topic_type, timeout)
             self.__callback(msg, name)
-        self.subs[name] = self.__rospy.Subscriber(topic, type, self.__callback, callback_args=name)
+        self.subs[name] = self.__rospy.Subscriber(topic, topic_type, self.__callback, callback_args=name)
 
     def startUserSubscriber(self, topic, type, callback, callback_args=None):
         name = f'sub/{self.uniqueTag()}'
