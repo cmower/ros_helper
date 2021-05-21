@@ -148,9 +148,11 @@ class RosNode:
         self.setupTimer(timer_name, frequency, __retrieveTfHandle)
 
     def tfRetrieved(self, name):
+        """True when at least one tf with given name has been received."""
         return name in self.__tfs.keys()
 
     def retrieveTf(self, name):
+        """Get tf with given name - can throw an error when tf not yet received, check with tfRetrieved."""
         return self.__tfs[name]
 
     def loadTfFromFile(self, filename):
