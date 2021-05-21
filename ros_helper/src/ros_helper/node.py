@@ -128,7 +128,7 @@ class RosNode:
             if only_once:
                 self.timers[timer_name].shutdown()
 
-        self.startTimer(timer_name, frequency, __retrieveTfHandle)
+        self.setupTimer(timer_name, frequency, __retrieveTfHandle)
 
     def tfRetrieved(self, name):
         return name in self.tfs.keys()
@@ -263,17 +263,17 @@ class RosNode:
     # Setup services
     # ----------------------------------------------------------------------------------
 
-    def startService(self, name, type, handle):
+    def setupService(self, name, srv_type, handle):
         """Start a service."""
         self.__assertNameIsUnique(name, 'srvs')
-        self.srvs[name] = self.__rospy.Service(name, type, handle)
+        self.srvs[name] = self.__rospy.Service(name, srv_type, handle)
 
     # ----------------------------------------------------------------------------------
     #
     # Setup timers
     # ----------------------------------------------------------------------------------
 
-    def startTimer(self, name, frequency, handle):
+    def setupTimer(self, name, frequency, handle):
         """Start a timer."""
         self.__assertNameIsUnique(name, 'timers')
         self.timers[name] = self.__rospy.Timer(self.__rospy.Duration(1.0/float(frequency)), handle)
@@ -283,7 +283,7 @@ class RosNode:
     # Setup subscribers
     # ----------------------------------------------------------------------------------
 
-    def startSubscriber(self, name, topic, topic_type, wait=False, timeout=None):
+    def setupSubscriber(self, name, topic, topic_type, wait=False, timeout=None):
         """Start a subscriber, optionally pause and wait for the first message."""
         self.__assertNameIsUnique(name, 'subs')
         if wait:
@@ -291,12 +291,12 @@ class RosNode:
             self.__callback(msg, name)
         self.subs[name] = self.__rospy.Subscriber(topic, topic_type, self.__callback, callback_args=name)
 
-    def startUserSubscriber(self, topic, type, callback, callback_args=None):
+    def setupUserSubscriber(self, topic, type, callback, callback_args=None):
         name = f'sub/{self.uniqueTag()}'
         self.__assertNameIsUnique(name, 'subs')
         self.subs[name] = self.__rospy.Subscriber(topic, type, callback, callback_args=callback_args)
 
-    def startJoySubscriber(self, name, topic, joystick_cls, wait=False):
+    def setupJoySubscriber(self, name, topic, joystick_cls, wait=False):
         """Starts a joystick subscriber that automatically parses sensor_msgs/Joy messages to joystick class from a class in joy.py script."""
         self.__assertNameIsUnique(name, 'subs')
         args = (name, joystick_cls)
