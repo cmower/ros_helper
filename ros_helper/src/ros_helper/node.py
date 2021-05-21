@@ -21,13 +21,13 @@ class RosNode:
     def __init__(self, rospy):
         """Initialization. Note, child-classes need to make a call to RosNode.__init__(rospy)."""
         self.__rospy = rospy
-        self.subs = {} # Subscribers
-        self.pubs = {} # Publishers
-        self.srvs = {} # Services
-        self.timers = {} # Timers
-        self.msgs = {} # Messages
-        self.params = {} # parameters
-        self.tfs = {} # Transforms
+        self.__subs = {} # Subscribers
+        self.__pubs = {} # Publishers
+        self.__srvs = {} # Services
+        self.__timers = {} # Timers
+        self.__msgs = {} # Messages
+        self.__params = {} # Parameters
+        self.__tfs = {} # Transforms
 
     def initNode(self, name):
         """Initializes a node, note that this assumes default options. Use rospy.init_node() when you need more flexibility."""
@@ -93,7 +93,10 @@ class RosNode:
         for args in params:
             name = args[0]
             self.__assertNameIsUnique(name, 'params')
-            self.params[name] = self.__rospy.get_param(*args)
+            self.__params[name] = self.__rospy.get_param(*args)
+
+    def retrieveParam(self, name):
+        return self.__params[name]
 
     # ----------------------------------------------------------------------------------
     #
@@ -124,17 +127,17 @@ class RosNode:
         def __retrieveTfHandle(event):
             tf = self.getTf(base_frame_id, child_frame_id)
             if tf is None: return
-            self.tfs[name] = tf
+            self.__tfs[name] = tf
             if only_once:
-                self.timers[timer_name].shutdown()
+                self.__timers[timer_name].shutdown()
 
         self.setupTimer(timer_name, frequency, __retrieveTfHandle)
 
     def tfRetrieved(self, name):
-        return name in self.tfs.keys()
+        return name in self.__tfs.keys()
 
     def retrieveTf(self, name):
-        return self.tfs[name]
+        return self.__tfs[name]
 
     def loadTfFromFile(self, filename):
         """Loads a transform from a .npy file, assumes file has the same format as how the save_tf.py saves tfs"""
@@ -205,11 +208,11 @@ class RosNode:
 
     def setupPublisher(self, name, topic, msg_type, queue_size=10):
         """Setup a publisher."""
-        self.pubs[name] = self.__rospy.Publisher(topic, msg_type, queue_size=queue_size)
+        self.__pubs[name] = self.__rospy.Publisher(topic, msg_type, queue_size=queue_size)
 
     def publishMsg(self, name, msg):
         """Publish a message for a given publisher accessed by name."""
-        self.pubs[name].publish(msg)
+        self.__pubs[name].publish(msg)
 
     def setupJointStatePublisher(self, name, topic, queue_size=10):
         """Setup joint state message publisher."""
@@ -238,25 +241,25 @@ class RosNode:
 
     def publishJointState(self, name, joint_name=[], joint_position=[], joint_velocity=[], joint_effort=[]):
         """Publish a joint state message."""
-        self.pubs[name].publish(self.addTimeStampToMsg(JointState(name=joint_name, position=joint_position, velocity=joint_velocity, effort=joint_effort)))
+        self.__pubs[name].publish(self.addTimeStampToMsg(JointState(name=joint_name, position=joint_position, velocity=joint_velocity, effort=joint_effort)))
 
     def publishPoint(self, name, position):
         """Publish a point message."""
-        self.pubs[name].publish(self.packPointMsg(position))
+        self.__pubs[name].publish(self.packPointMsg(position))
 
 
     def publishPointStamped(self, name, position):
         """Publish a point stamped message."""
-        self.pubs[name].publish(self.addTimeStampToMsg(PointStamped(point=self.packPointMsg(position))))
+        self.__pubs[name].publish(self.addTimeStampToMsg(PointStamped(point=self.packPointMsg(position))))
 
     def publishFloat64MultiArray(self, name, data):
         """Publish a float64 multi array message."""
-        self.pubs[name].publish(Float64MultiArray(data=data))
+        self.__pubs[name].publish(Float64MultiArray(data=data))
 
 
     def publishInt64(self, name, data):
         """Publish marker, user can make what they want of the flags."""
-        self.pubs[name].publish(Int64(data=data))
+        self.__pubs[name].publish(Int64(data=data))
 
     # ----------------------------------------------------------------------------------
     #
@@ -266,7 +269,7 @@ class RosNode:
     def setupService(self, name, srv_type, handle):
         """Start a service."""
         self.__assertNameIsUnique(name, 'srvs')
-        self.srvs[name] = self.__rospy.Service(name, srv_type, handle)
+        self.__srvs[name] = self.__rospy.Service(name, srv_type, handle)
 
     # ----------------------------------------------------------------------------------
     #
@@ -276,7 +279,7 @@ class RosNode:
     def setupTimer(self, name, frequency, handle):
         """Start a timer."""
         self.__assertNameIsUnique(name, 'timers')
-        self.timers[name] = self.__rospy.Timer(self.__rospy.Duration(1.0/float(frequency)), handle)
+        self.__timers[name] = self.__rospy.Timer(self.__rospy.Duration(1.0/float(frequency)), handle)
 
     # ----------------------------------------------------------------------------------
     #
@@ -289,12 +292,12 @@ class RosNode:
         if wait:
             msg = self.__rospy.wait_for_message(topic, topic_type, timeout)
             self.__callback(msg, name)
-        self.subs[name] = self.__rospy.Subscriber(topic, topic_type, self.__callback, callback_args=name)
+        self.__subs[name] = self.__rospy.Subscriber(topic, topic_type, self.__callback, callback_args=name)
 
     def setupUserSubscriber(self, topic, type, callback, callback_args=None):
         name = f'sub/{self.uniqueTag()}'
         self.__assertNameIsUnique(name, 'subs')
-        self.subs[name] = self.__rospy.Subscriber(topic, type, callback, callback_args=callback_args)
+        self.__subs[name] = self.__rospy.Subscriber(topic, type, callback, callback_args=callback_args)
 
     def setupJoySubscriber(self, name, topic, joystick_cls, wait=False):
         """Starts a joystick subscriber that automatically parses sensor_msgs/Joy messages to joystick class from a class in joy.py script."""
@@ -303,7 +306,7 @@ class RosNode:
         if wait:
             msg = self.__rospy.wait_for_message(topic, Joy)
             self.__joy_callback(msg, args)
-        self.subs[name] = self.__rospy.Subscriber(topic, Joy, self.__joy_callback, callback_args=args)
+        self.__subs[name] = self.__rospy.Subscriber(topic, Joy, self.__joy_callback, callback_args=args)
 
     # ----------------------------------------------------------------------------------
     #
@@ -312,7 +315,7 @@ class RosNode:
 
     def __callback(self, msg, name):
         """Internal callback method."""
-        self.msgs[name] = msg
+        self.__msgs[name] = msg
 
     def __joy_callback(self, msg, args):
         """Converts joy message to given joystick class and logs to the msgs class attribute."""
@@ -326,12 +329,12 @@ class RosNode:
 
     def msgsRecieved(self, name):
         """True when at least one named message has been received, False otherwise."""
-        return name in self.msgs.keys()
+        return name in self.__msgs.keys()
 
     def getMsg(self, name, default=None):
         """Returns named message, optional default when no messages have been received yet."""
         try:
-            msg = self.msgs[name]
+            msg = self.__msgs[name]
         except KeyError:
             msg = default
         return msg
@@ -347,11 +350,11 @@ class RosNode:
 
     def baseShutdown(self):
         """Kills all timers, subscribers, services, and publishers."""
-        for timer in self.timers.values():
+        for timer in self.__timers.values():
             timer.shutdown()
-        for sub in self.subs.values():
+        for sub in self.__subs.values():
             sub.unregister()
-        for srv in self.srvs.values():
+        for srv in self.__srvs.values():
             srv.shutdown()
-        for pub in self.pubs.values():
+        for pub in self.__pubs.values():
             pub.unregister()
