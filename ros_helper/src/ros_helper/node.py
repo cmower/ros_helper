@@ -197,6 +197,10 @@ class RosNode:
         """Setup a publisher."""
         self.pubs[name] = self.__rospy.Publisher(topic, msg_type, queue_size=queue_size)
 
+    def publishMsg(self, name, msg):
+        """Publish a message for a given publisher accessed by name."""
+        self.pubs[name].publish(msg)
+
     def setupJointStatePublisher(self, name, topic, queue_size=10):
         """Setup joint state message publisher."""
         self.setupPublisher(name, topic, JointState, queue_size=queue_size)
