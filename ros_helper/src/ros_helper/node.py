@@ -173,13 +173,6 @@ class RosNode:
         """Get tf with given name - can throw an error when tf not yet received, check with tfRetrieved."""
         return self.tfs[name]
 
-    def loadTfFromFile(self, filename):
-        """Loads a transform from a .npy file, assumes file has the same format as how the save_tf.py saves tfs"""
-        tf_data = numpy.load(self.parseFilename(filename))
-        p = tf_data[:3]
-        q = tf_data[3:]
-        return p, q
-
 
     # ----------------------------------------------------------------------------------
     #
