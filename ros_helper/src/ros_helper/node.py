@@ -40,8 +40,7 @@ class RosNode:
 
     def initTf2(self):
         """Call if you want to interface with tf2 and use the getTf/setTf."""
-        raise DeprecationWarning('initTf2 is not deprecated')
-
+        raise DeprecationWarning('initTf2 is now deprecated, and will be removed in the future')
 
     def onShutdownUseBaseShutdownMethod(self):
         """Specify the shutdown method as baseShutdown."""
