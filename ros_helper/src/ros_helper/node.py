@@ -183,30 +183,6 @@ class RosNode:
 
     # ----------------------------------------------------------------------------------
     #
-    # ROS message packing methods
-    # ----------------------------------------------------------------------------------
-
-    def addTimeStampToMsg(self, msg):
-        """Add time stamp to a ROS message."""
-        msg.header.stamp = rospy.Time.now()
-        return msg
-
-    def packTransformStampedMsg(self, base_frame_id, child_frame_id, position, quaternion=[0, 0, 0, 1]):
-        """Pack a transform stamped message"""
-        tf = self.addTimeStampToMsg(TransformStamped())
-        tf.child_frame_id = child_frame_id
-        tf.header.frame_id = base_frame_id
-        for i, dim in enumerate('xyz'):
-            setattr(tf.transform.translation, dim, position[i])
-            setattr(tf.transform.rotation, dim, quaternion[i])
-        tf.transform.rotation.w = quaternion[3]
-        return tf
-
-    def packPointMsg(self, position):
-        return Point(x=position[0], y=position[1], z=position[2])
-
-    # ----------------------------------------------------------------------------------
-    #
     # Setup publishers
     # ----------------------------------------------------------------------------------
 
