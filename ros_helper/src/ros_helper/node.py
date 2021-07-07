@@ -169,6 +169,11 @@ class RosNode:
     # Setup publishers
     # ----------------------------------------------------------------------------------
 
+    def create_publisher(self, name, *args, **kwargs):
+        if name in self.pubs.keys():
+            raise rospy.exceptions.ROSException(f'publisher with name ({name}) already exists!')
+        self.pubs[name] = rospy.Publisher(*args, **kwargs)
+
     def setupPublisher(self, name, topic, msg_type, queue_size=10):
         """Setup a publisher."""
         self.pubs[name] = rospy.Publisher(topic, msg_type, queue_size=queue_size)
