@@ -158,7 +158,7 @@ class RosNode:
             self.tfs[name] = tf
 
         # Start tf timer
-        self.setupTimer(f'listen_to_tf_{name}_{self.unique_tag()}', attempt_frequency, __get_tf)
+        self.create_timer(f'listen_to_tf_{name}_{self.unique_tag()}', attempt_frequency, __get_tf)
 
     def tf_retrieved(self, name):
         """True when at least one tf with given name has been received."""
@@ -197,10 +197,11 @@ class RosNode:
     # Setup timers
     # ----------------------------------------------------------------------------------
 
-    def setupTimer(self, name, frequency, handle):
+    def create_timer(self, name, hz, handle):
         """Start a timer."""
-        assert name not in self.timers.keys(), f"Given name ({name}) is not unique!"
-        self.timers[name] = rospy.Timer(rospy.Duration(1.0/float(frequency)), handle)
+        if self.timers.get(name, None) is not None:
+            raise rospy.exceptions.ROSException(f'timer name ({name}) must be unique!')
+        self.timers[name] = rospy.Timer(rospy.Duration(1.0/float(hz)), handle)
 
     # ----------------------------------------------------------------------------------
     #
