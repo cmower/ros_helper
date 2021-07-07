@@ -4,7 +4,10 @@ import tf_conversions
 from .config import parse_filename
 
 
-def load_tf(filename):
+def load_tf(filename, fmt='4x4'):
+    """Load transform from a file."""
+
+    # Load data as 4x4 transform matrix
     data = numpy.load(parse_filename(filename))
     tf = numpy.eye(4)
     if data.shape == (4, 4):
@@ -23,6 +26,31 @@ def load_tf(filename):
         # Position+quaternion
         tf = tf_conversions.transformations.quaternion_matrix(data[3:].copy())
         tf[:3, -1] = data[:3].copy()
+    else:
+        raise ValueError("transform did not conform to any recognized shapes, options: (4, 4), (3, 3), (3,), (4,), (7,)")
+
+    # Convert tf to user desired format
+    if fmt == '4x4':
+        return tf
+    elif fmt == '3x3':
+        return tf[:3, :3]
+
+    try:
+        fmt = int(fmt)
+    except ValueError(f"bad format ({fmt})"):
+        pass
+
+    if fmt == 3:
+        tf = tf[:3,-1].flatten()
+    elif fmt == 4:
+        tf = tf_conversions.transformations.quaternion_from_matrix(tf)
+    elif fmt == 7:
+        p =  tf[:3,-1].flatten()
+        q = tf_conversions.transformations.quaternion_from_matrix(tf[3:])
+        tf = numpy.zeros(7)
+        tf[:3] = p
+        tf[3:] = q
+
     return tf
 
 
