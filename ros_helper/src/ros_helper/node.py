@@ -151,17 +151,14 @@ class RosNode:
         if name in self.tfs.keys():
             raise rospy.exceptions.ROSException(f"given name ({name}) for tf is not unique!")
 
-        # Make unique timer name
-        timer_name = f'listen_to_tf_{name}_{self.unique_tag()}'
-
         # Setup internal retrieval method
-        def __get_tf(event):
+        def __get_tf(e):
             tf = self.get_tf(baseid, childid)
             if tf is None: return
             self.tfs[name] = tf
 
         # Start tf timer
-        self.setupTimer(timer_name, attempt_frequency, __get_tf)
+        self.setupTimer(f'listen_to_tf_{name}_{self.unique_tag()}', attempt_frequency, __get_tf)
 
     def tf_retrieved(self, name):
         """True when at least one tf with given name has been received."""
