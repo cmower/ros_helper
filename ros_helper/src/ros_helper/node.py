@@ -208,27 +208,18 @@ class RosNode:
     # Setup subscribers
     # ----------------------------------------------------------------------------------
 
-    def create_subscriber(self, name, topic, topic_type, wait=False):
+    def create_subscriber(self, name, topic, data_class, **kwargs):
         """Start a subscriber, optionally pause and wait for the first message."""
         if self.subs.get(name, None) is not None:
             raise rospy.exceptions.ROSException(f'subscriber name ({name}) must be unique!')
-        if wait:
-            self.__callback(rospy.wait_for_message(topic, topic_type), name)
-        self.subs[name] = rospy.Subscriber(topic, topic_type, self.__callback, callback_args=name)
 
-    # ----------------------------------------------------------------------------------
-    #
-    # Internal callback methods
-    # ----------------------------------------------------------------------------------
+        def callback(msg, name):
+            self.msgs[name] = msg
 
-    def __callback(self, msg, name):
-        """Internal callback method."""
-        self.msgs[name] = msg
+        if kwargs.get('wait', False):
+            callback(rospy.wait_for_message(topic, data_class), name)
 
-    def __joy_callback(self, msg, args):
-        """Converts joy message to given joystick class and logs to the msgs class attribute."""
-        name, joystick_cls = args
-        self.__callback(joystick_cls(msg), name)
+        self.subs[name] = rospy.Subscriber(topic, data_class, callback, callback_args=name, **kwargs)
 
     # ----------------------------------------------------------------------------------
     #
