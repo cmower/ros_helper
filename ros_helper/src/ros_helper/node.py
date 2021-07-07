@@ -63,14 +63,14 @@ class _callback:
             self._make_callback = self._make_call_args
 
 
-    def _make_call_args(self, x):
+    def _make_call_noargs(self, x):
         self._callback(x)
 
-    def _make_call_noargs(self, x):
+    def _make_call_args(self, x):
         self._callback(x, self._args)
 
     def __call__(self, x):
-        self._make_callback()
+        self._make_callback(x)
 
 # Main
 class RosNode:
