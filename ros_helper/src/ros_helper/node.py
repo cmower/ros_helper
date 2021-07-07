@@ -392,7 +392,7 @@ class RosNode:
         """Simple wrapper for rospy.spin."""
         self.__rospy.spin()
 
-    def baseShutdown(self):
+    def shutdown(self):
         """Kills all timers, subscribers, services, and publishers."""
         for timer in self.__timers.values():
             timer.shutdown()
