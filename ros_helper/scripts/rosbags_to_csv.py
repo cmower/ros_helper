@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 import sys
 import traceback
-import datetime
-import rosbag_pandas
+from datetime import datetime
+from ros_helper.data import rosbag_to_dataframe
 
 def main(argv):
     rval = 0
-    start = datetime.datetime.now()
+    start = datetime.now()
     for filename in argv[1:]:
         print("Converting:", filename)
         try:
             # rosbag -> pandas
-            df = rosbag_pandas.bag_to_dataframe(filename)
-            # pandas -> csv
-            filename_out = filename + '.csv'
-            df.to_csv(filename_out)
-            print("Saved:", filename_out)
+            rosbag_to_dataframe(filename)
         except KeyboardInterrupt:
             print("User quit.")
             break
@@ -24,9 +20,8 @@ def main(argv):
             traceback.print_exc(file=sys.stdout)
             print("-"*70)
             rval = 1
-    end = datetime.datetime.now()
-    duration = end - start
-    print(f"Completed in {duration}.")
+    end = datetime.now()
+    print(f"Completed in {end - start}.")
     return rval
 
 if __name__ == '__main__':
