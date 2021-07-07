@@ -58,6 +58,9 @@ class RosNode:
         self.__params = {}  # Parameters
         self.__tfs = {}     # Transforms
 
+        # Get name of node
+        self.node_name = rospy.get_name()
+
         # Init tf
         self.__tf_broadcaster = tf2_ros.TransformBroadcaster()
         self.__tf_buffer = tf2_ros.Buffer()
