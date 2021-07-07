@@ -29,10 +29,7 @@ import time
 import string
 import random
 import numpy
-# import re
-import rospkg
 import tf2_ros
-import yaml
 import tf_conversions
 from std_msgs.msg import Int64, Float64MultiArray
 from geometry_msgs.msg import TransformStamped, Point, PointStamped
@@ -74,24 +71,6 @@ class RosNode:
         if use_shutdown:
             rospy.on_shutdown(self.shutdown)
 
-    def parseFilename(self, filename):
-        """Parse the filename, i.e. replace $(find ..) with path to package."""
-        # TODO: ideally, use re
-        if ('$(find' in filename) and (')' in filename):
-            # pattern = '$(find \(.*?\))'
-            # matches = re.findall(pattern, filename)
-            filename = filename.replace('$(find ', '') # assume filename starts with '$(find '
-            idx_closing_bracket = filename.find(')')
-            package = filename[:idx_closing_bracket]
-            root = rospkg.RosPack().get_path(package)
-            filename = filename.replace(f'{package})', root)
-        return filename
-
-    def load_config(self, filename):
-        """Loads a yaml config file. You can use $(find package-name)."""
-        with open(self.parseFilename(filename), 'r') as configfile:
-            config = yaml.load(configfile, Loader=yaml.FullLoader)
-        return config
 
     # ----------------------------------------------------------------------------------
     #
