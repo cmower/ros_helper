@@ -95,7 +95,7 @@ class RosNode:
     # Handling parameters
     # ----------------------------------------------------------------------------------
 
-    def setupParams(self, params):
+    def collect_params(self, params):
         """Gets parameters, params must be a list of tuples. Each tuple must have length 1 or 2. The first element is required, it must be the parameter name. The second element is optional, if set it will be the default value."""
         # Iterate over params
         for args in params:
