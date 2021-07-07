@@ -1,7 +1,9 @@
 # ros_helper
 
-ROS helper package. Provides various helper classes/nodes/messages. When writing
-code for ROS, I find that a lot of code is repeated, the
-`ros_helper.node.RosNode` class provides a bunch of methods I use most often.
-When using joysticks, see `ros_helper.joy`. Also included are some helpful
-nodes/scripts.
+The `ros_helper` package provides various helper classes/methods/nodes/messages for
+[ROS1](https://www.ros.org/). Over the years, when I have been developing ROS
+packages, a lot of code is repeated. This package is a central collection of a
+bunch of code that I find myself repeating a lot. 
+
+Feel free to clone and use the `ros_helper` repo inside your catkin workspace,
+or copy/paste/modify any of the scripts for your projects.
