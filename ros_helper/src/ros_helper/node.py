@@ -179,6 +179,9 @@ class RosNode:
     def create_experiment_flag_publisher(self, name):
         self.create_publisher(name, f'experiment_flag/{name}', Int64)
 
+    def experiment_flag(self, name, flag):
+        self.pubs[name].publish(Int64(data=flag))
+
     # ----------------------------------------------------------------------------------
     #
     # Setup services
