@@ -29,15 +29,19 @@ class RosNode:
         self.__params = {}  # Parameters
         self.__tfs = {}     # Transforms
 
+        # Init tf
+        self.__tf_broadcaster = tf2_ros.TransformBroadcaster()
+        self.__tf_buffer = tf2_ros.Buffer()
+        tf2_ros.TransformListener(self.__tf_buffer)
+
     def initNode(self, name):
         """Initializes a node, note that this assumes default options. Use rospy.init_node() when you need more flexibility."""
         self.__rospy.init_node(name)
 
     def initTf2(self):
         """Call if you want to interface with tf2 and use the getTf/setTf."""
-        self.__tf_broadcaster = tf2_ros.TransformBroadcaster()
-        self.__tf_buffer = tf2_ros.Buffer()
-        tf2_ros.TransformListener(self.__tf_buffer)
+        raise DeprecationWarning('initTf2 is not deprecated')
+
 
     def onShutdownUseBaseShutdownMethod(self):
         """Specify the shutdown method as baseShutdown."""
