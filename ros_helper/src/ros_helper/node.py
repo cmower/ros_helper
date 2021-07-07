@@ -49,7 +49,6 @@ def null(*args, **kwargs):
 class _callback:
 
     def __init__(self, callback=None, args=None):
-        assert callable(callback), "callback must be callable"
         if callback is not None:
             self._callback = callback
         else:
