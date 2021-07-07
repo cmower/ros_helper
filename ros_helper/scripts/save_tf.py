@@ -40,8 +40,7 @@ class Node(RosNode):
     def __init__(self):
 
         # Initialization
-        rospy.init_node('save_tf_node', disable_signals=True)
-        RosNode.__init__(self, rospy)
+        RosNode.__init__(self, 'save_tf_node', disable_signals=True)
 
         # Get frames, assumes they are given by command line arguments
         self.baseid = sys.argv[1]
@@ -71,11 +70,13 @@ class Node(RosNode):
         if tf is None:
             if self.did_timeout():
                 rospy.logerr('save_tf.py reached timeout')
-                self.shutdown()
+                rospy.signal_shutdown('finished')
+                # self.shutdown()
             return
         self.append_transform(tf)
         if self.is_finished():
-            self.shutdown()
+            rospy.signal_shutdown('finished')
+            # self.shutdown()
 
     def shutdown(self):
         self.kill()
@@ -84,7 +85,6 @@ class Node(RosNode):
             filename = f'tf_{self.baseid}_{self.childid}.npy'
             numpy.save(filename, tf)
             rospy.loginfo(f'saved {filename}')
-        rospy.signal_shutdown('finished')
 
 if __name__ == '__main__':
     Node().spin()
