@@ -176,60 +176,8 @@ class RosNode:
             kwargs['queue_size'] = 10
         self.pubs[name] = rospy.Publisher(*args, **kwargs)
 
-    def setupPublisher(self, name, topic, msg_type, queue_size=10):
-        """Setup a publisher."""
-        self.pubs[name] = rospy.Publisher(topic, msg_type, queue_size=queue_size)
-
-    def publishMsg(self, name, msg):
-        """Publish a message for a given publisher accessed by name."""
-        self.pubs[name].publish(msg)
-
-    def setupJointStatePublisher(self, name, topic, queue_size=10):
-        """Setup joint state message publisher."""
-        self.setupPublisher(name, topic, JointState, queue_size=queue_size)
-
-    def setupPointPublisher(self, name, topic, queue_size=10):
-        """Setup a point message publisher."""
-        self.setupPublisher(name, topic, Point, queue_size=queue_size)
-
-    def setupPointStampedPublisher(self, name, topic, queue_size=10):
-        """Setup a point stamped message publisher."""
-        self.setupPublisher(name, topic, PointStamped, queue_size=queue_size)
-
-    def setupFloat64MultiArrayPublisher(self, name, topic, queue_size=10):
-        """Setup a float64 multi array message publisher."""
-        self.setupPublisher(name, topic, Float64MultiArray, queue_size=queue_size)
-
-    def setupInt64Publisher(self, name, topic, queue_size=10):
-        """Setup a int64 message publisher."""
-        self.setupPublisher(name, topic, Int64, queue_size=queue_size)
-
-    # ----------------------------------------------------------------------------------
-    #
-    # Easy-publish methods
-    # ----------------------------------------------------------------------------------
-
-    def publishJointState(self, name, joint_name=[], joint_position=[], joint_velocity=[], joint_effort=[]):
-        """Publish a joint state message."""
-        self.pubs[name].publish(self.addTimeStampToMsg(JointState(name=joint_name, position=joint_position, velocity=joint_velocity, effort=joint_effort)))
-
-    def publishPoint(self, name, position):
-        """Publish a point message."""
-        self.pubs[name].publish(self.packPointMsg(position))
-
-
-    def publishPointStamped(self, name, position):
-        """Publish a point stamped message."""
-        self.pubs[name].publish(self.addTimeStampToMsg(PointStamped(point=self.packPointMsg(position))))
-
-    def publishFloat64MultiArray(self, name, data):
-        """Publish a float64 multi array message."""
-        self.pubs[name].publish(Float64MultiArray(data=data))
-
-
-    def publishInt64(self, name, data):
-        """Publish marker, user can make what they want of the flags."""
-        self.pubs[name].publish(Int64(data=data))
+    def create_experiment_flag_publisher(self, name):
+        self.create_publisher(name, Int64)
 
     # ----------------------------------------------------------------------------------
     #
