@@ -180,36 +180,6 @@ class RosNode:
         q = tf_data[3:]
         return p, q
 
-    # ----------------------------------------------------------------------------------
-    #
-    # Common transform conversion methods.
-    # ----------------------------------------------------------------------------------
-
-    def positionFromTf2Msg(self, tf, fmt='xyz'):
-        """Extract position from geomety_msg/TransformStamed message."""
-        return numpy.array([getattr(tf.transform.translation, d) for d in fmt])
-
-    def quaternionFromTf2Msg(self, tf, fmt='xyzw'):
-        """Extract quaternion from geomety_msg/TransformStamed message."""
-        return numpy.array([getattr(tf.transform.rotation, d) for d in fmt])
-
-    def eulerFromQuaternion(self, q):
-        """Euler angles from quaternion."""
-        return tf_conversions.transformations.euler_from_quaternion(q)
-
-    def quaternionFromEuler(self, eul):
-        """Quaternion from Euler angles."""
-        return tf_conversions.transformations.quaternion_from_euler(*eul)
-
-    def eulerFromTf2Msg(self, tf):
-        """Extract Euler angles from geomety_msg/TransformStamed message."""
-        return self.eulerFromQuaternion(self.quaternionFromTf2Msg(tf))
-
-    def transformFromTf2Msg(self, tf):
-        """Extract transformation matrix from geomety_msg/TransformStamed message."""
-        T = tf_conversions.transformations.quaternion_matrix(self.quaternionFromTf2Msg(tf))
-        T[:3,-1] = self.positionFromTf2Msg(tf)
-        return T
 
     # ----------------------------------------------------------------------------------
     #
