@@ -63,9 +63,6 @@ class RosNode:
         self.__tf_buffer = tf2_ros.Buffer()
         tf2_ros.TransformListener(self.__tf_buffer)
 
-    def initNode(self, name):
-        """Initializes a node, note that this assumes default options. Use rospy.init_node() when you need more flexibility."""
-        self.__rospy.init_node(name)
 
     def initTf2(self):
         """Call if you want to interface with tf2 and use the getTf/setTf."""
