@@ -35,6 +35,8 @@ from std_msgs.msg import Int64, Float64MultiArray
 from geometry_msgs.msg import TransformStamped, Point, PointStamped
 from sensor_msgs.msg import Joy, JointState
 
+from .msgs import transform_stamped
+
 # Constants
 NUM_UNIQUE_LETTERS = 5
 NUM_UNIQUE_RAND_INTS = 5
@@ -129,22 +131,20 @@ class RosNode:
     # Interface to tf2
     # ----------------------------------------------------------------------------------
 
-    def get_tf(self, base_frame_id, child_frame_id):
+    def get_tf(self, baseid, childid):
         """Returns a transform from tf2 as a geometry_msgs/TransformStamped."""
         tf = None
         try:
-            tf = self.__tf_buffer.lookup_transform(base_frame_id, child_frame_id, rospy.Time())
+            tf = self.__tf_buffer.lookup_transform(baseid, childid, rospy.Time())
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
-            rospy.logwarn(f'Did not recover frame {child_frame_id} in the frame {base_frame_id}!')
+            rospy.logwarn(f'Did not recover frame {childid} in the frame {baseid}!')
         return tf
 
-    def set_tf(self, base_frame_id, child_frame_id, position, quaternion=[0, 0, 0, 1]):
+    def set_tf(self, baseid, childid, p, q=[0, 0, 0, 1]):
         """Sets a transform using tf2."""
-        self.__tf_broadcaster.sendTransform(
-            self.packTransformStampedMsg(base_frame_id, child_frame_id, position, quaternion)
-        )
+        self.__tf_broadcaster.sendTransform(transform_stamped(baseid, childid, p, q))
 
-    def listen_to_tf(self, name, base_frame_id, child_frame_id, only_one=False, attempt_frequency=50):
+    def listen_to_tf(self, name, baseid, childid, attempt_frequency=50):
         """Keeps track of transforms using tf2. """
 
         # Check name for tf is unique
@@ -152,26 +152,20 @@ class RosNode:
             raise rospy.exceptions.ROSException(f"given name ({name}) for tf is not unique!")
 
         # Make unique timer name
-        timer_name = f'listen_to_tf_{name}_{self.uniqueTag()}'
+        timer_name = f'listen_to_tf_{name}_{self.unique_tag()}'
 
         # Setup internal retrieval method
-        def __retrieveTf(event):
-            tf = self.getTf(base_frame_id, child_frame_id)
+        def __get_tf(event):
+            tf = self.get_tf(baseid, childid)
             if tf is None: return
             self.tfs[name] = tf
-            if only_one:
-                self.timers[timer_name].shutdown()
 
         # Start tf timer
-        self.setupTimer(timer_name, attempt_frequency, __retrieveTf)
+        self.setupTimer(timer_name, attempt_frequency, __get_tf)
 
     def tf_retrieved(self, name):
         """True when at least one tf with given name has been received."""
-        return name in self.tfs.keys()
-
-    def retrieve_tf(self, name):
-        """Get tf with given name - can throw an error when tf not yet received, check with tfRetrieved."""
-        return self.tfs[name]
+        return self.tfs.get(name, None) is not None
 
     # ----------------------------------------------------------------------------------
     #
