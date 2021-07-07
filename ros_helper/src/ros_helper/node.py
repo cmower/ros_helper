@@ -64,9 +64,6 @@ class RosNode:
         tf2_ros.TransformListener(self.__tf_buffer)
 
 
-    def initTf2(self):
-        """Call if you want to interface with tf2 and use the getTf/setTf."""
-        raise DeprecationWarning('initTf2 is now deprecated, and will be removed in the future')
 
     def onShutdownUseBaseShutdownMethod(self):
         """Specify the shutdown method as baseShutdown."""
