@@ -51,11 +51,6 @@ def _contains(d, n):
 # Main
 class RosNode:
 
-    # ----------------------------------------------------------------------------------
-    #
-    # Initialization
-    # ----------------------------------------------------------------------------------
-
     def __init__(self, rospy_, use_shutdown=True):
         """Initialization. Note, child-classes need to make a call to RosNode.__init__(self, rospy)."""
 
@@ -87,11 +82,6 @@ class RosNode:
         if use_shutdown:
             rospy.on_shutdown(self.shutdown)
 
-    # ----------------------------------------------------------------------------------
-    #
-    # Helpful misc methods
-    # ----------------------------------------------------------------------------------
-
     @staticmethod
     def null(*args, **kwargs):
         """Method takes any input, and does nothing."""
@@ -104,11 +94,6 @@ class RosNode:
         random_numbers = "".join([str(n) for n in numpy.random.randint(0, 10, size=NUM_UNIQUE_RAND_INTS)])
         time_now = time.time_ns()
         return f"{random_letters}_{random_numbers}_{time_now}"
-
-    # ----------------------------------------------------------------------------------
-    #
-    # Handling parameters
-    # ----------------------------------------------------------------------------------
 
     def collect_params(self, params):
         """Gets parameters, params must be a list of tuples. Each tuple must have length 1 or 2. The first element is required, it must be the parameter name. The second element is optional, if set it will be the default value."""
@@ -125,11 +110,6 @@ class RosNode:
 
             # Get param from ROS
             self.params[name] = rospy.get_param(*args)
-
-    # ----------------------------------------------------------------------------------
-    #
-    # Interface to tf2
-    # ----------------------------------------------------------------------------------
 
     def get_tf(self, baseid, childid):
         """Returns a transform from tf2 as a geometry_msgs/TransformStamped."""
@@ -160,11 +140,6 @@ class RosNode:
         # Start tf timer
         self.create_timer(f'listen_to_tf_{name}_{self.unique_tag()}', attempt_frequency, __get_tf)
 
-    # ----------------------------------------------------------------------------------
-    #
-    # Setup publishers
-    # ----------------------------------------------------------------------------------
-
     def create_publisher(self, name, *args, **kwargs):
         if name in self.pubs.keys():
             raise rospy.exceptions.ROSException(f'publisher name ({name}) must be unique!')
@@ -178,31 +153,16 @@ class RosNode:
     def flag(self, name, flag):
         self.pubs[name].publish(Int64(data=flag))
 
-    # ----------------------------------------------------------------------------------
-    #
-    # Setup services
-    # ----------------------------------------------------------------------------------
-
     def create_service(self, name, *args, **kwargs):
         if _contains(self.srvs, name):
             raise rospy.exceptions.ROSException(f'service name ({name}) must be unique!')
         self.srvs[name] = rospy.Service(name, *args, **kwargs)
-
-    # ----------------------------------------------------------------------------------
-    #
-    # Setup timers
-    # ----------------------------------------------------------------------------------
 
     def create_timer(self, name, hz, handle):
         """Start a timer."""
         if _contains(self.timers, name):
             raise rospy.exceptions.ROSException(f'timer name ({name}) must be unique!')
         self.timers[name] = rospy.Timer(rospy.Duration(1.0/float(hz)), handle)
-
-    # ----------------------------------------------------------------------------------
-    #
-    # Setup subscribers
-    # ----------------------------------------------------------------------------------
 
     def create_subscriber(self, name, topic, data_class, **kwargs):
         """Start a subscriber, optionally pause and wait for the first message."""
