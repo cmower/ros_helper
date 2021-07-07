@@ -35,6 +35,9 @@ from std_msgs.msg import Int64, Float64MultiArray
 from geometry_msgs.msg import TransformStamped, Point, PointStamped
 from sensor_msgs.msg import Joy, JointState
 
+# Constants
+NUM_UNIQUE_LETTERS = 5
+NUM_UNIQUE_RAND_INTS = 5
 rospy = None
 
 class RosNode:
@@ -82,13 +85,13 @@ class RosNode:
         """Method takes any input, and does nothing."""
         pass
 
-    def uniqueTag(self):
+    @staticmethod
+    def unique_tag():
         """Returns a random string that can be used to uniquify labels."""
-        random_letters = "".join(random.choice(string.ascii_letters) for _ in range(5))
+        random_letters = "".join(random.choice(string.ascii_letters) for _ in range(NUM_UNIQUE_LETTERS))
+        random_numbers = "".join([str(n) for n in numpy.random.randint(0, 10, size=NUM_UNIQUE_RAND_INTS)])
         time_now = time.time_ns()
-        random_numbers = "".join([str(n) for n in numpy.random.randint(0, 10, size=(4,))])
-        unique_stamp = f"{random_letters}_{random_numbers}_{time_now}"
-        return unique_stamp
+        return f"{random_letters}_{random_numbers}_{time_now}"
 
     # ----------------------------------------------------------------------------------
     #
