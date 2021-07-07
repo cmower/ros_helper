@@ -71,12 +71,10 @@ class Node(RosNode):
             if self.did_timeout():
                 rospy.logerr('save_tf.py reached timeout')
                 rospy.signal_shutdown('finished')
-                # self.shutdown()
             return
         self.append_transform(tf)
         if self.is_finished():
             rospy.signal_shutdown('finished')
-            # self.shutdown()
 
     def shutdown(self):
         self.kill()
