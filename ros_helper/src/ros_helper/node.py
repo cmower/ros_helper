@@ -74,10 +74,9 @@ class RosNode:
         if use_shutdown:
             rospy.on_shutdown(self.shutdown)
 
-
     # ----------------------------------------------------------------------------------
     #
-    # Helpful methods
+    # Helpful misc methods
     # ----------------------------------------------------------------------------------
 
     @staticmethod
