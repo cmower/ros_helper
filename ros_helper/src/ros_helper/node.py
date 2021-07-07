@@ -57,13 +57,13 @@ class RosNode:
         rospy = rospy_
 
         # Base setup
-        self.__subs = {}    # Subscribers
-        self.__pubs = {}    # Publishers
-        self.__srvs = {}    # Services
-        self.__timers = {}  # Timers
-        self.__msgs = {}    # Messages
-        self.__params = {}  # Parameters
-        self.__tfs = {}     # Transforms
+        self.subs = {}    # Subscribers
+        self.pubs = {}    # Publishers
+        self.srvs = {}    # Services
+        self.timers = {}  # Timers
+        self.msgs = {}    # Messages
+        self.params = {}  # Parameters
+        self.tfs = {}     # Transforms
 
         # Get name of node
         self.node_name = rospy.get_name()
@@ -115,21 +115,14 @@ class RosNode:
             # Extract name (NOTE: each item in list/tuple params MUST contain a
             # name argument that is the parameter to be retrieved from ROS)
             name = args[0]
-            assert name not in self.__params.keys(), f"Given name ({name}) is not unique!"
+            assert name not in self.params.keys(), f"Given name ({name}) is not unique!"
 
             # Get param from ROS
             #
             # NOTE: for future dev, this will throw an error if default is not
             # given and the name is not found (this is useful to keep, i.e.
             # don't use self.getParam here).
-            self.__params[name] = rospy.get_param(*args)
-
-    def getParam(self, name, default=None):
-        """Retrieves parameter (if name doesn't exists in internal parameter dictionary then getParam attempts to retrieve parameter from ROS)."""
-        if name in self.__params.keys():
-            return self.__params[name]
-        else:
-            return rospy.get_param(name, default)
+            self.params[name] = rospy.get_param(*args)
 
     # ----------------------------------------------------------------------------------
     #
@@ -155,7 +148,7 @@ class RosNode:
         """Keeps track of transforms using tf2. """
 
         # Check name for tf is unique
-        assert name not in self.__tfs.keys(), f"Given name ({name}) is not unique!"
+        assert name not in self.tfs.keys(), f"Given name ({name}) is not unique!"
 
         # Make unique timer name
         timer_name = f'listen_to_tf_{name}_{self.uniqueTag()}'
@@ -164,20 +157,20 @@ class RosNode:
         def __retrieveTf(event):
             tf = self.getTf(base_frame_id, child_frame_id)
             if tf is None: return
-            self.__tfs[name] = tf
+            self.tfs[name] = tf
             if only_one:
-                self.__timers[timer_name].shutdown()
+                self.timers[timer_name].shutdown()
 
         # Start tf timer
         self.setupTimer(timer_name, attempt_frequency, __retrieveTf)
 
     def tfRetrieved(self, name):
         """True when at least one tf with given name has been received."""
-        return name in self.__tfs.keys()
+        return name in self.tfs.keys()
 
     def retrieveTf(self, name):
         """Get tf with given name - can throw an error when tf not yet received, check with tfRetrieved."""
-        return self.__tfs[name]
+        return self.tfs[name]
 
     def loadTfFromFile(self, filename):
         """Loads a transform from a .npy file, assumes file has the same format as how the save_tf.py saves tfs"""
@@ -248,11 +241,11 @@ class RosNode:
 
     def setupPublisher(self, name, topic, msg_type, queue_size=10):
         """Setup a publisher."""
-        self.__pubs[name] = rospy.Publisher(topic, msg_type, queue_size=queue_size)
+        self.pubs[name] = rospy.Publisher(topic, msg_type, queue_size=queue_size)
 
     def publishMsg(self, name, msg):
         """Publish a message for a given publisher accessed by name."""
-        self.__pubs[name].publish(msg)
+        self.pubs[name].publish(msg)
 
     def setupJointStatePublisher(self, name, topic, queue_size=10):
         """Setup joint state message publisher."""
@@ -281,25 +274,25 @@ class RosNode:
 
     def publishJointState(self, name, joint_name=[], joint_position=[], joint_velocity=[], joint_effort=[]):
         """Publish a joint state message."""
-        self.__pubs[name].publish(self.addTimeStampToMsg(JointState(name=joint_name, position=joint_position, velocity=joint_velocity, effort=joint_effort)))
+        self.pubs[name].publish(self.addTimeStampToMsg(JointState(name=joint_name, position=joint_position, velocity=joint_velocity, effort=joint_effort)))
 
     def publishPoint(self, name, position):
         """Publish a point message."""
-        self.__pubs[name].publish(self.packPointMsg(position))
+        self.pubs[name].publish(self.packPointMsg(position))
 
 
     def publishPointStamped(self, name, position):
         """Publish a point stamped message."""
-        self.__pubs[name].publish(self.addTimeStampToMsg(PointStamped(point=self.packPointMsg(position))))
+        self.pubs[name].publish(self.addTimeStampToMsg(PointStamped(point=self.packPointMsg(position))))
 
     def publishFloat64MultiArray(self, name, data):
         """Publish a float64 multi array message."""
-        self.__pubs[name].publish(Float64MultiArray(data=data))
+        self.pubs[name].publish(Float64MultiArray(data=data))
 
 
     def publishInt64(self, name, data):
         """Publish marker, user can make what they want of the flags."""
-        self.__pubs[name].publish(Int64(data=data))
+        self.pubs[name].publish(Int64(data=data))
 
     # ----------------------------------------------------------------------------------
     #
@@ -308,8 +301,8 @@ class RosNode:
 
     def setupService(self, name, srv_type, handle):
         """Start a service."""
-        assert name not in self.__srvs.keys(), f"Given name ({name}) is not unique!"
-        self.__srvs[name] = rospy.Service(name, srv_type, handle)
+        assert name not in self.srvs.keys(), f"Given name ({name}) is not unique!"
+        self.srvs[name] = rospy.Service(name, srv_type, handle)
 
     # ----------------------------------------------------------------------------------
     #
@@ -318,8 +311,8 @@ class RosNode:
 
     def setupTimer(self, name, frequency, handle):
         """Start a timer."""
-        assert name not in self.__timers.keys(), f"Given name ({name}) is not unique!"
-        self.__timers[name] = rospy.Timer(rospy.Duration(1.0/float(frequency)), handle)
+        assert name not in self.timers.keys(), f"Given name ({name}) is not unique!"
+        self.timers[name] = rospy.Timer(rospy.Duration(1.0/float(frequency)), handle)
 
     # ----------------------------------------------------------------------------------
     #
@@ -328,25 +321,25 @@ class RosNode:
 
     def setupSubscriber(self, name, topic, topic_type, wait=False, timeout=None):
         """Start a subscriber, optionally pause and wait for the first message."""
-        assert name not in self.__subs.keys(), f"Given name ({name}) is not unique!"
+        assert name not in self.subs.keys(), f"Given name ({name}) is not unique!"
         if wait:
             msg = rospy.wait_for_message(topic, topic_type, timeout)
             self.__callback(msg, name)
-        self.__subs[name] = rospy.Subscriber(topic, topic_type, self.__callback, callback_args=name)
+        self.subs[name] = rospy.Subscriber(topic, topic_type, self.callback, callback_args=name)
 
     def setupUserSubscriber(self, topic, type, callback, callback_args=None):
         name = f'sub/{self.uniqueTag()}'
-        assert name not in self.__subs.keys(), f"Given name ({name}) is not unique!"
-        self.__subs[name] = rospy.Subscriber(topic, type, callback, callback_args=callback_args)
+        assert name not in self.subs.keys(), f"Given name ({name}) is not unique!"
+        self.subs[name] = rospy.Subscriber(topic, type, callback, callback_args=callback_args)
 
     def setupJoySubscriber(self, name, topic, joystick_cls, wait=False):
         """Starts a joystick subscriber that automatically parses sensor_msgs/Joy messages to joystick class from a class in joy.py script."""
-        assert name not in self.__subs.keys(), f"Given name ({name}) is not unique!"
+        assert name not in self.subs.keys(), f"Given name ({name}) is not unique!"
         args = (name, joystick_cls)
         if wait:
             msg = rospy.wait_for_message(topic, Joy)
             self.__joy_callback(msg, args)
-        self.__subs[name] = rospy.Subscriber(topic, Joy, self.__joy_callback, callback_args=args)
+        self.subs[name] = rospy.Subscriber(topic, Joy, self.__joy_callback, callback_args=args)
 
     # ----------------------------------------------------------------------------------
     #
@@ -355,7 +348,7 @@ class RosNode:
 
     def __callback(self, msg, name):
         """Internal callback method."""
-        self.__msgs[name] = msg
+        self.msgs[name] = msg
 
     def __joy_callback(self, msg, args):
         """Converts joy message to given joystick class and logs to the msgs class attribute."""
@@ -369,12 +362,12 @@ class RosNode:
 
     def msgsRecieved(self, name):
         """True when at least one named message has been received, False otherwise."""
-        return name in self.__msgs.keys()
+        return name in self.msgs.keys()
 
     def getMsg(self, name, default=None):
         """Returns named message, optional default when no messages have been received yet."""
         try:
-            msg = self.__msgs[name]
+            msg = self.msgs[name]
         except KeyError:
             msg = default
         return msg
@@ -390,11 +383,11 @@ class RosNode:
 
     def shutdown(self):
         """Kills all timers, subscribers, services, and publishers."""
-        for timer in self.__timers.values():
+        for timer in self.timers.values():
             timer.shutdown()
-        for sub in self.__subs.values():
+        for sub in self.subs.values():
             sub.unregister()
-        for srv in self.__srvs.values():
+        for srv in self.srvs.values():
             srv.shutdown()
-        for pub in self.__pubs.values():
+        for pub in self.pubs.values():
             pub.unregister()
