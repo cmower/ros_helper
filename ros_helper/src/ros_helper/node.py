@@ -146,13 +146,13 @@ class RosNode:
         self.create_timer(f'listen_to_tf_{name}_{self.unique_tag()}', attempt_frequency, __get_tf)
 
 
-    def create_publisher(self, name, *args, **kwargs):
+    def create_publisher(self, name, topic, data_class, **kwargs):
         """Creates a publisher."""
         if name in self.pubs.keys():
             raise rospy.exceptions.ROSException(f'publisher name ({name}) must be unique!')
-        if _contains(kwargs, 'queue_size'):
+        if not _contains(kwargs, 'queue_size'):
             kwargs['queue_size'] = 10
-        self.pubs[name] = rospy.Publisher(*args, **kwargs)
+        self.pubs[name] = rospy.Publisher(topic, data_class, **kwargs)
 
 
     def create_flag_publisher(self, name):
