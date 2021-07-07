@@ -43,22 +43,21 @@ NUM_UNIQUE_RAND_INTS = 5
 def _contains(d, n):
     return d.get(n, None) is not None
 
-def null(*args, **kwargs):
-    pass
-
 class _callback:
 
     def __init__(self, callback=None, args=None):
         if callback is not None:
             self._callback = callback
         else:
-            self._callback = null
+            self._callback = self._null
         self._args = args
         if self._args is None:
             self._make_callback = self._make_call_noargs
         else:
             self._make_callback = self._make_call_args
 
+    def _null(self, *args, **kwargs):
+        pass
 
     def _make_call_noargs(self, x):
         self._callback(x)
