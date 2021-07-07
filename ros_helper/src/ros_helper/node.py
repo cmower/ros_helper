@@ -148,12 +148,12 @@ class RosNode:
         if name in self.tfs.keys():
             raise rospy.exceptions.ROSException(f"given name ({name}) for tf is not unique!")
 
-        _cb = _callback(callback, callback_args)
+        _user_callback = _callback(callback, callback_args)
 
         # Setup internal retrieval method
         def __get_tf(e):
             tf = self.get_tf(baseid, childid)
-            _cb(tf)
+            _user_callback(tf)
             if tf is None: return
             self.tfs[name] = tf
 
@@ -201,11 +201,11 @@ class RosNode:
             raise rospy.exceptions.ROSException(f'subscriber name ({name}) must be unique!')
 
         # User defined callback
-        _cb = _callback(kwargs.get('callback', None), kwargs.get('callback_args', None))
+        _user_callback = _callback(kwargs.get('callback', None), kwargs.get('callback_args', None))
 
         def _sub_callback(msg, name):
             self.msgs[name] = msg
-            _cb(msg)
+            _user_callback(msg)
 
         if kwargs.get('wait', False):
             _sub_callback(rospy.wait_for_message(topic, data_class), name)
