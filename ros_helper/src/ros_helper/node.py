@@ -105,6 +105,9 @@ class RosNode:
         # Iterate over params
         for args in params:
 
+            if not (1 <= len(args) <= 2):
+                raise ValueError("incorrect number of arguments!")
+
             # Extract name (NOTE: each item in list/tuple params MUST contain a
             # name argument that is the parameter to be retrieved from ROS)
             name = args[0]
