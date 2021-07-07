@@ -60,7 +60,6 @@ class Node(RosNode):
 
         # Start main timer
         self.create_timer('main_loop', self.params['~hz'], self.main_loop)
-        self.startTime('main', self.params['~hz'], self.main)
 
     def callback(self, joy, j):
         self.joys[j] = joy
