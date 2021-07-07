@@ -44,6 +44,10 @@ NUM_UNIQUE_RAND_INTS = 5
 # Rospy
 rospy = None
 
+# Helper functions
+def _contains(d, n):
+    return d.get(n, None) is not None
+
 # Main
 class RosNode:
 
