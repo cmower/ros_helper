@@ -176,10 +176,10 @@ class RosNode:
             kwargs['queue_size'] = 10
         self.pubs[name] = rospy.Publisher(*args, **kwargs)
 
-    def create_experiment_flag_publisher(self, name):
-        self.create_publisher(name, f'experiment_flag/{name}', Int64)
+    def create_flag_publisher(self, name):
+        self.create_publisher(name, f'flag/{name}', Int64)
 
-    def experiment_flag(self, name, flag):
+    def flag(self, name, flag):
         self.pubs[name].publish(Int64(data=flag))
 
     # ----------------------------------------------------------------------------------
