@@ -77,7 +77,8 @@ class RosNode:
     # Helpful methods
     # ----------------------------------------------------------------------------------
 
-    def null(self, *args, **kwargs):
+    @staticmethod
+    def null(*args, **kwargs):
         """Method takes any input, and does nothing."""
         pass
 
