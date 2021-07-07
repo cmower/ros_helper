@@ -187,10 +187,10 @@ class RosNode:
     # Setup services
     # ----------------------------------------------------------------------------------
 
-    def setupService(self, name, srv_type, handle):
-        """Start a service."""
-        assert name not in self.srvs.keys(), f"Given name ({name}) is not unique!"
-        self.srvs[name] = rospy.Service(name, srv_type, handle)
+    def create_service(self, name, *args, **kwargs):
+        if self.srvs.get(name, None) is not None:
+            raise rospy.exceptions.ROSException(f'service name ({name}) must be unique!')
+        self.srvs[name] = rospy.Service(name, *args, **kwargs)
 
     # ----------------------------------------------------------------------------------
     #
