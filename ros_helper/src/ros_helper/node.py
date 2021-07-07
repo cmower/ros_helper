@@ -82,6 +82,17 @@ class RosNode:
         global rospy
         rospy = rospy_
 
+        # Check node is initialized
+        is_initialized = True
+        err_msg = ''
+        try:
+            rospy.Time.now()
+        except rospy.exceptions.ROSInitException as err_msg:
+            is_initialized = False
+
+        if not is_initialized:
+            raise rospy.exceptions.ROSInitException(err_msg)
+
         # Base setup
         self.subs = {}    # Subscribers
         self.pubs = {}    # Publishers
@@ -93,10 +104,6 @@ class RosNode:
 
         # Get name of node
         self.node_name = rospy.get_name()
-
-        # Check node is initialized
-        if self.node_name.endswith('unnamed'):
-            raise rospy.exceptions.ROSException('node not initialized, need to call rospy.init_node()!')
 
         # Init tf
         self.__tf_broadcaster = tf2_ros.TransformBroadcaster()
