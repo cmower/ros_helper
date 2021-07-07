@@ -29,6 +29,7 @@ import time
 import string
 import random
 import numpy
+import rospy
 import tf2_ros
 from std_msgs.msg import Int64
 
@@ -37,9 +38,6 @@ from .msgs import transform_stamped
 # Constants
 NUM_UNIQUE_LETTERS = 5
 NUM_UNIQUE_RAND_INTS = 5
-
-# Rospy
-rospy = None
 
 # Helper functions/classes
 def _contains(d, n):
@@ -76,11 +74,8 @@ class _callback:
 class RosNode:
 
 
-    def __init__(self, rospy_, name, **kwargs):
-        """Initialization. Note, child-classes need to make a call to RosNode.__init__(self, rospy, name, **kwargs)."""
-
-        global rospy
-        rospy = rospy_
+    def __init__(self, name, **kwargs):
+        """Initialization. Note, child-classes need to make a call to RosNode.__init__(self, name, **kwargs)."""
 
         # Initialize node
         rospy.init_node(name, **kwargs)
