@@ -209,13 +209,17 @@ class RosNode:
         if _contains(self.subs, name):
             raise rospy.exceptions.ROSException(f'subscriber name ({name}) must be unique!')
 
-        def callback(msg, name):
+        # User defined callback
+        callback = kwargs.get('callback', self.null)
+
+        def _callback(msg, name):
             self.msgs[name] = msg
+            callback(msg)
 
         if kwargs.get('wait', False):
-            callback(rospy.wait_for_message(topic, data_class), name)
+            _callback(rospy.wait_for_message(topic, data_class), name)
 
-        self.subs[name] = rospy.Subscriber(topic, data_class, callback, callback_args=name, **kwargs)
+        self.subs[name] = rospy.Subscriber(topic, data_class, _callback, callback_args=name, **kwargs)
 
     # ----------------------------------------------------------------------------------
     #
