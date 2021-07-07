@@ -124,10 +124,6 @@ class RosNode:
             assert name not in self.params.keys(), f"Given name ({name}) is not unique!"
 
             # Get param from ROS
-            #
-            # NOTE: for future dev, this will throw an error if default is not
-            # given and the name is not found (this is useful to keep, i.e.
-            # don't use self.getParam here).
             self.params[name] = rospy.get_param(*args)
 
     # ----------------------------------------------------------------------------------
@@ -164,10 +160,6 @@ class RosNode:
         # Start tf timer
         self.create_timer(f'listen_to_tf_{name}_{self.unique_tag()}', attempt_frequency, __get_tf)
 
-    def tf_retrieved(self, name):
-        """True when at least one tf with given name has been received."""
-        return self.tfs.get(name, None) is not None
-
     # ----------------------------------------------------------------------------------
     #
     # Setup publishers
@@ -176,7 +168,7 @@ class RosNode:
     def create_publisher(self, name, *args, **kwargs):
         if name in self.pubs.keys():
             raise rospy.exceptions.ROSException(f'publisher name ({name}) must be unique!')
-        if kwargs.get('queue_size', None) is None:
+        if _contains(kwargs, 'queue_size'):
             kwargs['queue_size'] = 10
         self.pubs[name] = rospy.Publisher(*args, **kwargs)
 
@@ -192,7 +184,7 @@ class RosNode:
     # ----------------------------------------------------------------------------------
 
     def create_service(self, name, *args, **kwargs):
-        if self.srvs.get(name, None) is not None:
+        if _contains(self.srvs, name):
             raise rospy.exceptions.ROSException(f'service name ({name}) must be unique!')
         self.srvs[name] = rospy.Service(name, *args, **kwargs)
 
@@ -203,7 +195,7 @@ class RosNode:
 
     def create_timer(self, name, hz, handle):
         """Start a timer."""
-        if self.timers.get(name, None) is not None:
+        if _contains(self.timers, name):
             raise rospy.exceptions.ROSException(f'timer name ({name}) must be unique!')
         self.timers[name] = rospy.Timer(rospy.Duration(1.0/float(hz)), handle)
 
@@ -214,7 +206,7 @@ class RosNode:
 
     def create_subscriber(self, name, topic, data_class, **kwargs):
         """Start a subscriber, optionally pause and wait for the first message."""
-        if self.subs.get(name, None) is not None:
+        if _contains(self.subs, name):
             raise rospy.exceptions.ROSException(f'subscriber name ({name}) must be unique!')
 
         def callback(msg, name):
@@ -224,23 +216,6 @@ class RosNode:
             callback(rospy.wait_for_message(topic, data_class), name)
 
         self.subs[name] = rospy.Subscriber(topic, data_class, callback, callback_args=name, **kwargs)
-
-    # ----------------------------------------------------------------------------------
-    #
-    # Retrieve messages
-    # ----------------------------------------------------------------------------------
-
-    def msgsRecieved(self, name):
-        """True when at least one named message has been received, False otherwise."""
-        return name in self.msgs.keys()
-
-    def getMsg(self, name, default=None):
-        """Returns named message, optional default when no messages have been received yet."""
-        try:
-            msg = self.msgs[name]
-        except KeyError:
-            msg = default
-        return msg
 
     # ----------------------------------------------------------------------------------
     #
