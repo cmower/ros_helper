@@ -11,7 +11,6 @@ class Node(RosNode):
         # Initialization
         RosNode.__init__(self, rospy)
         self.initNode('save_tf_node')
-        self.initTf2()
 
         # Get frames, assumes they are given by command line arguments
         self.base_frame_id = sys.argv[1]
