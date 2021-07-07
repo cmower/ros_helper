@@ -45,7 +45,7 @@ class RosNode:
     # Initialization
     # ----------------------------------------------------------------------------------
 
-    def __init__(self, rospy):
+    def __init__(self, rospy, use_shutdown=True):
         """Initialization. Note, child-classes need to make a call to RosNode.__init__(self, rospy)."""
 
         # Base setup
@@ -66,11 +66,9 @@ class RosNode:
         self.__tf_buffer = tf2_ros.Buffer()
         tf2_ros.TransformListener(self.__tf_buffer)
 
-
-
-    def onShutdownUseBaseShutdownMethod(self):
-        """Specify the shutdown method as baseShutdown."""
-        self.__rospy.on_shutdown(self.baseShutdown)
+        # Use shutdown
+        if use_shutdown:
+            self.__rospy.on_shutdown(self.shutdown)
 
     def parseFilename(self, filename):
         """Parse the filename, i.e. replace $(find ..) with path to package."""
