@@ -76,22 +76,14 @@ class _callback:
 class RosNode:
 
 
-    def __init__(self, rospy_, use_shutdown=True):
-        """Initialization. Note, child-classes need to make a call to RosNode.__init__(self, rospy)."""
+    def __init__(self, rospy_, name, **kwargs):
+        """Initialization. Note, child-classes need to make a call to RosNode.__init__(self, rospy, name, **kwargs)."""
 
         global rospy
         rospy = rospy_
 
-        # Check node is initialized
-        is_initialized = True
-        err_msg = ''
-        try:
-            rospy.Time.now()
-        except rospy.exceptions.ROSInitException as err_msg:
-            is_initialized = False
-
-        if not is_initialized:
-            raise rospy.exceptions.ROSInitException(err_msg)
+        # Initialize node
+        rospy.init_node(name, **kwargs)
 
         # Base setup
         self.subs = {}    # Subscribers
@@ -111,8 +103,7 @@ class RosNode:
         tf2_ros.TransformListener(self.__tf_buffer)
 
         # Use shutdown
-        if use_shutdown:
-            rospy.on_shutdown(self.shutdown)
+        rospy.on_shutdown(self.shutdown)
 
 
     @staticmethod
