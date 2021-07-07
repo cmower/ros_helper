@@ -38,3 +38,6 @@ catkin_install_python(PROGRAMS
   scripts/save_tf.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+catkin_add_nosetests(test/test_transforms.py)
+catkin_add_nosetests(test/test_config.py)
