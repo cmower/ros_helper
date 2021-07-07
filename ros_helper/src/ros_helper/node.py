@@ -129,7 +129,7 @@ class RosNode:
     # Interface to tf2
     # ----------------------------------------------------------------------------------
 
-    def getTf(self, base_frame_id, child_frame_id):
+    def get_tf(self, base_frame_id, child_frame_id):
         """Returns a transform from tf2 as a geometry_msgs/TransformStamped."""
         tf = None
         try:
@@ -138,17 +138,18 @@ class RosNode:
             rospy.logwarn(f'Did not recover frame {child_frame_id} in the frame {base_frame_id}!')
         return tf
 
-    def setTf(self, base_frame_id, child_frame_id, position, quaternion=[0, 0, 0, 1]):
+    def set_tf(self, base_frame_id, child_frame_id, position, quaternion=[0, 0, 0, 1]):
         """Sets a transform using tf2."""
         self.__tf_broadcaster.sendTransform(
             self.packTransformStampedMsg(base_frame_id, child_frame_id, position, quaternion)
         )
 
-    def listenToTf(self, name, base_frame_id, child_frame_id, only_one=False, attempt_frequency=50):
+    def listen_to_tf(self, name, base_frame_id, child_frame_id, only_one=False, attempt_frequency=50):
         """Keeps track of transforms using tf2. """
 
         # Check name for tf is unique
-        assert name not in self.tfs.keys(), f"Given name ({name}) is not unique!"
+        if name in self.tfs.keys():
+            raise rospy.exceptions.ROSException(f"given name ({name}) for tf is not unique!")
 
         # Make unique timer name
         timer_name = f'listen_to_tf_{name}_{self.uniqueTag()}'
