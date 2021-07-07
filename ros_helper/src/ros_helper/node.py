@@ -187,10 +187,23 @@ class RosNode:
 
         # User defined callback
         callback = kwargs.get('callback', self.null)
+        callback_args = kwargs.get('callback_args', None)
+
+
+        def _call_user_callback_noargs(msg, args):
+            callback(msg)
+
+        def _call_user_callback_args(msg, args):
+            callback(msg, args)
+
+        if callback_args is not None:
+            _call_user_callback = _call_user_callback_args
+        else:
+            _call_user_callback = _call_user_callback_noargs
 
         def _callback(msg, name):
             self.msgs[name] = msg
-            callback(msg)
+            _call_user_callback(msg, callback_args)
 
         if kwargs.get('wait', False):
             _callback(rospy.wait_for_message(topic, data_class), name)
