@@ -27,9 +27,10 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 import rospy
-from ros_helper.msg import MultiJoy
 from sensor_msgs.msg import Joy
+
 from ros_helper.node import RosNode
+from ros_helper.msg import MultiJoy
 
 class Node(RosNode):
 
