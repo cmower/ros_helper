@@ -45,9 +45,6 @@ rospy = None
 # Main
 class RosNode:
 
-    # Constants
-
-
     # ----------------------------------------------------------------------------------
     #
     # Initialization
