@@ -41,9 +41,36 @@ NUM_UNIQUE_RAND_INTS = 5
 # Rospy
 rospy = None
 
-# Helper functions
+# Helper functions/classes
 def _contains(d, n):
     return d.get(n, None) is not None
+
+def null(*args, **kwargs):
+    pass
+
+class _callback:
+
+    def __init__(self, callback=None, args=None):
+        assert callable(callback), "callback must be callable"
+        if callback is not None:
+            self._callback = callback
+        else:
+            self._callback = null
+        self._args = args
+        if self._args is None:
+            self._make_callback = self._make_call_noargs
+        else:
+            self._make_callback = self._make_call_args
+
+
+    def _make_call_args(self, x):
+        self._callback(x)
+
+    def _make_call_noargs(self, x):
+        self._callback(x, self._args)
+
+    def __call__(self, x):
+        self._make_callback()
 
 # Main
 class RosNode:
@@ -79,12 +106,6 @@ class RosNode:
         # Use shutdown
         if use_shutdown:
             rospy.on_shutdown(self.shutdown)
-
-
-    @staticmethod
-    def null(*args, **kwargs):
-        """Method takes any input, and does nothing."""
-        pass
 
 
     @staticmethod
@@ -129,21 +150,24 @@ class RosNode:
         self.__tf_broadcaster.sendTransform(transform_stamped(baseid, childid, p, q))
 
 
-    def listen_to_tf(self, name, baseid, childid, attempt_frequency=50):
+    def listen_to_tf(self, name, baseid, childid, frequency=50, callback=None, callback_args=None):
         """Keeps track of transforms using tf2. """
 
         # Check name for tf is unique
         if name in self.tfs.keys():
             raise rospy.exceptions.ROSException(f"given name ({name}) for tf is not unique!")
 
+        _cb = _callback(callback, callback_args)
+
         # Setup internal retrieval method
         def __get_tf(e):
             tf = self.get_tf(baseid, childid)
+            _cb(tf)
             if tf is None: return
             self.tfs[name] = tf
 
         # Start tf timer
-        self.create_timer(f'listen_to_tf_{name}_{self.unique_tag()}', attempt_frequency, __get_tf)
+        self.create_timer(f'listen_to_tf_{name}_{self.unique_tag()}', frequency, __get_tf)
 
 
     def create_publisher(self, name, topic, data_class, **kwargs):
@@ -186,29 +210,16 @@ class RosNode:
             raise rospy.exceptions.ROSException(f'subscriber name ({name}) must be unique!')
 
         # User defined callback
-        callback = kwargs.get('callback', self.null)
-        callback_args = kwargs.get('callback_args', None)
+        _cb = _callback(kwargs.get('callback', None), kwargs.get('callback_args', None))
 
-
-        def _call_user_callback_noargs(msg, args):
-            callback(msg)
-
-        def _call_user_callback_args(msg, args):
-            callback(msg, args)
-
-        if callback_args is not None:
-            _call_user_callback = _call_user_callback_args
-        else:
-            _call_user_callback = _call_user_callback_noargs
-
-        def _callback(msg, name):
+        def _sub_callback(msg, name):
             self.msgs[name] = msg
-            _call_user_callback(msg, callback_args)
+            _cb(msg)
 
         if kwargs.get('wait', False):
-            _callback(rospy.wait_for_message(topic, data_class), name)
+            _sub_callback(rospy.wait_for_message(topic, data_class), name)
 
-        self.subs[name] = rospy.Subscriber(topic, data_class, _callback, callback_args=name, **kwargs)
+        self.subs[name] = rospy.Subscriber(topic, data_class, _sub_callback, callback_args=name, **kwargs)
 
 
     def spin(self):
