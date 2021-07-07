@@ -68,6 +68,10 @@ class RosNode:
         # Get name of node
         self.node_name = rospy.get_name()
 
+        # Check node is initialized
+        if self.node_name.endswith('unnamed'):
+            raise rospy.exceptions.ROSException('node not initialized, need to call rospy.init_node()!')
+
         # Init tf
         self.__tf_broadcaster = tf2_ros.TransformBroadcaster()
         self.__tf_buffer = tf2_ros.Buffer()
