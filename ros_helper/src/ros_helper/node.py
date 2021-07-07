@@ -226,14 +226,28 @@ class RosNode:
         """Simple wrapper for rospy.spin."""
         rospy.spin()
 
-
-    def shutdown(self):
-        """Kills all timers, subscribers, services, and publishers."""
+    def shutdown_timers(self):
         for timer in self.timers.values():
             timer.shutdown()
-        for sub in self.subs.values():
-            sub.unregister()
+
+    def shutdown_services(self):
         for srv in self.srvs.values():
             srv.shutdown()
+
+    def unregister_publishers(self):
         for pub in self.pubs.values():
             pub.unregister()
+
+    def unregister_subscribers(self):
+        for sub in self.subs.values():
+            sub.unregister()
+
+    def kill(self):
+        """Kills all timers, subscribers, services, and publishers."""
+        self.shutdown_timers()
+        self.unregister_subscribers()
+        self.shutdown_services()
+        self.unregister_publishers()
+
+    def shutdown(self):
+        self.kill()
