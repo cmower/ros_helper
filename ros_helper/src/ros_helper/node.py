@@ -51,6 +51,7 @@ def _contains(d, n):
 # Main
 class RosNode:
 
+
     def __init__(self, rospy_, use_shutdown=True):
         """Initialization. Note, child-classes need to make a call to RosNode.__init__(self, rospy)."""
 
@@ -82,10 +83,12 @@ class RosNode:
         if use_shutdown:
             rospy.on_shutdown(self.shutdown)
 
+
     @staticmethod
     def null(*args, **kwargs):
         """Method takes any input, and does nothing."""
         pass
+
 
     @staticmethod
     def unique_tag():
@@ -94,6 +97,7 @@ class RosNode:
         random_numbers = "".join([str(n) for n in numpy.random.randint(0, 10, size=NUM_UNIQUE_RAND_INTS)])
         time_now = time.time_ns()
         return f"{random_letters}_{random_numbers}_{time_now}"
+
 
     def collect_params(self, params):
         """Gets parameters, params must be a list of tuples. Each tuple must have length 1 or 2. The first element is required, it must be the parameter name. The second element is optional, if set it will be the default value."""
@@ -111,6 +115,7 @@ class RosNode:
             # Get param from ROS
             self.params[name] = rospy.get_param(*args)
 
+
     def get_tf(self, baseid, childid):
         """Returns a transform from tf2 as a geometry_msgs/TransformStamped."""
         tf = None
@@ -120,9 +125,11 @@ class RosNode:
             rospy.logwarn(f'Did not recover frame {childid} in the frame {baseid}!')
         return tf
 
+
     def set_tf(self, baseid, childid, p, q=[0, 0, 0, 1]):
         """Sets a transform using tf2."""
         self.__tf_broadcaster.sendTransform(transform_stamped(baseid, childid, p, q))
+
 
     def listen_to_tf(self, name, baseid, childid, attempt_frequency=50):
         """Keeps track of transforms using tf2. """
@@ -140,6 +147,7 @@ class RosNode:
         # Start tf timer
         self.create_timer(f'listen_to_tf_{name}_{self.unique_tag()}', attempt_frequency, __get_tf)
 
+
     def create_publisher(self, name, *args, **kwargs):
         if name in self.pubs.keys():
             raise rospy.exceptions.ROSException(f'publisher name ({name}) must be unique!')
@@ -147,22 +155,27 @@ class RosNode:
             kwargs['queue_size'] = 10
         self.pubs[name] = rospy.Publisher(*args, **kwargs)
 
+
     def create_flag_publisher(self, name):
         self.create_publisher(name, f'flag/{name}', Int64)
 
+
     def flag(self, name, flag):
         self.pubs[name].publish(Int64(data=flag))
+
 
     def create_service(self, name, *args, **kwargs):
         if _contains(self.srvs, name):
             raise rospy.exceptions.ROSException(f'service name ({name}) must be unique!')
         self.srvs[name] = rospy.Service(name, *args, **kwargs)
 
+
     def create_timer(self, name, hz, handle):
         """Start a timer."""
         if _contains(self.timers, name):
             raise rospy.exceptions.ROSException(f'timer name ({name}) must be unique!')
         self.timers[name] = rospy.Timer(rospy.Duration(1.0/float(hz)), handle)
+
 
     def create_subscriber(self, name, topic, data_class, **kwargs):
         """Start a subscriber, optionally pause and wait for the first message."""
@@ -181,14 +194,11 @@ class RosNode:
 
         self.subs[name] = rospy.Subscriber(topic, data_class, _callback, callback_args=name, **kwargs)
 
-    # ----------------------------------------------------------------------------------
-    #
-    # Spin and shutdown node
-    # ----------------------------------------------------------------------------------
 
     def spin(self):
         """Simple wrapper for rospy.spin."""
         rospy.spin()
+
 
     def shutdown(self):
         """Kills all timers, subscribers, services, and publishers."""
