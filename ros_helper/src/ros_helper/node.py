@@ -98,6 +98,7 @@ class RosNode:
 
     def collect_params(self, params):
         """Gets parameters, params must be a list of tuples. Each tuple must have length 1 or 2. The first element is required, it must be the parameter name. The second element is optional, if set it will be the default value."""
+
         # Iterate over params
         for args in params:
 
@@ -146,6 +147,7 @@ class RosNode:
 
 
     def create_publisher(self, name, *args, **kwargs):
+        """Creates a publisher."""
         if name in self.pubs.keys():
             raise rospy.exceptions.ROSException(f'publisher name ({name}) must be unique!')
         if _contains(kwargs, 'queue_size'):
@@ -154,14 +156,17 @@ class RosNode:
 
 
     def create_flag_publisher(self, name):
+        """Creates a publisher for a flag, you can use this in experiments to stamp discrete events."""
         self.create_publisher(name, f'flag/{name}', Int64)
 
 
-    def flag(self, name, flag):
+    def flag(self, name, flag=0):
+        """Publish a flag."""
         self.pubs[name].publish(Int64(data=flag))
 
 
     def create_service(self, name, *args, **kwargs):
+        """Create a service"""
         if _contains(self.srvs, name):
             raise rospy.exceptions.ROSException(f'service name ({name}) must be unique!')
         self.srvs[name] = rospy.Service(name, *args, **kwargs)
@@ -176,6 +181,7 @@ class RosNode:
 
     def create_subscriber(self, name, topic, data_class, **kwargs):
         """Start a subscriber, optionally pause and wait for the first message."""
+
         if _contains(self.subs, name):
             raise rospy.exceptions.ROSException(f'subscriber name ({name}) must be unique!')
 
