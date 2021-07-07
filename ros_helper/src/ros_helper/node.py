@@ -208,27 +208,13 @@ class RosNode:
     # Setup subscribers
     # ----------------------------------------------------------------------------------
 
-    def setupSubscriber(self, name, topic, topic_type, wait=False, timeout=None):
+    def create_subscriber(self, name, topic, topic_type, wait=False):
         """Start a subscriber, optionally pause and wait for the first message."""
-        assert name not in self.subs.keys(), f"Given name ({name}) is not unique!"
+        if self.subs.get(name, None) is not None:
+            raise rospy.exceptions.ROSException(f'subscriber name ({name}) must be unique!')
         if wait:
-            msg = rospy.wait_for_message(topic, topic_type, timeout)
-            self.__callback(msg, name)
-        self.subs[name] = rospy.Subscriber(topic, topic_type, self.callback, callback_args=name)
-
-    def setupUserSubscriber(self, topic, type, callback, callback_args=None):
-        name = f'sub/{self.uniqueTag()}'
-        assert name not in self.subs.keys(), f"Given name ({name}) is not unique!"
-        self.subs[name] = rospy.Subscriber(topic, type, callback, callback_args=callback_args)
-
-    def setupJoySubscriber(self, name, topic, joystick_cls, wait=False):
-        """Starts a joystick subscriber that automatically parses sensor_msgs/Joy messages to joystick class from a class in joy.py script."""
-        assert name not in self.subs.keys(), f"Given name ({name}) is not unique!"
-        args = (name, joystick_cls)
-        if wait:
-            msg = rospy.wait_for_message(topic, Joy)
-            self.__joy_callback(msg, args)
-        self.subs[name] = rospy.Subscriber(topic, Joy, self.__joy_callback, callback_args=args)
+            self.__callback(rospy.wait_for_message(topic, topic_type), name)
+        self.subs[name] = rospy.Subscriber(topic, topic_type, self.__callback, callback_args=name)
 
     # ----------------------------------------------------------------------------------
     #
