@@ -177,7 +177,7 @@ class RosNode:
         self.pubs[name] = rospy.Publisher(*args, **kwargs)
 
     def create_experiment_flag_publisher(self, name):
-        self.create_publisher(name, Int64)
+        self.create_publisher(name, f'experiment_flag/{name}', Int64)
 
     # ----------------------------------------------------------------------------------
     #
