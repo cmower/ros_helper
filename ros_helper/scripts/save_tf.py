@@ -29,76 +29,60 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import sys
 import rospy
 import numpy
+
 from ros_helper.node import RosNode
+from ros_helper.transforms import transform_from_msg
 
 class Node(RosNode):
+
+    TIMEOUT = 100
 
     def __init__(self):
 
         # Initialization
-        RosNode.__init__(self, rospy)
-        self.initNode('save_tf_node')
+        RosNode.__init__(self, 'save_tf_node', disable_signals=True)
 
         # Get frames, assumes they are given by command line arguments
-        self.base_frame_id = sys.argv[1]
-        self.child_frame_id = sys.argv[2]
+        self.baseid = sys.argv[1]
+        self.childid = sys.argv[2]
+        n = 1
         if len(sys.argv) > 3:
-            self.num_tfs_to_collect = int(sys.argv[3])
-        else:
-            self.num_tfs_to_collect = 200
-        if len(sys.argv) > 4:
-            self.timeout = int(sys.argv[4])
-        else:
-            self.timeout = 100
-        self.n_attempts = 0
-        self.tfs = []
+            n = int(sys.argv[3])
 
-        # Setup tf listener
-        self.listenToTf('tf', self.base_frame_id, self.child_frame_id, frequency=150)
+        self.nfails = 0
+        self.idx = 0
+        self.transforms = [None]*n
+        self.listen_to_tf('tf', self.baseid, self.childid, frequency=100, callback=self.callback)
 
-        # Start main loop
-        rospy.loginfo('Logging tfs...')
-        self.startTimer('main', 100, self.main)
+    def did_timeout(self):
+        self.nfails += 1
+        return self.nfails == self.TIMEOUT
 
-    def main(self, event):
+    def append_transform(self, tf):
+        self.transforms[self.idx] = tf
+        self.idx += 1
+        rospy.loginfo(f'collected transform {self.idx}/{len(self.transforms)}')
 
-        # If nothing received yet return
-        if not self.tfRetrieved('tf'):
-            self.n_attempts += 1
-            if self.n_passes == self.timeout:
-                rospy.logerr(f'Did not hear any tfs in {self.timeout} attempts.')
-                self.baseShutdown()
-                sys.exit(1)
+    def is_finished(self):
+        return self.idx == len(self.transforms)
+
+    def callback(self, tf):
+        if tf is None:
+            if self.did_timeout():
+                rospy.logerr('save_tf.py reached timeout')
+                rospy.signal_shutdown('finished')
             return
+        self.append_transform(tf)
+        if self.is_finished():
+            rospy.signal_shutdown('finished')
 
-        # Grab tf and append to tfs
-        tf = self.retrieveTf('tf')
-        p = self.positionFromTf2Msg(tf).tolist()
-        q = self.quaterionFromTf2Msg(tf).tolist()
-        self.tfs.append(p + q)
-
-        # Report
-        n = len(self.tfs)
-        rospy.loginfo(f'Collected {n}/{self.num_tfs_to_collect} tfs.')
-
-        # Check if collected enough
-        if n == self.num_tfs_to_collect:
-            rospy.loginfo('Complete.')
-
-            # Compute tf
-            tf = numpy.array(self.tfs).mean(axis=0)
-
-            # Save tf
-            stamp = self.uniqueTag()
-            filename = f'tf_{self.base_frame_id}_{self.child_frame_id}_{stamp}.npy'
+    def shutdown(self):
+        self.kill()
+        if self.is_finished():
+            tf = numpy.array(list(map(transform_from_msg, self.transforms))).mean(axis=0)
+            filename = f'tf_{self.baseid}_{self.childid}.npy'
             numpy.save(filename, tf)
-            rospy.loginfo('Saved: %s' % filename)
-
-            # Shutdown
-            self.baseShutdown()
-            sys.exit(0)
+            rospy.loginfo(f'saved {filename}')
 
 if __name__ == '__main__':
     Node().spin()
-
-
