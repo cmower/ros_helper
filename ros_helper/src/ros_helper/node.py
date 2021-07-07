@@ -83,7 +83,7 @@ class RosNode:
             filename = filename.replace(f'{package})', root)
         return filename
 
-    def loadConfig(self, filename):
+    def load_config(self, filename):
         """Loads a yaml config file. You can use $(find package-name)."""
         with open(self.parseFilename(filename), 'r') as configfile:
             config = yaml.load(configfile, Loader=yaml.FullLoader)
