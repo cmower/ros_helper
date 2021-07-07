@@ -74,3 +74,7 @@ def transform_from_msg(tf_msg):
     T = tf_conversions.transformations.quaternion_matrix(quaternion_from_msg(tf_msg))
     T[:3, -1] = position_from_msg(tf_msg)
     return T
+
+def rotation_from_msg(tf_msg):
+    """Extract rotation matrix from geomety_msg/TransformStamed message."""
+    return tf_conversions.transformations.quaternion_matrix(quaternion_from_msg(tf_msg))[:3, :3]
