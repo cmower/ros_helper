@@ -172,11 +172,11 @@ class RosNode:
         self.srvs[name] = rospy.Service(name, *args, **kwargs)
 
 
-    def create_timer(self, name, hz, handle):
+    def create_timer(self, name, frequency, handle):
         """Start a timer."""
         if _contains(self.timers, name):
             raise rospy.exceptions.ROSException(f'timer name ({name}) must be unique!')
-        self.timers[name] = rospy.Timer(rospy.Duration(1.0/float(hz)), handle)
+        self.timers[name] = rospy.Timer(rospy.Duration(1.0/float(frequency)), handle)
 
 
     def create_subscriber(self, name, topic, data_class, **kwargs):
