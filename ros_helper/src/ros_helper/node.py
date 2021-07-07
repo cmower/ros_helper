@@ -38,9 +38,15 @@ from sensor_msgs.msg import Joy, JointState
 # Constants
 NUM_UNIQUE_LETTERS = 5
 NUM_UNIQUE_RAND_INTS = 5
+
+# Rospy
 rospy = None
 
+# Main
 class RosNode:
+
+    # Constants
+
 
     # ----------------------------------------------------------------------------------
     #
