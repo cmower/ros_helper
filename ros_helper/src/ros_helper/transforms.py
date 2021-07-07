@@ -46,7 +46,7 @@ def load_tf(filename, fmt='4x4'):
         tf = tf_conversions.transformations.quaternion_from_matrix(tf)
     elif fmt == 7:
         p =  tf[:3,-1].flatten()
-        q = tf_conversions.transformations.quaternion_from_matrix(tf[3:])
+        q = tf_conversions.transformations.quaternion_from_matrix(tf)
         tf = numpy.zeros(7)
         tf[:3] = p
         tf[3:] = q
