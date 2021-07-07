@@ -171,7 +171,9 @@ class RosNode:
 
     def create_publisher(self, name, *args, **kwargs):
         if name in self.pubs.keys():
-            raise rospy.exceptions.ROSException(f'publisher with name ({name}) already exists!')
+            raise rospy.exceptions.ROSException(f'publisher name ({name}) must be unique!')
+        if kwargs.get('queue_size', None) is None:
+            kwargs['queue_size'] = 10
         self.pubs[name] = rospy.Publisher(*args, **kwargs)
 
     def setupPublisher(self, name, topic, msg_type, queue_size=10):
