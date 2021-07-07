@@ -37,36 +37,36 @@ class Node(RosNode):
     def __init__(self):
 
         # Initialization
+        rospy.init_node('multijoy_node')
         RosNode.__init__(self, rospy)
-        self.initNode('multijoy_node')
-        self.onShutdownUseBaseShutdownMethod()
 
         # Get parameters
-        self.getParams([
+        self.collect_params([
             ('~joy_topics', ['joy']),  # a list of sensor_msgs/Joy topics
             ('~hz', 100),  # sampling frequency
         ])
         self.njoys = len(self.params['~joy_topics'])
 
         # Setup publisher
-        self.setupPublisher('joys_out', 'multijoy', MultiJoy)
+        self.create_publisher('joys_out', 'multijoy', MultiJoy)
 
         # Setup subscribers
         self.joys = [None]*self.njoys
         for j in range(self.njoys):
             topic = self.params['~joy_topics'][j]
-            self.subs[f'joy_sub_{j}'] = rospy.Subscriber(topic, Joy, self.callback, callback_args=j)
+            self.create_subscriber(f'joy{j}', topic, Joy, callback=self.callback, callback_args=j)
 
         # Setup output message
         self.joys_out = MultiJoy(njoys=self.njoys)
 
         # Start main timer
+        self.create_timer('main_loop', self.params['~hz'], self.main_loop)
         self.startTime('main', self.params['~hz'], self.main)
 
     def callback(self, joy, j):
         self.joys[j] = joy
 
-    def main(self, event):
+    def main_loop(self, event):
         if any(joy is None for joy in self.joys):
             return
         self.joys_out.header.stamp = rospy.Time.now()
