@@ -145,7 +145,7 @@ class RosNode:
 
     def set_tf(self, baseid, childid, p, q=[0, 0, 0, 1]):
         """Sets a transform using tf2."""
-        self.__tf_broadcaster.sendTransform(transform_stamped(baseid, childid, p, q))
+        self.__tf_broadcaster.sendTransform(transform_stamped(baseid, childid, rospy.Time.now(), p, q))
 
 
     def listen_to_tf(self, name, baseid, childid, frequency=50, callback=None, callback_args=None):
