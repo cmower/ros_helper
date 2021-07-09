@@ -41,6 +41,7 @@ NUM_UNIQUE_RAND_INTS = 5
 
 # Helper functions/classes
 def _contains(d, n):
+    """True when dictionary contains name in keys."""
     return d.get(n, None) is not None
 
 class _callback:
@@ -217,18 +218,22 @@ class RosNode:
         rospy.spin()
 
     def shutdown_timers(self):
+        """Shutdown all timers"""l
         for timer in self.timers.values():
             timer.shutdown()
 
     def shutdown_services(self):
+        """Shutdown all services"""
         for srv in self.srvs.values():
             srv.shutdown()
 
     def unregister_publishers(self):
+        """Unregister all publishers"""
         for pub in self.pubs.values():
             pub.unregister()
 
     def unregister_subscribers(self):
+        """Unregister all subscribers"""
         for sub in self.subs.values():
             sub.unregister()
 
@@ -240,4 +245,5 @@ class RosNode:
         self.unregister_publishers()
 
     def shutdown(self):
+        """Shutdown method"""
         self.kill()
