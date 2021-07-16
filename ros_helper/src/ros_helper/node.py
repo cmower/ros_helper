@@ -202,6 +202,14 @@ class RosNode:
 
         # User defined callback
         _user_callback = _callback(kwargs.get('callback', None), kwargs.get('callback_args', None))
+        try:
+            kwargs.pop('callback')
+        except KeyError:
+            pass
+        try:
+            kwargs.pop('callback_args')
+        except KeyError:
+            pass
 
         def _sub_callback(msg, name):
             self.msgs[name] = msg
