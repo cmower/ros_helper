@@ -41,6 +41,7 @@ NUM_UNIQUE_RAND_INTS = 5
 
 # Helper functions/classes
 def _contains(d, n):
+    """True when dictionary contains name in keys."""
     return d.get(n, None) is not None
 
 class _callback:
@@ -99,6 +100,12 @@ class RosNode:
         rospy.on_shutdown(self.shutdown)
 
 
+    def __is_name_unique(self, d, n, label):
+        """Check if name is unique in the dictionary keys, ROSException is thrown if not."""
+        if _contains(d, n):
+            raise rospy.exceptions.ROSException(f"given name ({n}) is not unique in {label}!")
+
+
     @staticmethod
     def unique_tag():
         """Returns a random string that can be used to uniquify labels."""
@@ -138,16 +145,13 @@ class RosNode:
 
     def set_tf(self, baseid, childid, p, q=[0, 0, 0, 1]):
         """Sets a transform using tf2."""
-        self.__tf_broadcaster.sendTransform(transform_stamped(baseid, childid, p, q))
+        self.__tf_broadcaster.sendTransform(transform_stamped(baseid, childid, rospy.Time.now(), p, q))
 
 
     def listen_to_tf(self, name, baseid, childid, frequency=50, callback=None, callback_args=None):
-        """Keeps track of transforms using tf2. """
+        """Keeps track of transforms using tf2."""
 
-        # Check name for tf is unique
-        if name in self.tfs.keys():
-            raise rospy.exceptions.ROSException(f"given name ({name}) for tf is not unique!")
-
+        self.__is_name_unique(self.tfs, name, 'tfs')
         _user_callback = _callback(callback, callback_args)
 
         # Setup internal retrieval method
@@ -163,8 +167,7 @@ class RosNode:
 
     def create_publisher(self, name, topic, data_class, **kwargs):
         """Creates a publisher."""
-        if name in self.pubs.keys():
-            raise rospy.exceptions.ROSException(f'publisher name ({name}) must be unique!')
+        self.__is_name_unique(self.pubs, name, 'publisher')
         if not _contains(kwargs, 'queue_size'):
             kwargs['queue_size'] = 10
         self.pubs[name] = rospy.Publisher(topic, data_class, **kwargs)
@@ -182,23 +185,20 @@ class RosNode:
 
     def create_service(self, name, *args, **kwargs):
         """Create a service"""
-        if _contains(self.srvs, name):
-            raise rospy.exceptions.ROSException(f'service name ({name}) must be unique!')
+        self.__is_name_unique(self.srvs, name, 'service')
         self.srvs[name] = rospy.Service(name, *args, **kwargs)
 
 
     def create_timer(self, name, frequency, handle):
         """Start a timer."""
-        if _contains(self.timers, name):
-            raise rospy.exceptions.ROSException(f'timer name ({name}) must be unique!')
+        self.__is_name_unique(self.timers, name, 'timer')
         self.timers[name] = rospy.Timer(rospy.Duration(1.0/float(frequency)), handle)
 
 
     def create_subscriber(self, name, topic, data_class, **kwargs):
         """Start a subscriber, optionally pause and wait for the first message."""
 
-        if _contains(self.subs, name):
-            raise rospy.exceptions.ROSException(f'subscriber name ({name}) must be unique!')
+        self.__is_name_unique(self.subs, name, 'subscriber')
 
         # User defined callback
         _user_callback = _callback(kwargs.get('callback', None), kwargs.get('callback_args', None))
@@ -226,18 +226,22 @@ class RosNode:
         rospy.spin()
 
     def shutdown_timers(self):
+        """Shutdown all timers"""l
         for timer in self.timers.values():
             timer.shutdown()
 
     def shutdown_services(self):
+        """Shutdown all services"""
         for srv in self.srvs.values():
             srv.shutdown()
 
     def unregister_publishers(self):
+        """Unregister all publishers"""
         for pub in self.pubs.values():
             pub.unregister()
 
     def unregister_subscribers(self):
+        """Unregister all subscribers"""
         for sub in self.subs.values():
             sub.unregister()
 
@@ -249,4 +253,5 @@ class RosNode:
         self.unregister_publishers()
 
     def shutdown(self):
+        """Shutdown method"""
         self.kill()
