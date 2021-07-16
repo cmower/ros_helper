@@ -7,3 +7,8 @@ common snippets into one helpful package.
 
 Feel free to clone and use `ros_helper` inside your catkin workspace, or
 copy/paste/modify any of the scripts for your projects.
+
+Run tests
+```
+$ catkin build ros_helper -s --catkin-make-args run_tests
+```
