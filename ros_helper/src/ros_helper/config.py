@@ -27,6 +27,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 import yaml
 import rospkg
+import numpy
+import tf_conversions
 
 
 def parse_filename(filename):
@@ -44,3 +46,9 @@ def load_config(filename):
     """Loads a yaml config file. You can use $(find package-name)."""
     with open(parse_filename(filename), 'r') as configfile:
         return yaml.load(configfile, Loader=yaml.FullLoader)
+
+
+# Geometry handling
+def quaternion_from_euler_deg(euler):
+    euler = numpy.deg2rad(euler)
+    return tf_conversions.transformations.quaternion_from_euler(euler[0], euler[1], euler[2])
