@@ -39,9 +39,9 @@ class Node(RosNode):
     def main_loop(self, event):
         t = rospy.Time.now().to_sec()
         p = [
-            -0.1 + 0.1*sin(t*pi),
-            0.5 + sin(t*pi*0.5),
-            cos(t*pi)
+            -0.1 + 0.8*sin(t*pi*0.2),
+            0.5 + 0.8*sin(t*pi*0.5*0.2),
+            cos(t*pi*0.2),
         ]
         self.set_tf('world', 'sphere', p)
 
