@@ -226,7 +226,7 @@ class RosNode:
         rospy.spin()
 
     def shutdown_timers(self):
-        """Shutdown all timers"""l
+        """Shutdown all timers"""
         for timer in self.timers.values():
             timer.shutdown()
 
