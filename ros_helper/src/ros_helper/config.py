@@ -50,5 +50,6 @@ def load_config(filename):
 
 # Geometry handling
 def quaternion_from_euler_deg(euler):
+    """Convert euler angles (in degrees) to quaternion."""
     euler = numpy.deg2rad(euler)
     return tf_conversions.transformations.quaternion_from_euler(euler[0], euler[1], euler[2])

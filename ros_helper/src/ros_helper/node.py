@@ -72,6 +72,7 @@ class _callback:
 # Main
 class RosNode:
 
+    """Base-class for a ROS node containing several useful methods."""
 
     def __init__(self, name, **kwargs):
         """Initialization. Note, child-classes need to make a call to RosNode.__init__(self, name, **kwargs)."""
@@ -225,25 +226,30 @@ class RosNode:
         """Simple wrapper for rospy.spin."""
         rospy.spin()
 
+
     def shutdown_timers(self):
         """Shutdown all timers"""
         for timer in self.timers.values():
             timer.shutdown()
+
 
     def shutdown_services(self):
         """Shutdown all services"""
         for srv in self.srvs.values():
             srv.shutdown()
 
+
     def unregister_publishers(self):
         """Unregister all publishers"""
         for pub in self.pubs.values():
             pub.unregister()
 
+
     def unregister_subscribers(self):
         """Unregister all subscribers"""
         for sub in self.subs.values():
             sub.unregister()
+
 
     def kill(self):
         """Kills all timers, subscribers, services, and publishers."""
@@ -251,6 +257,7 @@ class RosNode:
         self.unregister_subscribers()
         self.shutdown_services()
         self.unregister_publishers()
+
 
     def shutdown(self):
         """Shutdown method"""
