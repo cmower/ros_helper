@@ -36,6 +36,7 @@ catkin_install_python(PROGRAMS
   scripts/rosbags_to_csv.py
   scripts/multijoy_node.py
   scripts/save_tf.py
+  scripts/publish_environment_node.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
