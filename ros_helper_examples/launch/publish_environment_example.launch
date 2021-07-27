@@ -1,0 +1,16 @@
+<launch>
+
+  <node name="publish_environment" pkg="ros_helper" type="publish_environment_node.py">
+    <rosparam param="configs">
+      [
+      "$(find ros_helper_examples)/resources/box.yaml",
+      "$(find ros_helper_examples)/resources/sphere.yaml",
+      ]
+    </rosparam>
+  </node>
+
+  <node name="publish_environment_example" pkg="ros_helper_examples" type="example_publish_environment.py"/>
+
+  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find ros_helper_examples)/resources/publish_environment.rviz" />
+
+</launch>
